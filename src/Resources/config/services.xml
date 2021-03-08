@@ -193,7 +193,7 @@
             <tag name="container.service_subscriber"/>
             <argument type="service" id="DatingLibre\AppBundle\Service\ImageService"/>
             <argument type="service" id="DatingLibre\AppBundle\Service\ProfileService"/>
-            <argument>true</argument>
+            <argument>%datinglibre.image_upload%</argument>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
@@ -351,7 +351,7 @@
             <argument type="service" id="DatingLibre\AppBundle\Service\ProfileService"/>
             <argument type="service" id="security.user_password_encoder.generic"/>
             <argument type="service" id="translator.default"/>
-            <argument>%datinglibre.admin_email%%</argument>
+            <argument>%datinglibre.admin_email%</argument>
         </service>
         <service id="DatingLibre\AppBundle\Service\UuidValueResolver" class="DatingLibre\AppBundle\Service\UuidValueResolver" autowire="true" autoconfigure="true">
             <tag name="controller.argument_value_resolver" priority="500"/>

@@ -8,6 +8,7 @@
             "email": "admin@datinglibre.com"
         }
     ],
+    "description": "The core overridable code of DatingLibre",
     "require": {
         "ext-json": "*",
         "aws/aws-sdk-php": "^3.140",
