@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <a class="navbar-brand" href="{{ path('login') }}">{{ 'site.name'|trans }}</a>
     <div class="collapse navbar-collapse" id="site_navbar">
-        {% if is_granted('ROLE_USER') and not is_granted('ROLE_MODERATOR') or is_granted('ROLE_ADMIN') %}
+        {% if is_granted('ROLE_USER') and not is_granted('ROLE_MODERATOR') and not is_granted('ROLE_ADMIN') %}
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('search') }}">{{ 'nav.search'|trans  }}</a>
