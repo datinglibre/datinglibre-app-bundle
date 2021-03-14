@@ -1,4 +1,4 @@
-{% extends '@DatingLibreApp/base.html.twig' %}
+{% extends '@DatingLibreApp/authenticated.html.twig' %}
 {% block title %}Profile{% endblock %}
 {% block menu %}
     {% from '@DatingLibreApp/macros/profile.image.html.twig' import profile_image %}
@@ -43,6 +43,7 @@
     </div>
 {% endblock %}
 {% block stylesheets %}
+    {{ parent() }}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.css"
           integrity="sha384-LviqaWVrhQ5vfp8yDZoxcPR9PH4//hAxpcfh5coUt5oZ3/jGIGj/R8bxO6AjCOM3"
           crossorigin="anonymous"/>
@@ -51,6 +52,7 @@
     </style>
 {% endblock %}
 {% block javascripts %}
+    {{ parent() }}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/javascript-canvas-to-blob/3.27.0/js/canvas-to-blob.js"
             integrity="sha384-vXXFsWaKbgL+DtF3tCB2B69cnH0rtx9FWApgkItmAgyBP/02GRnz2VnbrnU1d66Z"
             crossorigin="anonymous"></script>

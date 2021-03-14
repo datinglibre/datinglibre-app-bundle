@@ -1,8 +1,5 @@
-{% extends '@DatingLibreApp/base.html.twig' %}
+{% extends '@DatingLibreApp/authenticated.html.twig' %}
 {% block title %}{{ 'menu.edit'|trans }} - {{ 'nav.profile'|trans }}{% endblock %}
-{% block stylesheets %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.15/css/bootstrap-select.min.css" />
-{% endblock %}
 {% block menu %}
     {% from '@DatingLibreApp/macros/profile.image.html.twig' import profile_image %}
     <a href="{{ path('profile_image') }}">{{ profile_image(profile.imageUrl) }}</a>
@@ -31,10 +28,11 @@
     </div>
 {% endblock %}
 {% block javascripts %}
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.15/js/bootstrap-select.min.js"
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.15/js/bootstrap-select.min.js"
              integrity="sha384-fSJacRNiqwuGQg4sAAs0X8bVHsAZBEG5VT+tQIhIqCxFzgR1YazUQR1/VV33DW/J" crossorigin="anonymous"></script>
-     <script src="{{ asset('js/location.js') }}"></script>
-     <script>
+    <script src="{{ asset('js/location.js') }}"></script>
+    <script>
          console.log("Location")
           $(function () {
               var $countrySelect = $('#profile_form_country');
@@ -65,5 +63,5 @@
                   "{{ 'profile.city.error'|trans }}"
               );
           });
-     </script>
+    </script>
 {% endblock %}
