@@ -13,8 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ModerateImageController extends AbstractController
 {
-    const ACCEPT = 'accept';
-    const REJECT = 'reject';
+    protected const ACCEPT = 'accept';
+    protected const REJECT = 'reject';
     private ImageService $imageService;
 
     public function __construct(ImageService $imageService)

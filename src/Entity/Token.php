@@ -5,7 +5,6 @@ namespace DatingLibre\AppBundle\Entity;
 use DatingLibre\AppBundle\Repository\TokenRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 
@@ -16,11 +15,11 @@ use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
  */
 class Token
 {
-    const USER = 'user';
-    const SECRET = 'secret';
-    const TYPE = 'type';
-    const SIGNUP = 'SIGNUP';
-    const PASSWORD_RESET = 'PASSWORD_RESET';
+    public const USER = 'user';
+    public const SECRET = 'secret';
+    public const TYPE = 'type';
+    public const SIGNUP = 'SIGNUP';
+    public const PASSWORD_RESET = 'PASSWORD_RESET';
 
     /**
      * @var Uuid

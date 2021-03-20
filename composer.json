@@ -11,7 +11,9 @@
     "description": "The core overridable code of DatingLibre",
     "require": {
         "ext-json": "*",
-        "aws/aws-sdk-php": "^3.140",
+        "ext-calendar": "*",
+        "datinglibre/datinglibre-ccbill-bundle": "0.2.*",
+        "aws/aws-sdk-php": "3.174.*",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.1",
         "doctrine/orm": "^2.7",
@@ -23,6 +25,7 @@
         "symfony/uid": "5.2.*",
         "symfony/serializer": "5.2.*",
         "symfony/twig-bundle": "5.2.*",
+        "symfony/http-client": "5.2.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
         "symfony/console": "5.2.*",
@@ -33,7 +36,8 @@
         "symfony/mailer": "5.2.*",
         "symfony/amazon-mailer": "5.2.*",
         "symfony/security-bundle": "5.2.*",
-        "symfony/translation": "5.2.*"
+        "symfony/translation": "5.2.*",
+        "twig/intl-extra": "^3.3"
     },
     "autoload": {
         "psr-4": {

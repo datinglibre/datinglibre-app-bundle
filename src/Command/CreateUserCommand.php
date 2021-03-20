@@ -15,9 +15,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CreateUserCommand extends Command
 {
     protected static $defaultName = 'app:users:create';
-    const MODERATOR = 'MODERATOR';
-    const ADMIN = 'ADMIN';
-    const USER = 'USER';
+    protected const MODERATOR = 'MODERATOR';
+    protected const ADMIN = 'ADMIN';
+    protected const USER = 'USER';
     private UserService $userService;
 
     public function __construct(UserService $userService)

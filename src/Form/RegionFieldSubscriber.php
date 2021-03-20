@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DatingLibre\AppBundle\Form;
 
 // https://symfony.com/doc/current/form/events.html
@@ -17,7 +19,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RegionFieldSubscriber implements EventSubscriberInterface
 {
-    const REGION = 'region';
+    protected const REGION = 'region';
     private FormFactoryInterface $formFactory;
     private RegionRepository $regionRepository;
 

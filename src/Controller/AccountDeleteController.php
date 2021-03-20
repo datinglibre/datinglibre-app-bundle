@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace DatingLibre\AppBundle\Controller;
 
@@ -8,7 +9,7 @@ use DatingLibre\AppBundle\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class DeleteAccountController extends AbstractController
+class AccountDeleteController extends AbstractController
 {
     public function delete(Request $request, UserService $userService)
     {
@@ -29,7 +30,7 @@ class DeleteAccountController extends AbstractController
         }
 
         return $this->render(
-            '@DatingLibreApp/user/delete.html.twig',
+            '@DatingLibreApp/account/delete.html.twig',
             ['deleteAccountForm' => $deleteAccountForm->createView()]
         );
     }

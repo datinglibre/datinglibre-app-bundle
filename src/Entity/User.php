@@ -19,9 +19,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface
 {
     public const EMAIL = 'email';
-    const ENABLED = 'enabled';
-    const MODERATOR = 'ROLE_MODERATOR';
-    const ADMIN = 'ROLE_ADMIN';
+    public const ENABLED = 'enabled';
+    public const MODERATOR = 'ROLE_MODERATOR';
+    public const ADMIN = 'ROLE_ADMIN';
 
     /**
      * @var Uuid

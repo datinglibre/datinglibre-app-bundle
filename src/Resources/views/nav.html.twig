@@ -21,11 +21,14 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('moderate_profile_images') }}">{{ 'nav.moderate'|trans  }}</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('events_index') }}">{{ 'nav.events'|trans  }}</a>
+            </li>
         </ul>
         {% endif %}
         <ul class="nav navbar-nav navbar-right">
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('delete_my_user') }}">{{ 'nav.account'|trans }}</a>
+                <a class="nav-link" href="{{ path('account_subscription') }}">{{ 'nav.account'|trans }}</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('logout') }}">{{ 'nav.logout'|trans }}</a>

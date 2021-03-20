@@ -16,9 +16,9 @@ use Symfony\Component\Uid\Uuid;
  */
 class Image
 {
-    const UNMODERATED = 'UNMODERATED';
-    const ACCEPTED = 'ACCEPTED';
-    const REJECTED = 'REJECTED';
+    public const UNMODERATED = 'UNMODERATED';
+    public const ACCEPTED = 'ACCEPTED';
+    public const REJECTED = 'REJECTED';
 
     /**
      * @var Uuid
@@ -62,14 +62,19 @@ class Image
     private $secureUrlExpiry;
 
     /**
+     * @ORM\Column(name="state", type="string")
+     */
+    private $state;
+
+    /**
      * @ORM\Column(name="created_at", type="datetimetz")
      */
     private $createdAt;
 
     /**
-     * @ORM\Column(name="state", type="string")
+     * @ORM\Column(name="updated_at", type="datetimetz")
      */
-    private $state;
+    private $updatedAt;
 
 
     public function getType()
@@ -135,13 +140,31 @@ class Image
         $this->user = $user;
     }
 
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
 
     /**
      * @ORM\PrePersist
      */
-    public function prePersist()
+    public function prePersist(): void
     {
         $this->createdAt = new DateTime('UTC');
+        $this->updatedAt = new DateTime('UTC');
         $this->state = self::UNMODERATED;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate(): void
+    {
+        $this->updatedAt = new DateTime('UTC');
     }
 }

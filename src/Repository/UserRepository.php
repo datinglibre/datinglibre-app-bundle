@@ -81,7 +81,7 @@ EOD, new ResultSetMapping());
     {
         $this->_em->persist($user);
         $this->_em->flush();
-        
+
         return $user;
     }
 }

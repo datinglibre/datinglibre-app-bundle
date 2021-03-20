@@ -19,8 +19,8 @@ use Symfony\Component\Uid\Uuid;
  */
 class ProfileRepository extends ServiceEntityRepository
 {
-    const DEFAULT_MAX_AGE = 100;
-    const DEFAULT_MIN_AGE = 18;
+    protected const DEFAULT_MAX_AGE = 100;
+    protected const DEFAULT_MIN_AGE = 18;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Profile::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DatingLibre\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -80,7 +82,7 @@ class MessageProjection
         return $this->senderUsername;
     }
 
-    public function getSecureProfileImageUrl() : ?string
+    public function getSecureProfileImageUrl(): ?string
     {
         return $this->secureProfileImageUrl;
     }

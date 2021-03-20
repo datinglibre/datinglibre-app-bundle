@@ -21,6 +21,9 @@ class LoginController extends AbstractController
 
     public function login(AuthenticationUtils $authenticationUtils, AuthorizationCheckerInterface $authChecker): Response
     {
+        if ($authChecker->isGranted(User::ADMIN)) {
+            return $this->redirectToRoute('events_index');
+        }
         if ($authChecker->isGranted(User::MODERATOR)) {
             return $this->redirectToRoute('moderate_profile_images');
         }

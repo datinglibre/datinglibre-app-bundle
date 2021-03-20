@@ -58,7 +58,6 @@ class Email
         return $this->user;
     }
 
-
     public function getType()
     {
         return $this->type;

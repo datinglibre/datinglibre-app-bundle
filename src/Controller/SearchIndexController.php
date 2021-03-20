@@ -20,13 +20,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class SearchIndexController extends AbstractController
 {
-    const PREVIOUS = 'previous';
-    const NEXT = 'next';
-    const LIMIT = 10;
     private ProfileService $profileService;
     private UserRepository $userRepository;
     private FilterRepository $filterRepository;
     private RequirementService $requirementService;
+    protected const PREVIOUS = 'previous';
+    protected const NEXT = 'next';
+    protected const LIMIT = 10;
 
     public function __construct(
         ProfileService $profileService,

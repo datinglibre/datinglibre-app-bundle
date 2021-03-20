@@ -8,7 +8,7 @@ use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
 
 class ProfileImagePage extends SymfonyPage
 {
-    const IS_UPLOADED_PROFILE_IMAGE_VISIBLE = '$("#profileImageSuccessMessage").is(":visible");';
+    protected const IS_UPLOADED_PROFILE_IMAGE_VISIBLE = '$("#profileImageSuccessMessage").is(":visible");';
 
     public function getRouteName(): string
     {

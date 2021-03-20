@@ -21,7 +21,7 @@ class ImageService
     private S3Client $s3Client;
     private string $imagesBucket;
     // pre-signed URLs max expiry is 7 days, make it a bit earlier so enough time to refresh them
-    const EXPIRY_INTERVAL = 'P6D';
+    protected const EXPIRY_INTERVAL = 'P6D';
 
     public function __construct(
         string $imagesBucket,

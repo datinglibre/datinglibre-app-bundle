@@ -47,6 +47,7 @@ account:
   delete_confirm: "Permanently delete my account"
   deleted: "You account has been deleted"
   incorrect_password: "Incorrect password."
+  subscriptions: "Subscriptions"
 search:
   search: "Search"
   filter: "Filter"
@@ -65,6 +66,7 @@ nav:
   account: "Account"
   moderate: "Moderate"
   logout: "Logout"
+  events: "Events"
 menu:
   view: "View"
   edit: "Edit"
@@ -99,3 +101,27 @@ registration:
   already_exists_subject: "An account for your email address already exists"
   already_exists_body: "If you have forgotten your password please use the "
   password_reset_form: "password reset form"
+subscriptions:
+  empty: "No subscriptions"
+subscription:
+  id: "ID"
+  provider: "Provider"
+  renewal_date: "Renewal date"
+  status: "Status"
+  cancelled: "Cancelled"
+  active: "Active"
+  updated: "Updated"
+  renewal_failure: "Renewal failure"
+  chargeback: "Chargeback"
+  ccbill: "CCBill"
+  ended: "Ended"
+  refund: "Refund"
+event:
+  date: "Date"
+  filter: "Filter"
+  empty: "No events"
+  createdAt: "Created at"
+  data: "Data"
+  name: "Name"
+filter:
+  day_optional: "Day (optional)"

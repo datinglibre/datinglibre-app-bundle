@@ -40,7 +40,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 {
     use TargetPathTrait;
 
-    const USER_INCORRECT_CREDENTIALS_KEY = 'user.incorrect_credentials';
+    protected const USER_INCORRECT_CREDENTIALS_KEY = 'user.incorrect_credentials';
     private EntityManagerInterface $entityManager;
     private UrlGeneratorInterface $urlGenerator;
     private CsrfTokenManagerInterface $csrfTokenManager;
@@ -122,6 +122,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
+        }
+
+        if ($this->authorizationChecker->isGranted(User::ADMIN)) {
+            return new RedirectResponse($this->urlGenerator->generate('events_index'));
         }
 
         if ($this->authorizationChecker->isGranted(User::MODERATOR)) {

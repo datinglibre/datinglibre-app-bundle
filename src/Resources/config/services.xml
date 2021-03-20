@@ -65,6 +65,14 @@
             <tag name="doctrine.repository_service"/>
             <argument type="service" id="doctrine"/>
         </service>
+        <service id="DatingLibre\AppBundle\Repository\EventRepository" class="DatingLibre\AppBundle\Repository\EventRepository" autowire="true" autoconfigure="true">
+            <tag name="doctrine.repository_service"/>
+            <argument type="service" id="doctrine"/>
+        </service>
+        <service id="DatingLibre\AppBundle\Repository\SubscriptionRepository" class="DatingLibre\AppBundle\Repository\SubscriptionRepository" autowire="true" autoconfigure="true">
+            <tag name="doctrine.repository_service"/>
+            <argument type="service" id="doctrine"/>
+        </service>
         <service id="DatingLibre\AppBundle\Command\CheckPrivateIpCommand" class="DatingLibre\AppBundle\Command\CheckPrivateIpCommand" autowire="true" autoconfigure="true">
             <tag name="console.command"/>
             <tag name="container.no_preload"/>
@@ -113,7 +121,7 @@
                 <argument type="service" id="service_container"/>
             </call>
         </service>
-        <service id="DatingLibre\AppBundle\Controller\DeleteAccountController" class="DatingLibre\AppBundle\Controller\DeleteAccountController" public="true" autowire="true" autoconfigure="true">
+        <service id="DatingLibre\AppBundle\Controller\AccountDeleteController" class="DatingLibre\AppBundle\Controller\AccountDeleteController" public="true" autowire="true" autoconfigure="true">
             <tag name="controller.service_arguments"/>
             <tag name="container.service_subscriber"/>
             <call method="setContainer">
@@ -240,6 +248,21 @@
                 <argument type="service" id="service_container"/>
             </call>
         </service>
+        <service id="DatingLibre\AppBundle\Controller\EventController" class="DatingLibre\AppBundle\Controller\EventController" public="true" autowire="true" autoconfigure="true">
+            <tag name="controller.service_arguments"/>
+            <tag name="container.service_subscriber"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        <service id="DatingLibre\AppBundle\Controller\AccountSubscriptionController" class="DatingLibre\AppBundle\Controller\AccountSubscriptionController" public="true" autowire="true" autoconfigure="true">
+            <tag name="controller.service_arguments"/>
+            <tag name="container.service_subscriber"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <argument type="service" id="DatingLibre\AppBundle\Service\SubscriptionService"/>
+        </service>
         <service id="DatingLibre\AppBundle\DataFixtures\AppFixtures" class="DatingLibre\AppBundle\DataFixtures\AppFixtures" autowire="true" autoconfigure="true">
             <argument type="service" id="security.user_password_encoder.generic"/>
             <argument>%datinglibre.categories%</argument>
@@ -249,6 +272,12 @@
         <service id="DatingLibre\AppBundle\EventListener\LoginListener" class="DatingLibre\AppBundle\EventListener\LoginListener" autowire="true" autoconfigure="true">
             <tag name="kernel.event_listener" event="security.interactive_login"/>
             <argument type="service" id="doctrine.orm.default_entity_manager"/>
+        </service>
+        <service id="DatingLibre\AppBundle\EventListener\CcBillEventListener" class="DatingLibre\AppBundle\EventListener\CcBillEventListener" autowire="true" autoconfigure="true">
+            <tag name="kernel.event_subscriber"/>
+            <argument type="service" id="DatingLibre\AppBundle\Service\EventService" />
+            <argument type="service" id="DatingLibre\AppBundle\Service\UserService" />
+            <argument type="service" id="DatingLibre\AppBundle\Service\SubscriptionService" />
         </service>
         <service id="DatingLibre\AppBundle\Form\BlockFormType" class="DatingLibre\AppBundle\Form\BlockFormType" autowire="true" autoconfigure="true">
             <tag name="form.type"/>
@@ -352,6 +381,15 @@
             <argument type="service" id="security.user_password_encoder.generic"/>
             <argument type="service" id="translator.default"/>
             <argument>%datinglibre.admin_email%</argument>
+        </service>
+        <service id="DatingLibre\AppBundle\Service\EventService" class="DatingLibre\AppBundle\Service\EventService" autowire="true" autoconfigure="true">
+            <argument type="service" id="DatingLibre\AppBundle\Repository\EventRepository"/>
+            <argument type="service" id="DatingLibre\AppBundle\Repository\UserRepository"/>
+        </service>
+        <service id="DatingLibre\AppBundle\Service\SubscriptionService" class="DatingLibre\AppBundle\Service\SubscriptionService" autowire="true" autoconfigure="true">
+            <argument type="service" id="DatingLibre\AppBundle\Repository\SubscriptionRepository"/>
+            <argument type="service" id="DatingLibre\AppBundle\Repository\UserRepository"/>
+            <argument type="service" id="DatingLibre\AppBundle\Service\EventService" />
         </service>
         <service id="DatingLibre\AppBundle\Service\UuidValueResolver" class="DatingLibre\AppBundle\Service\UuidValueResolver" autowire="true" autoconfigure="true">
             <tag name="controller.argument_value_resolver" priority="500"/>

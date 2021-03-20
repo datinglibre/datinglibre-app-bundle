@@ -22,7 +22,7 @@ class MessageRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Message::class);
     }
-    
+
     public function findMessagesBetweenUsers(Uuid $userId, Uuid $participantId)
     {
         $rsm = new ResultSetMapping();

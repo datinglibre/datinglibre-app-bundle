@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CountryFieldSubscriber implements EventSubscriberInterface
 {
-    const COUNTRY = 'country';
+    protected const COUNTRY = 'country';
     private CountryRepository $countryRepository;
 
     public function __construct(CountryRepository $countryRepository)
@@ -25,7 +25,7 @@ class CountryFieldSubscriber implements EventSubscriberInterface
         $this->countryRepository = $countryRepository;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [FormEvents::PRE_SET_DATA => 'preSetData', FormEvents::PRE_SUBMIT => 'preSubmit'];
     }

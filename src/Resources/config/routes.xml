@@ -4,7 +4,7 @@
     <route id="matches_index" path="/matches" controller="DatingLibre\AppBundle\Controller\MatchesController::matches" methods="GET" />
     <route id="message_send" path="/message/{userId}" controller="DatingLibre\AppBundle\Controller\MessageSendController::message" methods="GET|POST" />
     <route id="moderate_profile_images" path="/moderator/profile/images" controller="DatingLibre\AppBundle\Controller\ModerateImageController::index" methods="GET|POST" />
-    <route id="delete_my_user" path="/user/delete" controller="DatingLibre\AppBundle\Controller\DeleteAccountController::delete" methods="GET|POST" />
+    <route id="account_delete" path="/account/delete" controller="DatingLibre\AppBundle\Controller\AccountDeleteController::delete" methods="GET|POST" />
     <route id="profile_edit" path="/profile/edit" controller="DatingLibre\AppBundle\Controller\ProfileEditController::edit" methods="GET|POST" />
     <route id="profile_image" path="/profile/image" controller="DatingLibre\AppBundle\Controller\ProfileImageController::index" methods="GET|POST" />
     <route id="profile_index" path="/profile" controller="DatingLibre\AppBundle\Controller\ProfileIndexController::index" methods="GET" />
@@ -20,4 +20,6 @@
     <route id="search_profile_view" path="/profile/{userId}/view" controller="DatingLibre\AppBundle\Controller\SearchProfileViewController::index" methods="GET" />
     <route id="register_terms" path="/register/terms" controller="DatingLibre\AppBundle\Controller\RegisterController::terms" methods="GET" />
     <route id="process_token" path="/token/{secret}" controller="DatingLibre\AppBundle\Controller\TokenController::processConfirm" methods="GET" />
+    <route id="events_index" path="/admin/events" controller="DatingLibre\AppBundle\Controller\EventController::displayEvents" methods="GET|POST" />
+    <route id="account_subscription" path="/account/subscription" controller="DatingLibre\AppBundle\Controller\AccountSubscriptionController::viewSubscription" methods="GET"/>
 </routes>

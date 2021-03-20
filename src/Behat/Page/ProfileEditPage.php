@@ -10,12 +10,12 @@ use Webmozart\Assert\Assert;
 
 class ProfileEditPage extends SymfonyPage
 {
-    const COUNTRY_SELECT = '#profile_form_country';
-    const REGION_SELECT = '#profile_form_region';
-    const CITY_SELECT = '#profile_form_city';
-    const SELECT_PICKER_VALUE = "$('%s').selectpicker('val', '%s');";
-    const SELECT_PICKER_TRIGGER = "$('%s').trigger('hidden.bs.select');";
-    const IS_OPTION_PRESENT = "$(\"%s option[value='%s']\").length > 0;";
+    protected const COUNTRY_SELECT = '#profile_form_country';
+    protected const REGION_SELECT = '#profile_form_region';
+    protected const CITY_SELECT = '#profile_form_city';
+    protected const SELECT_PICKER_VALUE = "$('%s').selectpicker('val', '%s');";
+    protected const SELECT_PICKER_TRIGGER = "$('%s').trigger('hidden.bs.select');";
+    protected const IS_OPTION_PRESENT = "$(\"%s option[value='%s']\").length > 0;";
 
     public function getRouteName(): string
     {

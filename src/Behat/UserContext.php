@@ -102,6 +102,19 @@ class UserContext extends RawMinkContext
     }
 
     /**
+     * @Given an administrator exists with email :email
+     */
+    public function anAdministratorExistsWithEmail(string $email)
+    {
+        $this->userService->create(
+            $email,
+            self::DEFAULT_PASSWORD,
+            true,
+            [User::ADMIN]
+        );
+    }
+
+    /**
      * @Then I should receive a password reset email to :email
      */
     public function iShouldReceiveAPasswordResetEmailTo(string $email)
