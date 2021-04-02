@@ -25,7 +25,7 @@ class AccountDeleteController extends AbstractController
                 return $this->redirectToRoute('logout');
             } else {
                 $this->addFlash('danger', 'account.incorrect_password');
-                $this->redirectToRoute('delete_my_user');
+                $this->redirectToRoute('account_delete');
             }
         }
 
