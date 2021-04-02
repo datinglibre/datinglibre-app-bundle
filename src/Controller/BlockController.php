@@ -28,7 +28,7 @@ class BlockController extends AbstractController
             $blockService->block($this->getUser()->getId(), $userId, $blockFormType->getData()['reason']);
 
             $this->addFlash('success', 'block.success');
-            return $this->redirectToRoute('search');
+            return $this->redirectToRoute('search_index');
         }
 
         return $this->render(

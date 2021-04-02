@@ -29,7 +29,7 @@ class LoginController extends AbstractController
         }
 
         if ($this->getUser()) {
-            return $this->redirectToRoute('search');
+            return $this->redirectToRoute('search_index');
         }
 
         $error = $authenticationUtils->getLastAuthenticationError();

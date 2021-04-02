@@ -132,7 +132,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             return new RedirectResponse($this->urlGenerator->generate('moderate_profile_images'));
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('search'));
+        return new RedirectResponse($this->urlGenerator->generate('search_index'));
     }
 
     protected function getLoginUrl()

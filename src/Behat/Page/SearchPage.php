@@ -11,7 +11,7 @@ class SearchPage extends SymfonyPage
 {
     public function getRouteName(): string
     {
-        return "search";
+        return "search_index";
     }
 
     public function assertContains(string $content): void

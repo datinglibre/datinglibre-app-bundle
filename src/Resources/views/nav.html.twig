@@ -6,7 +6,7 @@
         {% if is_granted('ROLE_USER') and not is_granted('ROLE_MODERATOR') and not is_granted('ROLE_ADMIN') %}
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('search') }}">{{ 'nav.search'|trans  }}</a>
+                <a class="nav-link" href="{{ path('search_index') }}">{{ 'nav.search'|trans  }}</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('profile_index') }}">{{ 'nav.profile'|trans }}</a>

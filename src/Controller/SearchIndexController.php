@@ -82,7 +82,7 @@ class SearchIndexController extends AbstractController
 
         if ($filterForm->isSubmitted() && $filterForm->isValid()) {
             $this->filterRepository->save($filter);
-            return new RedirectResponse($this->generateUrl('search'));
+            return new RedirectResponse($this->generateUrl('search_index'));
         }
 
         $previous = (int) $request->query->get(self::PREVIOUS, 0);
@@ -102,7 +102,7 @@ class SearchIndexController extends AbstractController
         return $this->render('@DatingLibreApp/search/index.html.twig', [
             'next' => $this->getNext($profiles, $previous),
             'previous' => $this->getPrevious($profiles, $next),
-            'page' => 'search',
+            'page' => 'search_index',
             'profiles' => $profiles,
             'filterForm' => $filterForm->createView(),
             'requirementsForm' => $requirementsForm->createView()
