@@ -178,8 +178,8 @@ class UserService
     public function purge(string $type, int $hours): void
     {
         $users = [];
-        $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
 
+        $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
         $interval = new DateInterval(sprintf('PT%dH', $hours));
 
         $criteria = Criteria::create()
@@ -198,6 +198,13 @@ class UserService
 
         /** @var User $user */
         foreach ($users as $user) {
+            $roles = $user->getRoles();
+
+            if (in_array(User::ADMIN, $roles)
+                || in_array(User::MODERATOR, $roles)) {
+                continue;
+            }
+
             $this->delete(null, $user->getId());
         }
     }
