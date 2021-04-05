@@ -2,27 +2,23 @@
 
 declare(strict_types=1);
 
-namespace DatingLibre\AppBundle\EventListener;
+namespace DatingLibre\AppBundle\Service;
 
 use DatingLibre\AppBundle\Entity\Event;
 use DatingLibre\AppBundle\Entity\Subscription;
-use DatingLibre\AppBundle\Service\EventService;
-use DatingLibre\AppBundle\Service\SubscriptionService;
-use DatingLibre\AppBundle\Service\UserService;
-use DatingLibre\CcBillBundle\Event\BillingDateChangeEvent;
-use DatingLibre\CcBillBundle\Event\CancellationEvent;
-use DatingLibre\CcBillBundle\Event\ChargebackEvent;
-use DatingLibre\CcBillBundle\Event\ErrorEvent;
-use DatingLibre\CcBillBundle\Event\NewSaleFailureEvent;
-use DatingLibre\CcBillBundle\Event\NewSaleSuccessEvent;
-use DatingLibre\CcBillBundle\Event\RefundEvent;
-use DatingLibre\CcBillBundle\Event\RenewalFailureEvent;
-use DatingLibre\CcBillBundle\Event\RenewalSuccessEvent;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use DatingLibre\CcBillEventParser\Event\BillingDateChangeEvent;
+use DatingLibre\CcBillEventParser\Event\CancellationEvent;
+use DatingLibre\CcBillEventParser\Event\CcBillEvent;
+use DatingLibre\CcBillEventParser\Event\ChargebackEvent;
+use DatingLibre\CcBillEventParser\Event\ErrorEvent;
+use DatingLibre\CcBillEventParser\Event\NewSaleFailureEvent;
+use DatingLibre\CcBillEventParser\Event\NewSaleSuccessEvent;
+use DatingLibre\CcBillEventParser\Event\RefundEvent;
+use DatingLibre\CcBillEventParser\Event\RenewalFailureEvent;
+use DatingLibre\CcBillEventParser\Event\RenewalSuccessEvent;
 use Symfony\Component\Uid\Uuid;
 
-class CcBillEventListener implements EventSubscriberInterface
+class CcBillService
 {
     private const EMAIL = 'email';
     private const SUBSCRIPTION_ID = 'subscriptionId';
@@ -39,36 +35,38 @@ class CcBillEventListener implements EventSubscriberInterface
     private const LAST_4 = 'lastFour';
     private const NEXT_BILLING_DATE = 'nextBillingDate';
 
-    private LoggerInterface $logger;
-    private EventService $eventService;
     private SubscriptionService $subscriptionService;
-    private UserService $userService;
+    private EventService $eventService;
 
     public function __construct(
         EventService $eventService,
-        UserService $userService,
-        SubscriptionService $subscriptionService,
-        LoggerInterface $logger
+        SubscriptionService $subscriptionService
     ) {
-        $this->logger = $logger;
-        $this->eventService = $eventService;
         $this->subscriptionService = $subscriptionService;
-        $this->userService = $userService;
+        $this->eventService = $eventService;
     }
 
-    public static function getSubscribedEvents(): array
+    public function processEvent(CcBillEvent $event): void
     {
-        return [
-            NewSaleSuccessEvent::class => 'newSaleSuccess',
-            NewSaleFailureEvent::class => 'newSaleFailure',
-            ErrorEvent::class => 'error',
-            RenewalSuccessEvent::class => 'renewalSuccess',
-            RenewalFailureEvent::class => 'renewalFailure',
-            CancellationEvent::class => 'cancellation',
-            ChargebackEvent::class => 'chargeback',
-            RefundEvent::class => 'refund',
-            BillingDateChangeEvent::class => 'billingDateChange'
-        ];
+        if ($event instanceof NewSaleSuccessEvent) {
+            $this->newSaleSuccess($event);
+        } elseif ($event instanceof NewSaleFailureEvent) {
+            $this->newSaleFailure($event);
+        } elseif ($event instanceof RenewalSuccessEvent) {
+            $this->renewalSuccess($event);
+        } elseif ($event instanceof RenewalFailureEvent) {
+            $this->renewalFailure($event);
+        } elseif ($event instanceof CancellationEvent) {
+            $this->cancellation($event);
+        } elseif ($event instanceof ChargebackEvent) {
+            $this->chargeback($event);
+        } elseif ($event instanceof RefundEvent) {
+            $this->refund($event);
+        } elseif ($event instanceof BillingDateChangeEvent) {
+            $this->billingDateChange($event);
+        } elseif ($event instanceof ErrorEvent) {
+            $this->error($event);
+        }
     }
 
     public function renewalSuccess(RenewalSuccessEvent $event): void

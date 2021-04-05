@@ -152,5 +152,5 @@ services:
         - '@DatingLibre\AppBundle\Service\UserService'
         - '@DatingLibre\AppBundle\Repository\EventRepository'
         - '@DatingLibre\AppBundle\Repository\SubscriptionRepository'
-        - '@event_dispatcher'
+        - '@DatingLibre\AppBundle\Service\CcBillService'
 

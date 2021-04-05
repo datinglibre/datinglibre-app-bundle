@@ -21,5 +21,6 @@
     <route id="register_terms" path="/register/terms" controller="DatingLibre\AppBundle\Controller\RegisterController::terms" methods="GET" />
     <route id="process_token" path="/token/{secret}" controller="DatingLibre\AppBundle\Controller\TokenController::processConfirm" methods="GET" />
     <route id="events_index" path="/admin/events" controller="DatingLibre\AppBundle\Controller\EventController::displayEvents" methods="GET|POST" />
-    <route id="account_subscription" path="/account/subscription" controller="DatingLibre\AppBundle\Controller\AccountSubscriptionController::viewSubscription" methods="GET"/>
+    <route id="account_subscription" path="/account/subscription" controller="DatingLibre\AppBundle\Controller\AccountSubscriptionController::viewSubscription" methods="GET" />
+    <route id="ccbill_webhook" path="/ccbill/webhook" controller="DatingLibre\AppBundle\Controller\CcBillWebhookController::webhook" methods="GET|POST" />
 </routes>

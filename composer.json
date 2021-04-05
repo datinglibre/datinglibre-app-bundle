@@ -12,7 +12,7 @@
     "require": {
         "ext-json": "*",
         "ext-calendar": "*",
-        "datinglibre/datinglibre-ccbill-bundle": "0.2.*",
+        "datinglibre/datinglibre-ccbill-bundle": "0.3.*",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "aws/aws-sdk-php": "3.174.*",
         "doctrine/annotations": "^1.0",
