@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b20710563b12a7fbda602d36ded51893",
+    "content-hash": "76d298c869e9ab1840e5cdd7ee9e4f19",
     "packages": [
         {
             "name": "async-aws/core",
@@ -927,27 +927,28 @@
         },
         {
             "name": "doctrine/doctrine-migrations-bundle",
-            "version": "3.0.2",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineMigrationsBundle.git",
-                "reference": "b8de89fe811e62f1dea8cf9aafda0ea45ca6f1f3"
+                "reference": "d1248471734c62b94baac36cb18e9c635775eeb0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/b8de89fe811e62f1dea8cf9aafda0ea45ca6f1f3",
-                "reference": "b8de89fe811e62f1dea8cf9aafda0ea45ca6f1f3",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/d1248471734c62b94baac36cb18e9c635775eeb0",
+                "reference": "d1248471734c62b94baac36cb18e9c635775eeb0",
                 "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-bundle": "~1.0|~2.0",
-                "doctrine/migrations": "~3.0",
+                "doctrine/migrations": "^3.1",
                 "php": "^7.2|^8.0",
                 "symfony/framework-bundle": "~3.4|~4.0|~5.0"
             },
             "require-dev": {
                 "doctrine/coding-standard": "^8.0",
                 "doctrine/orm": "^2.6",
+                "doctrine/persistence": "^1.3||^2.0",
                 "phpstan/phpstan": "^0.12",
                 "phpstan/phpstan-deprecation-rules": "^0.12",
                 "phpstan/phpstan-phpunit": "^0.12",
@@ -955,11 +956,6 @@
                 "phpunit/phpunit": "^7.0|^8.0|^9.0"
             },
             "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.0.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Doctrine\\Bundle\\MigrationsBundle\\": ""
@@ -995,7 +991,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/DoctrineMigrationsBundle/issues",
-                "source": "https://github.com/doctrine/DoctrineMigrationsBundle/tree/3.0.2"
+                "source": "https://github.com/doctrine/DoctrineMigrationsBundle/tree/3.1.0"
             },
             "funding": [
                 {
@@ -1011,7 +1007,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-12-23T15:13:22+00:00"
+            "time": "2021-04-05T20:45:07+00:00"
         },
         {
             "name": "doctrine/event-manager",
@@ -1460,16 +1456,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.8.3",
+            "version": "2.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "657a30f8ceef2a78c2ff36a9fe6c6a6717c1c448"
+                "reference": "a588555ecd837b8d7e89355d9a13902e54d529c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/657a30f8ceef2a78c2ff36a9fe6c6a6717c1c448",
-                "reference": "657a30f8ceef2a78c2ff36a9fe6c6a6717c1c448",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/a588555ecd837b8d7e89355d9a13902e54d529c7",
+                "reference": "a588555ecd837b8d7e89355d9a13902e54d529c7",
                 "shasum": ""
             },
             "require": {
@@ -1541,9 +1537,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/2.8.3"
+                "source": "https://github.com/doctrine/orm/tree/2.8.4"
             },
-            "time": "2021-04-01T21:16:53+00:00"
+            "time": "2021-04-05T18:38:36+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -2326,153 +2322,6 @@
                 }
             ],
             "time": "2021-02-25T21:54:58+00:00"
-        },
-        {
-            "name": "martin-georgiev/postgresql-for-doctrine",
-            "version": "v1.5.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/martin-georgiev/postgresql-for-doctrine.git",
-                "reference": "57997a5b6637546d5a09542125acf36ccf5479d3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/martin-georgiev/postgresql-for-doctrine/zipball/57997a5b6637546d5a09542125acf36ccf5479d3",
-                "reference": "57997a5b6637546d5a09542125acf36ccf5479d3",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/dbal": "~2.5",
-                "ext-ctype": "*",
-                "ext-json": "*",
-                "ext-mbstring": "*",
-                "php": "^7.2||^8.0"
-            },
-            "require-dev": {
-                "doctrine/orm": "~2.5",
-                "friendsofphp/php-cs-fixer": "^2.16",
-                "php-coveralls/php-coveralls": "^2.2",
-                "phpstan/phpstan": "^0.12",
-                "phpstan/phpstan-phpunit": "^0.12",
-                "phpunit/phpunit": "^8.5||^9.5",
-                "sensiolabs-de/deptrac-shim": "^0.10"
-            },
-            "suggest": {
-                "doctrine/orm": "~2.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "MartinGeorgiev\\": "src/MartinGeorgiev/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Martin Georgiev",
-                    "email": "martin.georgiev@gmail.com",
-                    "role": "author"
-                }
-            ],
-            "description": "Adds PostgreSQL enhancements to Doctrine. Provides support for JSON, JSONB and some array data types. Provides functions, operators and common expressions used when working with JSON data, arrays and features related to text search.",
-            "keywords": [
-                "array data types",
-                "dbal",
-                "doctrine",
-                "json",
-                "jsonb",
-                "martin georgiev",
-                "postgres",
-                "postgresql",
-                "text search",
-                "tsvector"
-            ],
-            "support": {
-                "issues": "https://github.com/martin-georgiev/postgresql-for-doctrine/issues",
-                "source": "https://github.com/martin-georgiev/postgresql-for-doctrine/tree/v1.5.2"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/martin-georgiev",
-                    "type": "github"
-                }
-            ],
-            "time": "2021-01-24T13:21:48+00:00"
-        },
-        {
-            "name": "mlocati/ip-lib",
-            "version": "1.14.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mlocati/ip-lib.git",
-                "reference": "882bc0e115970a536b13bcfa59f312783fce08c8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mlocati/ip-lib/zipball/882bc0e115970a536b13bcfa59f312783fce08c8",
-                "reference": "882bc0e115970a536b13bcfa59f312783fce08c8",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "ext-pdo_sqlite": "*",
-                "phpunit/dbunit": "^1.4 || ^2 || ^3 || ^4",
-                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "IPLib\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michele Locati",
-                    "email": "mlocati@gmail.com",
-                    "homepage": "https://github.com/mlocati",
-                    "role": "Author"
-                }
-            ],
-            "description": "Handle IPv4, IPv6 addresses and ranges",
-            "homepage": "https://github.com/mlocati/ip-lib",
-            "keywords": [
-                "IP",
-                "address",
-                "addresses",
-                "ipv4",
-                "ipv6",
-                "manage",
-                "managing",
-                "matching",
-                "network",
-                "networking",
-                "range",
-                "subnet"
-            ],
-            "support": {
-                "issues": "https://github.com/mlocati/ip-lib/issues",
-                "source": "https://github.com/mlocati/ip-lib/tree/1.14.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/sponsors/mlocati",
-                    "type": "github"
-                },
-                {
-                    "url": "https://paypal.me/mlocati",
-                    "type": "other"
-                }
-            ],
-            "time": "2020-12-31T11:30:02+00:00"
         },
         {
             "name": "mtdowling/jmespath.php",
