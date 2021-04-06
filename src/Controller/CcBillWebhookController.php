@@ -6,10 +6,11 @@ namespace DatingLibre\AppBundle\Controller;
 
 use DatingLibre\AppBundle\Service\CcBillService;
 use DatingLibre\CcBillEventParser\Parser\CcBillEventParser;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CcBillWebhookController
+class CcBillWebhookController extends AbstractController
 {
     private const UTF_8 = 'utf-8';
     private const EVENT_TYPE = 'eventType';
