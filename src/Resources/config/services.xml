@@ -73,13 +73,6 @@
             <tag name="doctrine.repository_service"/>
             <argument type="service" id="doctrine"/>
         </service>
-        <service id="DatingLibre\AppBundle\Command\CheckPrivateIpCommand" class="DatingLibre\AppBundle\Command\CheckPrivateIpCommand" autowire="true" autoconfigure="true">
-            <tag name="console.command"/>
-            <tag name="container.no_preload"/>
-            <call method="setName">
-                <argument>app:ip:is_private</argument>
-            </call>
-        </service>
         <service id="DatingLibre\AppBundle\Command\CreateUserCommand" class="DatingLibre\AppBundle\Command\CreateUserCommand" autowire="true" autoconfigure="true">
             <tag name="console.command"/>
             <tag name="container.no_preload"/>

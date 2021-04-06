@@ -20,7 +20,6 @@
         "doctrine/orm": "^2.7",
         "gumlet/php-image-resize": "^2.0",
         "martin-georgiev/postgresql-for-doctrine": "^1.5",
-        "mlocati/ip-lib": "^1.13",
         "symfony/framework-bundle": "5.2.*",
         "symfony/flex": "^1.11",
         "symfony/uid": "5.2.*",
