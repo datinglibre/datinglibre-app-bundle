@@ -1,0 +1,45 @@
+{% extends '@DatingLibreApp/user/user.html.twig' %}
+{% block title %}Subscriptions - Account{% endblock %}
+{% block menu %}
+    {% include '@DatingLibreApp/user/account/menu.html.twig' %}
+{% endblock %}
+{% block content %}
+{% if subscriptions is empty %}
+    <div class="alert alert-info" role="alert">{{ 'subscriptions.empty'|trans }}</div>
+{% endif %}
+{% if subscriptions is not empty %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">{{ 'subscription.id'|trans }}</th>
+                <th scope="col">{{ 'subscription.provider'|trans }}</th>
+                <th scope="col">{{ 'subscription.renewal_date'|trans }}</th>
+                <th scope="col">{{ 'subscription.updated'|trans }}</th>
+                <th scope="col">{{ 'subscription.status'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for subscription in subscriptions %}
+            {% set row_class = 'table-warning' %}
+            {% if subscription.state is same as 'renewal_failure' %}
+                {% set row_class = 'table-danger' %}
+            {% endif %}
+            {% if subscription.state is same as 'active' %}
+                {% set row_class = 'table-success' %}
+            {% endif %}
+
+            <tr {% if row_class is not empty %}class="{{ row_class }}"{% endif %}>
+                <td>{{ subscription.providerId }}</td>
+                <td>{{ ('subscription.' ~ subscription.provider)|trans }}</td>
+                <td>
+                    {% if subscription.renewalDate is not null %}{{ subscription.renewalDate|format_date('long') }}{% endif %}
+                    {% if subscription.renewalDate is null %}{{ 'subscription.ended'|trans }}{% endif %}
+                </td>
+                <td>{{ subscription.updatedAt|format_date('long') }}</td>
+                <td>{{ ('subscription.' ~ subscription.state)|trans }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

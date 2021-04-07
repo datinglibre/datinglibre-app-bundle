@@ -41,7 +41,7 @@ class PasswordUpdateController extends AbstractController
             return $this->redirectToRoute('login');
         }
 
-        return $this->render('@DatingLibreApp/user/password_update.html.twig', [
+        return $this->render('@DatingLibreApp/user/account/password_update.html.twig', [
             'controller_name' => 'update_password',
             'passwordUpdateForm' => $passwordUpdateFormType->createView(),
         ]);

@@ -1,0 +1,19 @@
+{% extends '@DatingLibreApp/moderator/moderator.html.twig' %}
+{% block title %}Profile{% endblock %}
+{% block menu %}
+    {% from '@DatingLibreApp/macros/profile.image.html.twig' import profile_image %}
+    {{ profile_image(profile.imageUrl) }}
+    {% include '@DatingLibreApp/moderator/profile/menu.html.twig' %}
+{% endblock %}
+{% block content %}
+    <div class="panel panel-default">
+    <div class="panel-body">
+        <h2>
+            {{ profile.username }}
+            <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
+        </h2>
+        {{ profile.about|nl2br }}
+    </div>
+    {% from '@DatingLibreApp/moderator/macros/reports.table.html.twig' import reports_table %}
+    {{ reports_table(reports, false, true, profile.id)}}
+{% endblock %}

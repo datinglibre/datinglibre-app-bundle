@@ -68,7 +68,7 @@ class MessageSendController extends AbstractController
             ));
         }
 
-        return $this->render('@DatingLibreApp/message/send.html.twig', [
+        return $this->render('@DatingLibreApp/user/message/send.html.twig', [
             'messages' => $this->messageRepository->findMessagesBetweenUsers(
                 $sender->getId(),
                 $recipient->getId()

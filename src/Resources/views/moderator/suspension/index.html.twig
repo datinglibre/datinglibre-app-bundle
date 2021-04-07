@@ -1,0 +1,40 @@
+{% extends '@DatingLibreApp/moderator/moderator.html.twig' %}
+{% block title %}{{ 'menu.suspensions'|trans }} - {{ 'site.moderator'|trans }}{% endblock %}
+{% block menu %}
+    {% include '@DatingLibreApp/moderator/menu.html.twig' %}
+{% endblock %}
+{% block content %}
+    {% if suspensions is empty %}
+        <div class="alert alert-success" role="alert">
+            {{ 'moderate.no_suspensions'|trans }}
+        </div>
+    {% endif %}
+    {% if suspensions is not empty %}
+        <table class="table table-striped">
+            <thead>
+            <th>{{ 'suspension.username'|trans }}</th>
+            <th>{{ 'suspension.reasons'|trans }}</th>
+            <th>{{ 'suspension.duration'|trans }}</th>
+            <th>{{ 'suspension.created_at'|trans }}</th>
+            </thead>
+            {% for suspension in suspensions %}
+                <tr>
+                    <td>
+                        <a href="{{ path('moderator_profile_suspensions', {'userId': suspension.userId}) }}">{{ suspension.username }}</a>
+                    </td>
+                    <td>
+                        {% if suspension.reasons is not empty %}
+                            <ul>
+                                {% for reason in suspension.reasons %}
+                                    <li>{{ reason|trans({}, 'rules') }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </td>
+                    <td>{{ suspension.duration }}</td>
+                    <td>{{ suspension.createdAt|format_date('long') }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}

@@ -35,7 +35,7 @@ message_send:
  
 moderate_profile_images:
     path: /moderator/profile/images
-    controller: DatingLibre\AppBundle\Controller\ModerateImageController::index
+    controller: DatingLibre\AppBundle\Controller\ModeratorImageController::index
     methods: GET|POST
  
 account_delete:
@@ -73,11 +73,26 @@ search_index:
     controller: DatingLibre\AppBundle\Controller\SearchIndexController::index
     methods: GET|POST
  
-search_profile_view:
+user_profile_view:
     path: /profile/{userId}/view
-    controller: DatingLibre\AppBundle\Controller\SearchProfileViewController::index
+    controller: DatingLibre\AppBundle\Controller\UserProfileViewController::index
     methods: GET
- 
+
+moderator_profile_view:
+    path: /moderator/profile/{userId}/view
+    controller: DatingLibre\AppBundle\Controller\ModeratorProfileViewController::index
+    methods: GET
+
+moderator_profile_reports:
+    path: /moderator/profile/{userId}/reports
+    controller: DatingLibre\AppBundle\Controller\ModeratorProfileReportsController::index
+    methods: GET
+
+moderator_profile_report:
+    path: /moderator/profile/{userId}/report/{reportId}
+    controller: DatingLibre\AppBundle\Controller\ModeratorProfileReportController::view
+    methods: GET|POST
+
 register_terms:
     path: /register/terms
     controller: DatingLibre\AppBundle\Controller\RegisterController::terms
@@ -97,7 +112,32 @@ account_subscription:
     path: /account/subscription
     controller: DatingLibre\AppBundle\Controller\AccountSubscriptionController::viewSubscription
     methods: GET
- 
+
+report_user:
+    path: /report/{userId}
+    controller: DatingLibre\AppBundle\Controller\ReportController::report
+    methods: GET|POST
+
+moderator_reports:
+    path: /moderator/reports
+    controller: DatingLibre\AppBundle\Controller\ModeratorReportsController::index
+    methods: GET|POST
+
+moderator_suspensions:
+    path: /moderator/suspensions
+    controller: DatingLibre\AppBundle\Controller\ModeratorSuspensionsController::index
+    methods: GET|POST
+
+moderator_profile_suspensions:
+    path: /moderator/profile/{userId}/suspensions
+    controller: DatingLibre\AppBundle\Controller\ModeratorProfileSuspensionsController::index
+    methods: GET|POST
+
+moderator_profile_suspension:
+    path: /moderator/profile/{userId}/suspension/{suspensionId}
+    controller: DatingLibre\AppBundle\Controller\ModeratorProfileSuspensionController::view
+    methods: GET|POST
+
 ccbill_webhook:
     path: /ccbill/webhook
     controller: DatingLibre\AppBundle\Controller\CcBillWebhookController::webhook

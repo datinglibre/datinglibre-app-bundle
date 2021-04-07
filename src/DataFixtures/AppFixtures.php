@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DatingLibre\AppBundle\DataFixtures;
 
 use DatingLibre\AppBundle\Entity\Attribute;
-use DatingLibre\AppBundle\Entity\BlockReason;
 use DatingLibre\AppBundle\Entity\Category;
 use DatingLibre\AppBundle\Entity\User;
 use DatingLibre\AppBundle\Entity\City;
@@ -21,18 +20,18 @@ class AppFixtures extends Fixture
     private ObjectManager $objectManager;
     private array $categories;
     private array $attributes;
-    private array $blockReasons;
+    private array $reportReasons;
 
     public function __construct(
         UserPasswordEncoderInterface $encoder,
         array $categories,
         array $attributes,
-        array $blockReasons
+        array $reportReasons
     ) {
         $this->encoder = $encoder;
         $this->categories = $categories;
         $this->attributes = $attributes;
-        $this->blockReasons = $blockReasons;
+        $this->reportReasons = $reportReasons;
     }
 
     public function load(ObjectManager $manager): void
@@ -41,10 +40,6 @@ class AppFixtures extends Fixture
 
         $this->createTestUser();
         $this->createLocations();
-
-        foreach ($this->blockReasons as $blockReason) {
-            $this->createBlockReason($blockReason);
-        }
 
         foreach ($this->categories as $categoryName) {
             $category = $this->createCategory($categoryName);
@@ -187,10 +182,5 @@ class AppFixtures extends Fixture
         $this->objectManager->flush();
 
         return $city;
-    }
-
-    private function createBlockReason(string $reason)
-    {
-        $this->objectManager->persist((new BlockReason())->setName($reason));
     }
 }

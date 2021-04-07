@@ -28,7 +28,7 @@ class EventController extends AbstractController
 
         $events = $this->getEvents($eventForm->getYear(), $eventForm->getMonth(), $eventForm->getDay());
 
-        return $this->render('@DatingLibreApp/event/index.html.twig', [
+        return $this->render('@DatingLibreApp/admin/event/index.html.twig', [
             'events' => $events,
             'controller_name' => 'EventController',
             'eventFilterForm' => $eventFormType->createView()

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DatingLibre\AppBundle\Entity;
 
 use DateTime;
-use DatingLibre\AppBundle\Entity\City;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
@@ -17,12 +17,21 @@ use Doctrine\ORM\Mapping\OneToOne;
  */
 class Profile
 {
+    // moderation statuses
     public const UNMODERATED = 'UNMODERATED';
-    public const PASSED_MODERATION = 'PASSED_MODERATION';
+    public const PASSED = 'PASSED';
+
+    // subscription statuses
+    public const NO_SUBSCRIPTION = 'NONE';
 
     public function __construct()
     {
+        $this->about = null;
         $this->city = null;
+        $this->username = null;
+        $this->dob = null;
+        $this->subscriptionStatus = self::NO_SUBSCRIPTION;
+        $this->moderationStatus = self::UNMODERATED;
     }
 
     /**
@@ -41,27 +50,33 @@ class Profile
     /**
      * @ORM\Column(type="string", name="username")
      */
-    private $username;
+    private ?string $username;
 
     /**
      * @ORM\Column(type="string", name="about")
      */
-    private $about;
+    private ?string $about;
 
     /**
      * @ORM\Column(type="date", name="dob")
      */
-    private $dob;
+    private ?DateTimeInterface $dob;
 
     /**
      * @ORM\Column(name="updated_at", type="datetimetz")
      */
-    private $updatedAt;
+    private DateTimeInterface $updatedAt;
 
     /**
-     * @ORM\Column(name="state", type="string")
+     * @ORM\Column(name="moderation_status", type="string")
      */
-    private $state;
+    private string $moderationStatus;
+
+    /**
+     * @ORM\Column(name="subscription_status", type="string")
+     */
+    private string $subscriptionStatus;
+
 
     public function getUser(): User
     {
@@ -85,10 +100,9 @@ class Profile
         return $this->city;
     }
 
-    public function setUsername($username): self
+    public function setUsername(string $username): void
     {
         $this->username = $username;
-        return $this;
     }
 
     public function getUsername(): ?string
@@ -96,13 +110,12 @@ class Profile
         return $this->username;
     }
 
-    public function setAbout($about): ?self
+    public function setAbout(string $about): void
     {
         $this->about = $about;
-        return $this;
     }
 
-    public function getAbout()
+    public function getAbout(): ?string
     {
         return $this->about;
     }
@@ -113,31 +126,39 @@ class Profile
         return $this;
     }
 
-    public function getDob()
+    public function getDob(): ?DateTimeInterface
     {
         return $this->dob;
     }
 
-    public function setUpdatedAt($updatedAt)
+    public function getSubscriptionStatus(): string
+    {
+        return $this->subscriptionStatus;
+    }
+
+    public function setSubscriptionStatus(string $subscriptionStatus): void
+    {
+        $this->subscriptionStatus = $subscriptionStatus;
+    }
+
+    public function getModerationStatus(): string
+    {
+        return $this->moderationStatus;
+    }
+
+    public function setModerationStatus($moderationStatus): void
+    {
+        $this->moderationStatus = $moderationStatus;
+    }
+
+    public function setUpdatedAt($updatedAt): void
     {
         $this->updatedAt = $updatedAt;
-        return $this;
     }
 
-    public function getUpdatedAt()
+    public function getUpdatedAt(): DateTimeInterface
     {
         return $this->updatedAt;
-    }
-
-    public function setState(string $state): self
-    {
-        $this->state = $state;
-        return $this;
-    }
-
-    public function getState(): string
-    {
-        return $this->state;
     }
 
     /**
@@ -146,6 +167,6 @@ class Profile
     public function prePersist()
     {
         $this->updatedAt = new DateTime('UTC');
-        $this->state = $this->state === null ? 'UNMODERATED' : $this->state;
+        $this->moderationStatus = $this->moderationStatus === null ? self::UNMODERATED : $this->moderationStatus;
     }
 }

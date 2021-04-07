@@ -13,6 +13,7 @@ use DatingLibre\AppBundle\Repository\FilterRepository;
 use DatingLibre\AppBundle\Repository\UserRepository;
 use DatingLibre\AppBundle\Service\ProfileService;
 use DatingLibre\AppBundle\Service\RequirementService;
+use DatingLibre\AppBundle\Service\SuspensionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,7 @@ class SearchIndexController extends AbstractController
     private UserRepository $userRepository;
     private FilterRepository $filterRepository;
     private RequirementService $requirementService;
+    private SuspensionService $suspensionService;
     protected const PREVIOUS = 'previous';
     protected const NEXT = 'next';
     protected const LIMIT = 10;
@@ -32,19 +34,25 @@ class SearchIndexController extends AbstractController
         ProfileService $profileService,
         UserRepository $userRepository,
         FilterRepository $filterRepository,
-        RequirementService $requirementService
+        RequirementService $requirementService,
+        SuspensionService $suspensionService
     ) {
         $this->profileService = $profileService;
         $this->userRepository = $userRepository;
         $this->filterRepository = $filterRepository;
         $this->requirementService = $requirementService;
+        $this->suspensionService = $suspensionService;
     }
 
     public function index(UserInterface $user, Request $request)
     {
-        if (null === $this->profileService->find($user->getId())) {
+        if ($this->profileService->find($user->getId()) === null) {
             $this->addFlash('warning', 'profile.incomplete');
             return new RedirectResponse($this->generateUrl('profile_edit'));
+        }
+
+        if ($this->suspensionService->findOpenByUserId($user->getId())) {
+            return new RedirectResponse($this->generateUrl('profile_index'));
         }
 
         $user = $this->userRepository->find($this->getUser()->getId());
@@ -99,7 +107,7 @@ class SearchIndexController extends AbstractController
             self::LIMIT
         );
 
-        return $this->render('@DatingLibreApp/search/index.html.twig', [
+        return $this->render('@DatingLibreApp/user/search/index.html.twig', [
             'next' => $this->getNext($profiles, $previous),
             'previous' => $this->getPrevious($profiles, $next),
             'page' => 'search_index',

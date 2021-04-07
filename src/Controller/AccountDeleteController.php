@@ -30,7 +30,7 @@ class AccountDeleteController extends AbstractController
         }
 
         return $this->render(
-            '@DatingLibreApp/account/delete.html.twig',
+            '@DatingLibreApp/user/account/delete.html.twig',
             ['deleteAccountForm' => $deleteAccountForm->createView()]
         );
     }

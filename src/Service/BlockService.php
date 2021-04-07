@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DatingLibre\AppBundle\Service;
 
 use DatingLibre\AppBundle\Entity\Block;
-use DatingLibre\AppBundle\Entity\BlockReason;
 use DatingLibre\AppBundle\Repository\BlockRepository;
 use DatingLibre\AppBundle\Repository\UserRepository;
 use Symfony\Component\Uid\Uuid;
@@ -24,20 +23,18 @@ class BlockService
 
     public function block(
         Uuid $currentUserId,
-        Uuid $userToBlockId,
-        BlockReason $reason
+        Uuid $userToBlockId
     ) {
         $currentUser = $this->userRepository->find($currentUserId);
         $userToBlock = $this->userRepository->find($userToBlockId);
 
         if (null === $currentUser || null === $userToBlock) {
-            throw new NotFoundHttpException("Could not find user to block");
+            throw new NotFoundHttpException('Could not find user to block');
         }
 
         $block = new Block();
         $block->setUser($currentUser);
         $block->setBlockedUser($userToBlock);
-        $block->setReason($reason);
 
         $this->blockRepository->save($block);
     }

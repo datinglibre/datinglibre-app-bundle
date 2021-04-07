@@ -149,6 +149,17 @@ class UserContext extends RawMinkContext
         Assert::contains($this->getSession()->getPage()->getContent(), $message);
     }
 
+    /**
+     * @When the user :email has deleted their account
+     */
+    public function theUserHasDeletedTheirAccount(string $email)
+    {
+        $user = $this->userService->findByEmail($email);
+        Assert::notNull($user);
+
+        $this->userService->delete(null, $user->getId());
+    }
+
     public function getPasswordResetLink(): string
     {
         $crawler = new Crawler($this->passwordResetEmail);

@@ -25,14 +25,14 @@ class BlockController extends AbstractController
         $blockFormType->handleRequest($request);
 
         if ($blockFormType->isSubmitted() && $blockFormType->isValid()) {
-            $blockService->block($this->getUser()->getId(), $userId, $blockFormType->getData()['reason']);
+            $blockService->block($this->getUser()->getId(), $userId);
 
             $this->addFlash('success', 'block.success');
             return $this->redirectToRoute('search_index');
         }
 
         return $this->render(
-            '@DatingLibreApp/block/create.html.twig',
+            '@DatingLibreApp/user/block/create.html.twig',
             [
                 'controller_name' => 'BlockController',
                 'blockForm' => $blockFormType->createView(),

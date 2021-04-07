@@ -81,7 +81,7 @@ class ProfileEditController extends AbstractController
             return new RedirectResponse($this->generateUrl('profile_index'));
         }
 
-        return $this->render('@DatingLibreApp/profile/edit.html.twig', [
+        return $this->render('@DatingLibreApp/user/profile/edit.html.twig', [
             'controller_name' => 'ProfileEditController',
             'profileForm' => $profileFormType->createView(),
             'profile' => $profileProjection,

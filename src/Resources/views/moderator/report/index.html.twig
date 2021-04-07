@@ -1,0 +1,9 @@
+{% extends '@DatingLibreApp/moderator/moderator.html.twig' %}
+{% block title %}{{ 'menu.reports'|trans }} - {{ 'site.moderator'|trans }}{% endblock %}
+{% block menu %}
+    {% include '@DatingLibreApp/moderator/menu.html.twig' %}
+{% endblock %}
+{% block content %}
+    {% from '@DatingLibreApp/moderator/macros/reports.table.html.twig' import reports_table %}
+    {{ reports_table(reports, true, true, null)}}
+{% endblock %}

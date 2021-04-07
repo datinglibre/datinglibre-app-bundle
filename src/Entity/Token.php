@@ -22,19 +22,12 @@ class Token
     public const PASSWORD_RESET = 'PASSWORD_RESET';
 
     /**
-     * @var Uuid
-     *
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidV4Generator::class)
      * @ORM\Column(type="uuid")
      */
     private $id;
-
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
 
     /**
      * @ORM\OneToOne(targetEntity="user")
@@ -56,6 +49,11 @@ class Token
      * @ORM\Column(name="created_at", type="datetimetz")
      */
     private $createdAt;
+
+    public function getId(): Uuid
+    {
+        return $this->id;
+    }
 
     public function getUser()
     {

@@ -1,0 +1,21 @@
+{% macro messages_table(messages) %}
+    {% if messages is empty %}
+        <div class="alert alert-success">
+            {{ 'report.no_messages'|trans }}
+        </div>
+    {% endif %}
+    {% if messages is not empty %}
+        {% from '@DatingLibreApp/macros/profile.image.html.twig' import profile_image %}
+        <table class="table table-striped">
+            {% for message in messages %}
+                <tr class="d-flex">
+                    <td class="col-1">{{ profile_image(message.secureProfileImageUrl) }}</td>
+                    <td class="col-11">
+                        <h5 class="media-heading">{{ message.senderUsername }}</h5>
+                        <div>{{ message.content }}</div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endmacro %}

@@ -1,0 +1,10 @@
+{% extends '@DatingLibreApp/user/user.html.twig' %}
+{% block title %}{% endblock %}
+{% block menu %}
+    {% from '@DatingLibreApp/macros/profile.image.html.twig' import profile_image %}
+    {{ profile_image(profile.imageUrl) }}
+    {% include '@DatingLibreApp/user/message/menu.html.twig' %}
+{% endblock %}
+{% block content %}
+    {{ form(blockForm) }}
+{% endblock %}

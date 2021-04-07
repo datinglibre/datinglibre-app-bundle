@@ -20,7 +20,7 @@ class DatingLibreAppExtension extends Extension
         $configuration = $this->processConfiguration(new Configuration(), $configs);
         $container->setParameter('datinglibre.categories', $configuration['categories']);
         $container->setParameter('datinglibre.attributes', $configuration['attributes']);
-        $container->setParameter('datinglibre.block_reasons', $configuration['block_reasons']);
+        $container->setParameter('datinglibre.rules', $configuration['rules']);
         $container->setParameter('datinglibre.image_upload', $configuration['image_upload']);
         $container->setParameter('datinglibre.is_demo', $configuration['is_demo']);
         $container->setParameter('datinglibre.admin_email', $configuration['admin_email']);

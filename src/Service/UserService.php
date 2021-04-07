@@ -91,7 +91,7 @@ class UserService
                 ->from($this->adminEmail)
                 ->subject($this->translator->trans('registration.already_exists_subject'))
                 ->to($newUser->getEmail())
-                ->htmlTemplate('@DatingLibreApp/user/email/already_exists.html.twig');
+                ->htmlTemplate('@DatingLibreApp/user/account/email/already_exists.html.twig');
 
             $this->emailService->send($email, $existingUser, Email::ALREADY_EXISTS);
             return;
@@ -106,7 +106,7 @@ class UserService
             ->from($this->adminEmail)
             ->subject($this->translator->trans('user.signup_subject'))
             ->to($savedUser->getEmail())
-            ->htmlTemplate('@DatingLibreApp/user/email/confirm.html.twig')
+            ->htmlTemplate('@DatingLibreApp/user/account/email/confirm.html.twig')
             ->context(['secret' => $token->getSecret(), 'userId' => $savedUser->getId()->toRfc4122()]);
 
         $this->emailService->send($email, $savedUser, Email::SIGNUP);
@@ -143,7 +143,7 @@ class UserService
             ->from($this->adminEmail)
             ->subject($this->translator->trans('user.reset_password_subject'))
             ->to($user->getEmail())
-            ->htmlTemplate('@DatingLibreApp/user/email/password_reset.html.twig')
+            ->htmlTemplate('@DatingLibreApp/user/account/email/password_reset.html.twig')
             ->context(['secret' => $token->getSecret(), 'userId' => $user->getId()->toRfc4122()]);
 
         $this->emailService->send($email, $user, Email::PASSWORD_RESET);

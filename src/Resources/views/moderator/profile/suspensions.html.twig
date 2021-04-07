@@ -1,0 +1,63 @@
+{% extends '@DatingLibreApp/moderator/moderator.html.twig' %}
+{% block title %}{{ 'menu.suspensions'|trans }} - {{ 'site.moderator'|trans }}{% endblock %}
+{% block menu %}
+    {% from '@DatingLibreApp/macros/profile.image.html.twig' import profile_image %}
+    {{ profile_image(profile.imageUrl) }}
+    {% include '@DatingLibreApp/moderator/profile/menu.html.twig' %}
+{% endblock %}
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2>
+                {{ profile.username }}
+                <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
+            </h2>
+            {{ profile.about|nl2br }}
+        </div>
+    </div>
+    {% if suspensions is empty %}
+        <div class="alert alert-success">{{ 'suspension.empty'|trans }}</div>
+    {% endif %}
+    {% if suspensions is not empty %}
+        <table class="table table-striped">
+            <thead>
+            <th colspan="col">{{ 'suspension.reasons'|trans }}</th>
+            <th colspan="col">{{ 'suspension.created_at'|trans }}</th>
+            <th colspan="col">{{ 'suspension.duration'|trans }}</th>
+            <th colspan="col">{{ 'suspension.elapsed'|trans }}</th>
+            <th colspan="col">{{ 'suspension.status'|trans }}</th>
+            <th colspan="col">{{ 'suspension.action'|trans }}</th>
+            </thead>
+            {% for suspension in suspensions %}
+                <tr class="{% if suspension.elapsed and suspension.status == 'open' %}table-warning{% endif %}">
+                    <td>
+                        {% if suspension.reasons is not empty %}
+                            <ul>
+                                {% for reason in suspension.reasons %}
+                                    <li>{{ reason|trans({}, 'rules') }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </td>
+                    <td>{{ suspension.createdAt|format_datetime('long') }}</td>
+                    <td>{{ suspension.duration }}</td>
+                    <td>{% if suspension.elapsed %}{{ 'suspension.yes'|trans }}{% else %}{{ 'suspension.no'|trans }}{% endif %}</td>
+                    <td>{{ ('suspension.' ~ suspension.status)|trans }}</td>
+                    <td>{% if suspension.elapsed and suspension.status == 'open' %}
+                            <a href="{{ path('moderator_profile_suspension', {'userId': profile.id, 'suspensionId': suspension.id}) }}"
+                               class="btn btn-primary btn-sm">{{ 'suspension.close'|trans }}</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if openSuspension is null %}
+        {{ form_start(suspensionForm) }}
+        {{ form_row(suspensionForm.duration) }}
+        {{ form_row(suspensionForm.reasons) }}
+        {{ form_row(suspensionForm.submit, {'attr': {'class': 'btn btn-danger'}}) }}
+        {{ form_end(suspensionForm) }}
+    {% endif %}
+{% endblock %}
+

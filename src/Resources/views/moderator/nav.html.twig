@@ -1,0 +1,26 @@
+{% from '@DatingLibreApp/macros/is_active.html.twig' import is_active %}
+{% if app.user %}
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="{{ path('login') }}">{{ 'site.name'|trans }}</a>
+    <div class="collapse navbar-collapse" id="site_navbar">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('moderate_profile_images') }}">{{ 'nav.moderate'|trans  }}</a>
+            </li>
+            {% if is_granted('ROLE_ADMIN') %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('events_index') }}">{{ 'nav.events'|trans  }}</a>
+            </li>
+            {% endif %}
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('logout') }}">{{ 'nav.logout'|trans }}</a>
+            </li>
+        </ul>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#site_navbar" aria-controls="site_navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</nav>
+{% endif %}

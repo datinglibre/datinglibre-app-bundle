@@ -180,12 +180,12 @@ class ProfileProjection
         return null !== $this->getImageState();
     }
 
-    public function isImageUnmoderated()
+    public function isImageUnmoderated(): bool
     {
         return Image::UNMODERATED === $this->getImageState();
     }
 
-    public function isImageRejected()
+    public function isImageRejected(): bool
     {
         return Image::REJECTED === $this->getImageState();
     }

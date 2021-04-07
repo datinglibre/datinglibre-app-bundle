@@ -69,8 +69,8 @@ final class Version20200101000000 extends AbstractMigration
     about TEXT,
     meta JSONB,
     city_id UUID REFERENCES datinglibre.cities,
-    state TEXT DEFAULT \'CREATED\'::TEXT NOT NULL,
-    status TEXT,
+    moderation_status TEXT NOT NULL,
+    subscription_status TEXT NOT NULL,
     sort_id BIGSERIAL,
     updated_at TIMESTAMP WITH TIME ZONE
 );');
@@ -95,19 +95,25 @@ final class Version20200101000000 extends AbstractMigration
     attribute_id UUID NOT NULL REFERENCES datinglibre.attributes,
     UNIQUE(user_id, attribute_id)
 );');
-        $this->addSql('CREATE TABLE datinglibre.block_reasons (
-    id UUID NOT NULL PRIMARY KEY,
-    name TEXT NOT NULL UNIQUE
-)');
-
         $this->addSql('CREATE TABLE datinglibre.blocks (
     id UUID NOT NULL PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES datinglibre.users ON DELETE CASCADE,
     blocked_user_id UUID NOT NULL REFERENCES datinglibre.users ON DELETE CASCADE,
-    reason_id UUID NOT NULL REFERENCES datinglibre.block_reasons,
-    state TEXT,
     UNIQUE (user_id, blocked_user_id)
 );');
+
+        $this->addSql('CREATE TABLE datinglibre.reports (
+    id UUID NOT NULL PRIMARY KEY,
+    user_id UUID NULL REFERENCES datinglibre.users ON DELETE SET NULL,
+    reported_user_id UUID NOT NULL REFERENCES datinglibre.users ON DELETE CASCADE,
+    reasons JSONB NOT NULL,
+    message TEXT,
+    status TEXT NOT NULL CHECK (status IN (\'open\', \'closed\')),
+    moderator_closed_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    UNIQUE (user_id, reported_user_id)
+)');
 
         $this->addSql('CREATE TABLE datinglibre.filters (
     user_id UUID NOT NULL REFERENCES datinglibre.users ON DELETE CASCADE,
@@ -130,8 +136,8 @@ final class Version20200101000000 extends AbstractMigration
     id UUID NOT NULL PRIMARY KEY,
     secret TEXT,
     type TEXT,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     user_id UUID NOT NULL REFERENCES datinglibre.users ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     UNIQUE (user_id, type)
 );');
 
@@ -164,8 +170,20 @@ final class Version20200101000000 extends AbstractMigration
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
     UNIQUE (provider, provider_id)
 )');
-
         $this->addSql('CREATE INDEX subscriptions_provider_id ON datinglibre.subscriptions(provider, provider_id);');
+
+        $this->addSql('CREATE TABLE datinglibre.suspensions (
+    id UUID NOT NULL PRIMARY KEY,
+    user_id UUID REFERENCES datinglibre.users ON DELETE CASCADE,
+    moderator_opened_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
+    moderator_closed_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
+    duration INT NOT NULL,
+    reasons JSONB NOT NULL,
+    status TEXT NOT NULL CHECK (status IN (\'open\', \'closed\')),
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL
+)');
+        $this->addSql('CREATE UNIQUE INDEX unique_open_suspension ON datinglibre.suspensions(user_id) WHERE (status = \'open\')');
     }
 
     public function down(Schema $schema): void
@@ -178,7 +196,6 @@ final class Version20200101000000 extends AbstractMigration
         $this->addSql('DROP TABLE datinglibre.user_attributes');
         $this->addSql('DROP TABLE datinglibre.attributes');
         $this->addSql('DROP TABLE datinglibre.blocks');
-        $this->addSql('DROP TABLE datinglibre.block_reasons');
         $this->addSql('DROP TABLE datinglibre.searches');
         $this->addSql('DROP TABLE datinglibre.messages');
         $this->addSql('DROP TABLE datinglibre.tokens');
@@ -186,5 +203,7 @@ final class Version20200101000000 extends AbstractMigration
         $this->addSql('DROP TABLE datinglibre.filters');
         $this->addSql('DROP TABLE datinglibre.events');
         $this->addSql('DROP TABLE datinglibre.subscriptions');
+        $this->addSql('DROP TABLE datinglibre.reports');
+        $this->addSql('DROP TABLE datinglibre.suspensions');
     }
 }

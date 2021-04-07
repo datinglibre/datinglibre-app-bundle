@@ -108,7 +108,6 @@ services:
     arguments:
       - '@DatingLibre\AppBundle\Service\UserService'
       - '@DatingLibre\AppBundle\Repository\BlockRepository'
-      - '@DatingLibre\AppBundle\Repository\BlockReasonRepository'
       - '@DatingLibre\AppBundle\Behat\Page\BlockPage'
 
   DatingLibre\AppBundle\Behat\UserContext:
@@ -146,6 +145,13 @@ services:
       - '@DatingLibre\AppBundle\Service\UserService'
       - '@DatingLibre\AppBundle\Repository\SubscriptionRepository'
 
+  DatingLibre\AppBundle\Behat\SuspensionContext:
+    public: true
+    arguments:
+      - '@DatingLibre\AppBundle\Service\UserService'
+      - '@DatingLibre\AppBundle\Repository\SuspensionRepository'
+      - '@DatingLibre\AppBundle\Service\SuspensionService'
+
   DatingLibre\AppBundle\Behat\CcBillContext:
     public: true
     arguments:
@@ -154,3 +160,8 @@ services:
       - '@DatingLibre\AppBundle\Repository\SubscriptionRepository'
       - '@DatingLibre\AppBundle\Service\CcBillService'
 
+  DatingLibre\AppBundle\Behat\ReportContext:
+    public: true
+    arguments:
+      - '@DatingLibre\AppBundle\Service\UserService'
+      - '@DatingLibre\AppBundle\Repository\ReportRepository'

@@ -61,7 +61,7 @@ SELECT p.user_id,
     profileImage.state as image_state, 
     city.name as city_name,
     region.name as region_name,
-    p.state, 
+    p.moderation_status, 
     p.sort_id as sort_id
 FROM datinglibre.profiles AS p
 INNER JOIN datinglibre.cities AS city ON p.city_id = city.id 
@@ -222,7 +222,7 @@ EOD, $rsm);
             i.state AS image_state, 
             city.name AS city_name, 
             region.name AS region_name, 
-            p.state AS state,
+            p.moderation_status AS moderation_status,
             u.last_login as last_login
             FROM datinglibre.profiles p
             LEFT JOIN datinglibre.images i ON p.user_id = i.user_id AND i.state = 'ACCEPTED' AND i.is_profile IS TRUE
@@ -234,13 +234,13 @@ EOD, $rsm);
             (SELECT b FROM datinglibre.blocks b WHERE
              (b.user_id = :currentUserId AND b.blocked_user_id = :userId) OR (b.user_id = :userId AND b.blocked_user_id = :currentUserId)
             ) 
-            AND p.state = :unmoderated OR p.state = :passed_moderation
+            AND p.moderation_status = :unmoderated OR p.moderation_status = :passed
 EOD, $rsm);
 
         $query->setParameter('userId', $userId);
         $query->setParameter('currentUserId', $currentUserId);
         $query->setParameter('unmoderated', Profile::UNMODERATED);
-        $query->setParameter('passed_moderation', Profile::PASSED_MODERATION);
+        $query->setParameter('passed', Profile::PASSED);
 
         return $query->getOneOrNullResult();
     }

@@ -23,7 +23,7 @@ class Configuration implements ConfigurationInterface
             ->scalarPrototype()->end()
             ->end()
             ->end()
-            ->arrayNode('block_reasons')
+            ->arrayNode('rules')
             ->scalarPrototype()->end()
             ->end()
             ->booleanNode('image_upload')->end()

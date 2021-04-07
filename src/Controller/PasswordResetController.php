@@ -27,7 +27,7 @@ class PasswordResetController extends AbstractController
             return $this->redirectToRoute('login');
         }
 
-        return $this->render('@DatingLibreApp/user/password_reset.html.twig', [
+        return $this->render('@DatingLibreApp/user/account/password_reset.html.twig', [
             'passwordResetForm' => $passwordResetFormType->createView(),
         ]);
     }

@@ -27,13 +27,13 @@ class RegisterController extends AbstractController
             return $this->redirectToRoute('login');
         }
 
-        return $this->render('@DatingLibreApp/register/register.html.twig', [
+        return $this->render('@DatingLibreApp/user/register/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }
 
     public function terms(): Response
     {
-        return $this->render('@DatingLibreApp/register/terms.html.twig');
+        return $this->render('@DatingLibreApp/user/register/terms.html.twig');
     }
 }

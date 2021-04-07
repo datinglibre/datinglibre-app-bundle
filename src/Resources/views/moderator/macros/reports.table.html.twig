@@ -1,0 +1,50 @@
+{% macro reports_table(reports, displayReportedUser, displayView, userId) %}
+    {% if reports is empty %}
+        <div class="alert alert-success">{{ 'report.empty'|trans }}</div>
+    {% else %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                {% if displayReportedUser %}<th scope="col">{{ 'report.reported_user'|trans }}</th>{% endif %}
+                <th scope="col">{{ 'report.reported_by'|trans }}</th>
+                <th scope="col">{{ 'report.reasons'|trans }}</th>
+                <th scope="col">{{ 'report.status'|trans }}</th>
+                <th scope="col">{{ 'report.updated_at'|trans }}</th>
+                <th scope="col">{{ 'report.created_at'|trans }}</th>
+                {% if displayView %}<th scope="col"></th>{% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for report in reports %}
+                <tr>
+                    {% if displayReportedUser %}
+                    <td>
+                        <a href="{{ path('moderator_profile_view', {'userId': report.reportedId}) }}">{{ report.reportedUsername }}</a>
+                    </td>
+                    {% endif %}
+                    <td>{% if report.reporterId is not null %}<a
+                            href="{{ path('moderator_profile_view', {'userId': report.reporterId}) }}">{{ report.reporterUsername }}</a>{% endif %}
+                    </td>
+                    <td>
+                        {% if report.reasons is not empty %}
+                            <ul>
+                                {% for reason in report.reasons %}
+                                    <li>{{ reason|trans({}, 'rules') }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </td>
+                    <td>{{ ('report.' ~ report.status)|trans }}</td>
+                    <td>{{ report.updatedAt|format_date('long') }}</td>
+                    <td>{{ report.createdAt|format_date('long') }}</td>
+                    {% if displayView %}
+                        <td>
+                            <a href="{{ path('moderator_profile_report', {'userId': report.reportedId, 'reportId': report.id}) }}" class="btn btn-primary btn-sm" role="button">{{ 'report.view'|trans }}</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endmacro  %}

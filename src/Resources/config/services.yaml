@@ -31,14 +31,6 @@ services:
     autoconfigure: true
     arguments: [ '@doctrine' ]
 
-  DatingLibre\AppBundle\Repository\BlockReasonRepository:
-    class: DatingLibre\AppBundle\Repository\BlockReasonRepository
-    tags:
-      - { name: doctrine.repository_service }
-    autowire: true
-    autoconfigure: true
-    arguments: [ '@doctrine' ]
-
   DatingLibre\AppBundle\Repository\BlockRepository:
     class: DatingLibre\AppBundle\Repository\BlockRepository
     tags:
@@ -135,6 +127,22 @@ services:
     autoconfigure: true
     arguments: [ '@doctrine' ]
 
+  DatingLibre\AppBundle\Repository\SuspensionRepository:
+    class: DatingLibre\AppBundle\Repository\SuspensionRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\ReportRepository:
+   class: DatingLibre\AppBundle\Repository\ReportRepository
+   tags:
+     - { name: doctrine.repository_service }
+   autowire: true
+   autoconfigure: true
+   arguments: [ '@doctrine' ]
+
   DatingLibre\AppBundle\Repository\SubscriptionRepository:
     class: DatingLibre\AppBundle\Repository\SubscriptionRepository
     tags:
@@ -228,7 +236,6 @@ services:
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
-
   DatingLibre\AppBundle\Controller\LogoutController:
     class: DatingLibre\AppBundle\Controller\LogoutController
     public: true
@@ -239,7 +246,6 @@ services:
     autoconfigure: true
     calls:
       - [ setContainer, [ '@service_container' ] ]
-
 
   DatingLibre\AppBundle\Controller\MatchesController:
     class: DatingLibre\AppBundle\Controller\MatchesController
@@ -267,8 +273,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\ModerateImageController:
-    class: DatingLibre\AppBundle\Controller\ModerateImageController
+  DatingLibre\AppBundle\Controller\ModeratorImageController:
+    class: DatingLibre\AppBundle\Controller\ModeratorImageController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -368,8 +374,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\SearchProfileViewController:
-    class: DatingLibre\AppBundle\Controller\SearchProfileViewController
+  DatingLibre\AppBundle\Controller\UserProfileViewController:
+    class: DatingLibre\AppBundle\Controller\UserProfileViewController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -380,6 +386,77 @@ services:
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
+  DatingLibre\AppBundle\Controller\ModeratorProfileViewController:
+    class: DatingLibre\AppBundle\Controller\ModeratorProfileViewController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+  DatingLibre\AppBundle\Controller\ModeratorProfileReportsController:
+    class: DatingLibre\AppBundle\Controller\ModeratorProfileReportsController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository', '@DatingLibre\AppBundle\Service\ReportService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+  DatingLibre\AppBundle\Controller\ModeratorProfileReportController:
+    class: DatingLibre\AppBundle\Controller\ModeratorProfileReportController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository', '@DatingLibre\AppBundle\Service\ReportService', '@DatingLibre\AppBundle\Service\MessageService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+  DatingLibre\AppBundle\Controller\ModeratorSuspensionsController:
+    class: DatingLibre\AppBundle\Controller\ModeratorSuspensionsController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\SuspensionService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+  DatingLibre\AppBundle\Controller\ModeratorProfileSuspensionsController:
+    class: DatingLibre\AppBundle\Controller\ModeratorProfileSuspensionsController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository', '@DatingLibre\AppBundle\Service\SuspensionService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+  DatingLibre\AppBundle\Controller\ModeratorProfileSuspensionController:
+    class: DatingLibre\AppBundle\Controller\ModeratorProfileSuspensionController
+    public: true
+    tags:
+    - { name: controller.service_arguments }
+    - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository', '@DatingLibre\AppBundle\Service\SuspensionService' ]
+    calls:
+    - [ setContainer, [ '@service_container' ] ]
 
   DatingLibre\AppBundle\Controller\TokenController:
     class: DatingLibre\AppBundle\Controller\TokenController
@@ -417,6 +494,29 @@ services:
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
+  DatingLibre\AppBundle\Controller\ReportController:
+    class: DatingLibre\AppBundle\Controller\ReportController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\ProfileService', '@DatingLibre\AppBundle\Service\ReportService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+  DatingLibre\AppBundle\Controller\ModeratorReportsController:
+    class: DatingLibre\AppBundle\Controller\ModeratorReportsController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\ReportService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
 
   DatingLibre\AppBundle\Controller\CcBillWebhookController:
     class: DatingLibre\AppBundle\Controller\CcBillWebhookController
@@ -435,7 +535,7 @@ services:
     class: DatingLibre\AppBundle\DataFixtures\AppFixtures
     autowire: true
     autoconfigure: true
-    arguments: [ '@security.user_password_encoder.generic', '%datinglibre.categories%', '%datinglibre.attributes%', '%datinglibre.block_reasons%' ]
+    arguments: [ '@security.user_password_encoder.generic', '%datinglibre.categories%', '%datinglibre.attributes%', '%datinglibre.rules%' ]
 
   DatingLibre\AppBundle\EventListener\LoginListener:
     class: DatingLibre\AppBundle\EventListener\LoginListener
@@ -451,7 +551,22 @@ services:
       - { name: form.type }
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Repository\BlockReasonRepository' ]
+
+  DatingLibre\AppBundle\Form\ReportFormType:
+    class: DatingLibre\AppBundle\Form\ReportFormType
+    tags:
+      - { name: form.type }
+    autowire: true
+    autoconfigure: true
+    arguments: ['%datinglibre.rules%']
+
+  DatingLibre\AppBundle\Form\SuspensionFormType:
+    class: DatingLibre\AppBundle\Form\SuspensionFormType
+    tags:
+      - { name: form.type }
+    autowire: true
+    autoconfigure: true
+    arguments: ['%datinglibre.rules%']
 
   DatingLibre\AppBundle\Form\CountryFieldSubscriber:
     class: DatingLibre\AppBundle\Form\CountryFieldSubscriber
@@ -572,6 +687,12 @@ services:
     autoconfigure: true
     arguments: [ '@DatingLibre\AppBundle\Repository\BlockRepository', '@DatingLibre\AppBundle\Repository\UserRepository' ]
 
+  DatingLibre\AppBundle\Service\ReportService:
+    class: DatingLibre\AppBundle\Service\ReportService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\ReportRepository', '@DatingLibre\AppBundle\Repository\UserRepository' ]
+
   DatingLibre\AppBundle\Service\EmailService:
     class: DatingLibre\AppBundle\Service\EmailService
     autowire: true
@@ -626,11 +747,23 @@ services:
     autoconfigure: true
     arguments: [ '@DatingLibre\AppBundle\Repository\EventRepository', '@DatingLibre\AppBundle\Repository\UserRepository' ]
 
+  DatingLibre\AppBundle\Service\SuspensionService:
+    class: DatingLibre\AppBundle\Service\SuspensionService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\UserRepository', '@DatingLibre\AppBundle\Repository\SuspensionRepository']
+
   DatingLibre\AppBundle\Service\SubscriptionService:
     class: DatingLibre\AppBundle\Service\SubscriptionService
     autowire: true
     autoconfigure: true
     arguments: [ '@DatingLibre\AppBundle\Repository\SubscriptionRepository', '@DatingLibre\AppBundle\Repository\UserRepository', '@DatingLibre\AppBundle\Service\EventService' ]
+
+  DatingLibre\AppBundle\Service\MessageService:
+    class: DatingLibre\AppBundle\Service\MessageService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\MessageRepository' ]
 
   DatingLibre\AppBundle\Service\CcBillService:
     class: DatingLibre\AppBundle\Service\CcBillService

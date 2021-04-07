@@ -20,7 +20,7 @@ class AccountSubscriptionController extends AbstractController
     public function viewSubscription(Request $request)
     {
         return $this->render(
-            '@DatingLibreApp/account/subscription.html.twig',
+            '@DatingLibreApp/user/account/subscription.html.twig',
             [
                 'controller_name' => 'AccountSubscriptionController',
                 'subscriptions' => $this->subscriptionService->findByUserId($this->getUser()->getId())
