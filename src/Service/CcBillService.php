@@ -6,16 +6,16 @@ namespace DatingLibre\AppBundle\Service;
 
 use DatingLibre\AppBundle\Entity\Event;
 use DatingLibre\AppBundle\Entity\Subscription;
-use DatingLibre\CcBillEventParser\Event\BillingDateChangeEvent;
-use DatingLibre\CcBillEventParser\Event\CancellationEvent;
-use DatingLibre\CcBillEventParser\Event\CcBillEvent;
-use DatingLibre\CcBillEventParser\Event\ChargebackEvent;
-use DatingLibre\CcBillEventParser\Event\ErrorEvent;
-use DatingLibre\CcBillEventParser\Event\NewSaleFailureEvent;
-use DatingLibre\CcBillEventParser\Event\NewSaleSuccessEvent;
-use DatingLibre\CcBillEventParser\Event\RefundEvent;
-use DatingLibre\CcBillEventParser\Event\RenewalFailureEvent;
-use DatingLibre\CcBillEventParser\Event\RenewalSuccessEvent;
+use DatingLibre\CcBill\Event\BillingDateChangeEvent;
+use DatingLibre\CcBill\Event\CancellationEvent;
+use DatingLibre\CcBill\Event\CcBillEvent;
+use DatingLibre\CcBill\Event\ChargebackEvent;
+use DatingLibre\CcBill\Event\ErrorEvent;
+use DatingLibre\CcBill\Event\NewSaleFailureEvent;
+use DatingLibre\CcBill\Event\NewSaleSuccessEvent;
+use DatingLibre\CcBill\Event\RefundEvent;
+use DatingLibre\CcBill\Event\RenewalFailureEvent;
+use DatingLibre\CcBill\Event\RenewalSuccessEvent;
 use Symfony\Component\Uid\Uuid;
 
 class CcBillService

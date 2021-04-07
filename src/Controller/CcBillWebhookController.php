@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DatingLibre\AppBundle\Controller;
 
 use DatingLibre\AppBundle\Service\CcBillService;
-use DatingLibre\CcBillEventParser\Parser\CcBillEventParser;
+use DatingLibre\CcBill\Mapper\CcBillEventMapper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +25,7 @@ class CcBillWebhookController extends AbstractController
     {
         $event = json_decode(mb_convert_encoding($request->getContent(), self::UTF_8, self::UTF_8), true);
 
-        $this->ccBillService->processEvent(CcBillEventParser::parseEvent(
+        $this->ccBillService->processEvent(CcBillEventMapper::mapEvent(
             $request->query->get(self::EVENT_TYPE),
             $event
         ));

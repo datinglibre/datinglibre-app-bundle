@@ -26,8 +26,8 @@
     "composer/xdebug-handler": {
         "version": "1.4.5"
     },
-    "datinglibre/datinglibre-ccbill-bundle": {
-        "version": "v0.1.0"
+    "datinglibre/ccbill": {
+        "version": "v0.5.0"
     },
     "doctrine/annotations": {
         "version": "1.0",
