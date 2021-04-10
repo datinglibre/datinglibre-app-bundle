@@ -1,0 +1,104 @@
+login:
+    path: /
+    controller: DatingLibre\AppBundle\Controller\LoginController::login
+
+register:
+    path: /register
+    controller: DatingLibre\AppBundle\Controller\RegisterController::register
+    methods: GET|POST
+
+update_password:
+    path: /user/password
+    controller: DatingLibre\AppBundle\Controller\PasswordUpdateController::processPasswordReset
+    methods: GET|POST
+    condition: request.get('userId') matches '/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i'
+
+reset_password:
+    path: /user/password
+    controller: DatingLibre\AppBundle\Controller\PasswordResetController::password
+    methods: GET|POST
+
+block_user:
+    path: /block/{userId}
+    controller: DatingLibre\AppBundle\Controller\BlockController::block
+    methods: GET|POST
+
+matches_index:
+    path: /matches
+    controller: DatingLibre\AppBundle\Controller\MatchesController::matches
+    methods: GET
+ 
+message_send:
+    path: /message/{userId}
+    controller: DatingLibre\AppBundle\Controller\MessageSendController::message
+    methods: GET|POST
+ 
+moderate_profile_images:
+    path: /moderator/profile/images
+    controller: DatingLibre\AppBundle\Controller\ModerateImageController::index
+    methods: GET|POST
+ 
+account_delete:
+    path: /account/delete
+    controller: DatingLibre\AppBundle\Controller\AccountDeleteController::delete
+    methods: GET|POST
+ 
+profile_edit:
+    path: /profile/edit
+    controller: DatingLibre\AppBundle\Controller\ProfileEditController::edit
+    methods: GET|POST
+ 
+profile_image:
+    path: /profile/image
+    controller: DatingLibre\AppBundle\Controller\ProfileImageController::index
+    methods: GET|POST
+ 
+profile_index:
+    path: /profile
+    controller: DatingLibre\AppBundle\Controller\ProfileIndexController::index
+    methods: GET
+ 
+country_regions:
+    path: /location/country/{countryId}/regions
+    controller: DatingLibre\AppBundle\Controller\LocationController::displayRegions
+    methods: GET
+ 
+region_cities:
+    path: /location/region/{regionId}/cities
+    controller: DatingLibre\AppBundle\Controller\LocationController::displayCities
+    methods: GET
+ 
+search_index:
+    path: /search
+    controller: DatingLibre\AppBundle\Controller\SearchIndexController::index
+    methods: GET|POST
+ 
+search_profile_view:
+    path: /profile/{userId}/view
+    controller: DatingLibre\AppBundle\Controller\SearchProfileViewController::index
+    methods: GET
+ 
+register_terms:
+    path: /register/terms
+    controller: DatingLibre\AppBundle\Controller\RegisterController::terms
+    methods: GET
+ 
+process_token:
+    path: /token/{secret}
+    controller: DatingLibre\AppBundle\Controller\TokenController::processConfirm
+    methods: GET
+ 
+events_index:
+    path: /admin/events
+    controller: DatingLibre\AppBundle\Controller\EventController::displayEvents
+    methods: GET|POST
+ 
+account_subscription:
+    path: /account/subscription
+    controller: DatingLibre\AppBundle\Controller\AccountSubscriptionController::viewSubscription
+    methods: GET
+ 
+ccbill_webhook:
+    path: /ccbill/webhook
+    controller: DatingLibre\AppBundle\Controller\CcBillWebhookController::webhook
+    methods: GET|POST

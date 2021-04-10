@@ -1,0 +1,647 @@
+services:
+  DatingLibre\AppBundle\Repository\CityRepository:
+    class: DatingLibre\AppBundle\Repository\CityRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\CountryRepository:
+    class: DatingLibre\AppBundle\Repository\CountryRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\RegionRepository:
+    class: DatingLibre\AppBundle\Repository\RegionRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\AttributeRepository:
+    class: DatingLibre\AppBundle\Repository\AttributeRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\BlockReasonRepository:
+    class: DatingLibre\AppBundle\Repository\BlockReasonRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\BlockRepository:
+    class: DatingLibre\AppBundle\Repository\BlockRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\CategoryRepository:
+    class: DatingLibre\AppBundle\Repository\CategoryRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\EmailRepository:
+    class: DatingLibre\AppBundle\Repository\EmailRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\FilterRepository:
+    class: DatingLibre\AppBundle\Repository\FilterRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\ImageRepository:
+    class: DatingLibre\AppBundle\Repository\ImageRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\MessageRepository:
+    class: DatingLibre\AppBundle\Repository\MessageRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\ProfileRepository:
+    class: DatingLibre\AppBundle\Repository\ProfileRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\RequirementRepository:
+    class: DatingLibre\AppBundle\Repository\RequirementRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\TokenRepository:
+    class: DatingLibre\AppBundle\Repository\TokenRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\UserAttributeRepository:
+    class: DatingLibre\AppBundle\Repository\UserAttributeRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\UserRepository:
+    class: DatingLibre\AppBundle\Repository\UserRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\EventRepository:
+    class: DatingLibre\AppBundle\Repository\EventRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\SubscriptionRepository:
+    class: DatingLibre\AppBundle\Repository\SubscriptionRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Command\CreateUserCommand:
+    class: DatingLibre\AppBundle\Command\CreateUserCommand
+    tags:
+      - { name: console.command }
+      - { name: container.no_preload }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\UserService' ]
+    calls:
+      - [ setName, [ 'app:users:create' ] ]
+
+
+  DatingLibre\AppBundle\Command\PurgeUsersCommand:
+    class: DatingLibre\AppBundle\Command\PurgeUsersCommand
+    tags:
+      - { name: console.command }
+      - { name: container.no_preload }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\UserService' ]
+    calls:
+      - [ setName, [ 'app:users:purge' ] ]
+
+
+  DatingLibre\AppBundle\Command\RefreshExpiredSecureImageUrls:
+    class: DatingLibre\AppBundle\Command\RefreshExpiredSecureImageUrls
+    tags:
+      - { name: console.command }
+      - { name: container.no_preload }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\ImageService' ]
+    calls:
+      - [ setName, [ 'app:secure_urls:refresh_image_urls' ] ]
+
+
+  DatingLibre\AppBundle\Controller\LocationController:
+    class: DatingLibre\AppBundle\Controller\LocationController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\CountryRepository', '@DatingLibre\AppBundle\Repository\RegionRepository', '@DatingLibre\AppBundle\Repository\CityRepository' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\BlockController:
+    class: DatingLibre\AppBundle\Controller\BlockController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\AccountDeleteController:
+    class: DatingLibre\AppBundle\Controller\AccountDeleteController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\LoginController:
+    class: DatingLibre\AppBundle\Controller\LoginController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '%datinglibre.is_demo%' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\LogoutController:
+    class: DatingLibre\AppBundle\Controller\LogoutController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\MatchesController:
+    class: DatingLibre\AppBundle\Controller\MatchesController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\MessageRepository' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\MessageSendController:
+    class: DatingLibre\AppBundle\Controller\MessageSendController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository', '@DatingLibre\AppBundle\Repository\UserRepository', '@DatingLibre\AppBundle\Repository\MessageRepository' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\ModerateImageController:
+    class: DatingLibre\AppBundle\Controller\ModerateImageController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\ImageService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\PasswordResetController:
+    class: DatingLibre\AppBundle\Controller\PasswordResetController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\PasswordUpdateController:
+    class: DatingLibre\AppBundle\Controller\PasswordUpdateController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\ProfileEditController:
+    class: DatingLibre\AppBundle\Controller\ProfileEditController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository', '@DatingLibre\AppBundle\Service\ProfileService', '@DatingLibre\AppBundle\Repository\UserRepository', '@DatingLibre\AppBundle\Repository\RegionRepository', '@DatingLibre\AppBundle\Repository\CountryRepository', '@DatingLibre\AppBundle\Service\UserAttributeService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\ProfileImageController:
+    class: DatingLibre\AppBundle\Controller\ProfileImageController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\ImageService', '@DatingLibre\AppBundle\Service\ProfileService', '%datinglibre.image_upload%' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\ProfileIndexController:
+    class: DatingLibre\AppBundle\Controller\ProfileIndexController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository', '@DatingLibre\AppBundle\Service\UserAttributeService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\RegisterController:
+    class: DatingLibre\AppBundle\Controller\RegisterController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\SearchIndexController:
+    class: DatingLibre\AppBundle\Controller\SearchIndexController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\ProfileService', '@DatingLibre\AppBundle\Repository\UserRepository', '@DatingLibre\AppBundle\Repository\FilterRepository', '@DatingLibre\AppBundle\Service\RequirementService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\SearchProfileViewController:
+    class: DatingLibre\AppBundle\Controller\SearchProfileViewController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\TokenController:
+    class: DatingLibre\AppBundle\Controller\TokenController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\EventController:
+    class: DatingLibre\AppBundle\Controller\EventController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\AccountSubscriptionController:
+    class: DatingLibre\AppBundle\Controller\AccountSubscriptionController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\SubscriptionService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\Controller\CcBillWebhookController:
+    class: DatingLibre\AppBundle\Controller\CcBillWebhookController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\CcBillService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+
+  DatingLibre\AppBundle\DataFixtures\AppFixtures:
+    class: DatingLibre\AppBundle\DataFixtures\AppFixtures
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@security.user_password_encoder.generic', '%datinglibre.categories%', '%datinglibre.attributes%', '%datinglibre.block_reasons%' ]
+
+  DatingLibre\AppBundle\EventListener\LoginListener:
+    class: DatingLibre\AppBundle\EventListener\LoginListener
+    tags:
+      - { name: kernel.event_listener, event: security.interactive_login }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine.orm.default_entity_manager' ]
+
+  DatingLibre\AppBundle\Form\BlockFormType:
+    class: DatingLibre\AppBundle\Form\BlockFormType
+    tags:
+      - { name: form.type }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\BlockReasonRepository' ]
+
+  DatingLibre\AppBundle\Form\CountryFieldSubscriber:
+    class: DatingLibre\AppBundle\Form\CountryFieldSubscriber
+    tags:
+      - { name: kernel.event_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\CountryRepository' ]
+
+  DatingLibre\AppBundle\Form\DeleteAccountFormType:
+    class: DatingLibre\AppBundle\Form\DeleteAccountFormType
+    tags:
+      - { name: form.type }
+    autowire: true
+    autoconfigure: true
+
+  DatingLibre\AppBundle\Form\FilterFormType:
+    class: DatingLibre\AppBundle\Form\FilterFormType
+    tags:
+      - { name: form.type }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\CountryRepository' ]
+
+  DatingLibre\AppBundle\Form\MessageForm:
+    class: DatingLibre\AppBundle\Form\MessageForm
+    autowire: true
+    autoconfigure: true
+
+  DatingLibre\AppBundle\Form\MessageFormType:
+    class: DatingLibre\AppBundle\Form\MessageFormType
+    tags:
+      - { name: form.type }
+    autowire: true
+    autoconfigure: true
+
+  DatingLibre\AppBundle\Form\ModerateForm:
+    class: DatingLibre\AppBundle\Form\ModerateForm
+    autowire: true
+    autoconfigure: true
+
+  DatingLibre\AppBundle\Form\ModerateFormType:
+    class: DatingLibre\AppBundle\Form\ModerateFormType
+    tags:
+      - { name: form.type }
+    autowire: true
+    autoconfigure: true
+
+  DatingLibre\AppBundle\Form\PasswordResetFormType:
+    class: DatingLibre\AppBundle\Form\PasswordResetFormType
+    tags:
+      - { name: form.type }
+    autowire: true
+    autoconfigure: true
+
+  DatingLibre\AppBundle\Form\PasswordUpdateForm:
+    class: DatingLibre\AppBundle\Form\PasswordUpdateForm
+    autowire: true
+    autoconfigure: true
+
+  DatingLibre\AppBundle\Form\PasswordUpdateFormType:
+    class: DatingLibre\AppBundle\Form\PasswordUpdateFormType
+    tags:
+      - { name: form.type }
+    autowire: true
+    autoconfigure: true
+
+  DatingLibre\AppBundle\Form\ProfileForm:
+    class: DatingLibre\AppBundle\Form\ProfileForm
+    autowire: true
+    autoconfigure: true
+
+  DatingLibre\AppBundle\Form\ProfileFormType:
+    class: DatingLibre\AppBundle\Form\ProfileFormType
+    tags:
+      - { name: form.type }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine.orm.default_entity_manager', '@DatingLibre\AppBundle\Repository\CategoryRepository', '@DatingLibre\AppBundle\Repository\CountryRepository', '@DatingLibre\AppBundle\Repository\RegionRepository' ]
+
+  DatingLibre\AppBundle\Form\RegionFieldSubscriber:
+    class: DatingLibre\AppBundle\Form\RegionFieldSubscriber
+    tags:
+      - { name: kernel.event_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@form.factory', '@DatingLibre\AppBundle\Repository\RegionRepository' ]
+
+  DatingLibre\AppBundle\Form\RegistrationFormType:
+    class: DatingLibre\AppBundle\Form\RegistrationFormType
+    tags:
+      - { name: form.type }
+    autowire: true
+    autoconfigure: true
+
+  DatingLibre\AppBundle\Form\RequirementsForm:
+    class: DatingLibre\AppBundle\Form\RequirementsForm
+    autowire: true
+    autoconfigure: true
+
+  DatingLibre\AppBundle\Form\RequirementsFormType:
+    class: DatingLibre\AppBundle\Form\RequirementsFormType
+    tags:
+      - { name: form.type }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\CategoryRepository' ]
+
+  DatingLibre\AppBundle\Security\LoginFormAuthenticator:
+    class: DatingLibre\AppBundle\Security\LoginFormAuthenticator
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine.orm.default_entity_manager', '@router.default', '@security.csrf.token_manager', '@security.user_password_encoder.generic', '@security.authorization_checker' ]
+
+  DatingLibre\AppBundle\Service\BlockService:
+    class: DatingLibre\AppBundle\Service\BlockService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\BlockRepository', '@DatingLibre\AppBundle\Repository\UserRepository' ]
+
+  DatingLibre\AppBundle\Service\EmailService:
+    class: DatingLibre\AppBundle\Service\EmailService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@mailer.mailer', '@DatingLibre\AppBundle\Repository\EmailRepository' ]
+
+  DatingLibre\AppBundle\Service\ImageService:
+    class: DatingLibre\AppBundle\Service\ImageService
+    autowire: true
+    autoconfigure: true
+    arguments: [ dlibreim, '@DatingLibre\AppBundle\Service\S3Service', '@DatingLibre\AppBundle\Repository\ImageRepository', '@DatingLibre\AppBundle\Repository\UserRepository' ]
+
+  DatingLibre\AppBundle\Service\ProfileService:
+    class: DatingLibre\AppBundle\Service\ProfileService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository', '@DatingLibre\AppBundle\Service\ImageService' ]
+
+  DatingLibre\AppBundle\Service\RequirementService:
+    class: DatingLibre\AppBundle\Service\RequirementService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\RequirementRepository', '@DatingLibre\AppBundle\Repository\AttributeRepository' ]
+
+  DatingLibre\AppBundle\Service\S3Service:
+    class: DatingLibre\AppBundle\Service\S3Service
+    autowire: true
+    autoconfigure: true
+    arguments: [ '%env(resolve:STORAGE_ENDPOINT)%', '%env(resolve:STORAGE_ACCESS_KEY)%', '%env(resolve:STORAGE_SECRET_KEY)%', '%env(resolve:STORAGE_REGION)%' ]
+
+  DatingLibre\AppBundle\Service\TokenService:
+    class: DatingLibre\AppBundle\Service\TokenService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\TokenRepository', '@security.csrf.token_generator' ]
+
+  DatingLibre\AppBundle\Service\UserAttributeService:
+    class: DatingLibre\AppBundle\Service\UserAttributeService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\UserAttributeRepository', '@DatingLibre\AppBundle\Repository\AttributeRepository' ]
+
+  DatingLibre\AppBundle\Service\UserService:
+    class: DatingLibre\AppBundle\Service\UserService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\UserRepository', '@DatingLibre\AppBundle\Service\EmailService', '@DatingLibre\AppBundle\Service\TokenService', '@DatingLibre\AppBundle\Service\ProfileService', '@security.user_password_encoder.generic', '@translator.default', '%datinglibre.admin_email%' ]
+
+  DatingLibre\AppBundle\Service\EventService:
+    class: DatingLibre\AppBundle\Service\EventService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\EventRepository', '@DatingLibre\AppBundle\Repository\UserRepository' ]
+
+  DatingLibre\AppBundle\Service\SubscriptionService:
+    class: DatingLibre\AppBundle\Service\SubscriptionService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\SubscriptionRepository', '@DatingLibre\AppBundle\Repository\UserRepository', '@DatingLibre\AppBundle\Service\EventService' ]
+
+  DatingLibre\AppBundle\Service\CcBillService:
+    class: DatingLibre\AppBundle\Service\CcBillService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\EventService', '@DatingLibre\AppBundle\Service\SubscriptionService' ]
+
+  DatingLibre\AppBundle\Service\UuidValueResolver:
+    class: DatingLibre\AppBundle\Service\UuidValueResolver
+    tags:
+      - { name: controller.argument_value_resolver, priority: 500 }
+      - { name: controller.argument_value_resolver }
+    autowire: true
+    autoconfigure: true
