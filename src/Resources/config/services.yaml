@@ -187,8 +187,8 @@ services:
       - [ setName, [ 'app:secure_urls:refresh_image_urls' ] ]
 
 
-  DatingLibre\AppBundle\Controller\LocationController:
-    class: DatingLibre\AppBundle\Controller\LocationController
+  DatingLibre\AppBundle\Controller\UserLocationController:
+    class: DatingLibre\AppBundle\Controller\UserLocationController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -200,8 +200,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\BlockController:
-    class: DatingLibre\AppBundle\Controller\BlockController
+  DatingLibre\AppBundle\Controller\UserBlockController:
+    class: DatingLibre\AppBundle\Controller\UserBlockController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -212,8 +212,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\AccountDeleteController:
-    class: DatingLibre\AppBundle\Controller\AccountDeleteController
+  DatingLibre\AppBundle\Controller\UserAccountDeleteController:
+    class: DatingLibre\AppBundle\Controller\UserAccountDeleteController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -224,8 +224,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\LoginController:
-    class: DatingLibre\AppBundle\Controller\LoginController
+  DatingLibre\AppBundle\Controller\UserLoginController:
+    class: DatingLibre\AppBundle\Controller\UserLoginController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -236,8 +236,8 @@ services:
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
-  DatingLibre\AppBundle\Controller\LogoutController:
-    class: DatingLibre\AppBundle\Controller\LogoutController
+  DatingLibre\AppBundle\Controller\UserLogoutController:
+    class: DatingLibre\AppBundle\Controller\UserLogoutController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -247,8 +247,8 @@ services:
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
-  DatingLibre\AppBundle\Controller\MatchesController:
-    class: DatingLibre\AppBundle\Controller\MatchesController
+  DatingLibre\AppBundle\Controller\UserMatchesController:
+    class: DatingLibre\AppBundle\Controller\UserMatchesController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -260,8 +260,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\MessageSendController:
-    class: DatingLibre\AppBundle\Controller\MessageSendController
+  DatingLibre\AppBundle\Controller\UserMessageSendController:
+    class: DatingLibre\AppBundle\Controller\UserMessageSendController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -286,8 +286,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\PasswordResetController:
-    class: DatingLibre\AppBundle\Controller\PasswordResetController
+  DatingLibre\AppBundle\Controller\UserPasswordResetController:
+    class: DatingLibre\AppBundle\Controller\UserPasswordResetController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -298,8 +298,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\PasswordUpdateController:
-    class: DatingLibre\AppBundle\Controller\PasswordUpdateController
+  DatingLibre\AppBundle\Controller\UserPasswordUpdateController:
+    class: DatingLibre\AppBundle\Controller\UserPasswordUpdateController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -310,8 +310,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\ProfileEditController:
-    class: DatingLibre\AppBundle\Controller\ProfileEditController
+  DatingLibre\AppBundle\Controller\UserProfileEditController:
+    class: DatingLibre\AppBundle\Controller\UserProfileEditController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -323,8 +323,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\ProfileImageController:
-    class: DatingLibre\AppBundle\Controller\ProfileImageController
+  DatingLibre\AppBundle\Controller\UserProfileImageController:
+    class: DatingLibre\AppBundle\Controller\UserProfileImageController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -336,8 +336,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\ProfileIndexController:
-    class: DatingLibre\AppBundle\Controller\ProfileIndexController
+  DatingLibre\AppBundle\Controller\UserProfileIndexController:
+    class: DatingLibre\AppBundle\Controller\UserProfileIndexController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -349,8 +349,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\RegisterController:
-    class: DatingLibre\AppBundle\Controller\RegisterController
+  DatingLibre\AppBundle\Controller\UserRegisterController:
+    class: DatingLibre\AppBundle\Controller\UserRegisterController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -361,8 +361,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\SearchIndexController:
-    class: DatingLibre\AppBundle\Controller\SearchIndexController
+  DatingLibre\AppBundle\Controller\UserSearchIndexController:
+    class: DatingLibre\AppBundle\Controller\UserSearchIndexController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -458,8 +458,8 @@ services:
     calls:
     - [ setContainer, [ '@service_container' ] ]
 
-  DatingLibre\AppBundle\Controller\TokenController:
-    class: DatingLibre\AppBundle\Controller\TokenController
+  DatingLibre\AppBundle\Controller\UserTokenController:
+    class: DatingLibre\AppBundle\Controller\UserTokenController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -470,8 +470,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\EventController:
-    class: DatingLibre\AppBundle\Controller\EventController
+  DatingLibre\AppBundle\Controller\AdminEventController:
+    class: DatingLibre\AppBundle\Controller\AdminEventController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -482,8 +482,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\AccountSubscriptionController:
-    class: DatingLibre\AppBundle\Controller\AccountSubscriptionController
+  DatingLibre\AppBundle\Controller\UserAccountSubscriptionController:
+    class: DatingLibre\AppBundle\Controller\UserAccountSubscriptionController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -494,8 +494,8 @@ services:
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
-  DatingLibre\AppBundle\Controller\ReportController:
-    class: DatingLibre\AppBundle\Controller\ReportController
+  DatingLibre\AppBundle\Controller\UserReportController:
+    class: DatingLibre\AppBundle\Controller\UserReportController
     public: true
     tags:
       - { name: controller.service_arguments }

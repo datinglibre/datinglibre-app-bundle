@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EventController extends AbstractController
+class AdminEventController extends AbstractController
 {
     private EventRepository $eventRepository;
 

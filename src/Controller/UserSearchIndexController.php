@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class SearchIndexController extends AbstractController
+class UserSearchIndexController extends AbstractController
 {
     private ProfileService $profileService;
     private UserRepository $userRepository;

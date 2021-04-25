@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class PasswordUpdateController extends AbstractController
+class UserPasswordUpdateController extends AbstractController
 {
     public function processPasswordReset(Request $request, UserService $userService, SessionInterface $session): Response
     {

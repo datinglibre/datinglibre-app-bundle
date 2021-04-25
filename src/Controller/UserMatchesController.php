@@ -9,7 +9,7 @@ use DatingLibre\AppBundle\Service\SuspensionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class MatchesController extends AbstractController
+class UserMatchesController extends AbstractController
 {
     private MessageRepository $messageRepository;
     private SuspensionService $suspensionService;

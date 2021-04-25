@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class MessageSendController extends AbstractController
+class UserMessageSendController extends AbstractController
 {
     private ProfileRepository $profileRepository;
     private MessageRepository $messageRepository;

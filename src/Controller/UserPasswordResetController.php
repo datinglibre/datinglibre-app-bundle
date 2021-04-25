@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use function strtolower;
 
-class PasswordResetController extends AbstractController
+class UserPasswordResetController extends AbstractController
 {
     public function password(Request $request, SessionInterface $session, UserService $userService): Response
     {

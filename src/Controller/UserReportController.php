@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
 
-class ReportController extends AbstractController
+class UserReportController extends AbstractController
 {
     private ReportService $reportService;
     private ProfileService $profileService;

@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Uid\Uuid;
 
-class LocationController extends AbstractController
+class UserLocationController extends AbstractController
 {
     private CountryRepository $countryRepository;
     private RegionRepository $regionRepository;

@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
 
-class BlockController extends AbstractController
+class UserBlockController extends AbstractController
 {
     public function block(Uuid $userId, Request $request, ProfileService $profileService, BlockService $blockService)
     {

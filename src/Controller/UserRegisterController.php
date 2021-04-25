@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class RegisterController extends AbstractController
+class UserRegisterController extends AbstractController
 {
     public function register(Request $request, SessionInterface $session, UserService $userService): Response
     {

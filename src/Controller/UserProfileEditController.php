@@ -17,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class ProfileEditController extends AbstractController
+class UserProfileEditController extends AbstractController
 {
     private ProfileRepository $profileRepository;
     private UserRepository $userRepository;

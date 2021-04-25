@@ -10,7 +10,7 @@ use Gumlet\ImageResize;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ProfileImageController extends AbstractController
+class UserProfileImageController extends AbstractController
 {
     private ImageService $imageService;
     private ProfileService $profileService;

@@ -9,7 +9,7 @@ use DatingLibre\AppBundle\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class AccountDeleteController extends AbstractController
+class UserAccountDeleteController extends AbstractController
 {
     public function delete(Request $request, UserService $userService)
     {

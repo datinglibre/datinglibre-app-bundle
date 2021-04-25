@@ -7,7 +7,7 @@ namespace DatingLibre\AppBundle\Controller;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class LogoutController extends AbstractController
+class UserLogoutController extends AbstractController
 {
     public function matches()
     {

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class TokenController extends AbstractController
+class UserTokenController extends AbstractController
 {
     public function processConfirm(Request $request, UserService $userService, string $secret): Response
     {

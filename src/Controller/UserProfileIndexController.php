@@ -10,7 +10,7 @@ use DatingLibre\AppBundle\Service\UserAttributeService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class ProfileIndexController extends AbstractController
+class UserProfileIndexController extends AbstractController
 {
     private ProfileRepository $profileRepository;
     private UserAttributeService $userAttributeService;

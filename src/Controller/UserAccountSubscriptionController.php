@@ -8,7 +8,7 @@ use DatingLibre\AppBundle\Service\SubscriptionService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class AccountSubscriptionController extends AbstractController
+class UserAccountSubscriptionController extends AbstractController
 {
     private SubscriptionService $subscriptionService;
 
