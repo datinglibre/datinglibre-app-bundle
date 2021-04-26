@@ -110,7 +110,7 @@ class Profile
         return $this->username;
     }
 
-    public function setAbout(string $about): void
+    public function setAbout(?string $about): void
     {
         $this->about = $about;
     }
