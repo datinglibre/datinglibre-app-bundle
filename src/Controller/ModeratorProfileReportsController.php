@@ -31,7 +31,6 @@ class ModeratorProfileReportsController extends AbstractController
         return $this->render('@DatingLibreApp/moderator/profile/reports.html.twig', [
             'profile' => $profile,
             'reports' => $this->reportService->findByUserId($userId),
-            'controller_name' => 'ModeratorProfileReportsController',
         ]);
     }
 }

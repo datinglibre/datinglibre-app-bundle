@@ -11,7 +11,7 @@ class MatchesPage extends SymfonyPage
 {
     public function getRouteName(): string
     {
-        return "matches_index";
+        return 'user_matches_index';
     }
 
     public function assertProfileImageDisplayed()

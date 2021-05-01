@@ -10,7 +10,7 @@ class LoginPage extends SymfonyPage
 {
     public function getRouteName(): string
     {
-        return "login";
+        return 'user_login';
     }
 
     public function login(string $email, string $password): void

@@ -22,14 +22,14 @@ class UserLoginController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils, AuthorizationCheckerInterface $authChecker): Response
     {
         if ($authChecker->isGranted(User::ADMIN)) {
-            return $this->redirectToRoute('events_index');
+            return $this->redirectToRoute('admin_events_index');
         }
         if ($authChecker->isGranted(User::MODERATOR)) {
-            return $this->redirectToRoute('moderate_profile_images');
+            return $this->redirectToRoute('moderator_profile_images');
         }
 
         if ($this->getUser()) {
-            return $this->redirectToRoute('search_index');
+            return $this->redirectToRoute('user_search_index');
         }
 
         $error = $authenticationUtils->getLastAuthenticationError();

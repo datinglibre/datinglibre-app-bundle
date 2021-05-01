@@ -18,10 +18,10 @@ class UserTokenController extends AbstractController
 
         if ($userService->enable($userId, $secret)) {
             $this->addFlash('success', 'user.confirmed');
-            return new RedirectResponse($this->generateUrl('login'));
+            return new RedirectResponse($this->generateUrl('user_login'));
         }
 
         $this->addFlash('danger', 'user.confirmation_failed');
-        return new RedirectResponse($this->generateUrl('login'));
+        return new RedirectResponse($this->generateUrl('user_login'));
     }
 }

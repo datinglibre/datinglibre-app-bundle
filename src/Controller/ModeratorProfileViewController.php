@@ -27,7 +27,6 @@ class ModeratorProfileViewController extends AbstractController
 
         return $this->render('@DatingLibreApp/moderator/profile/view.html.twig', [
             'profile' => $profile,
-            'controller_name' => 'ModeratorProfileViewController',
         ]);
     }
 }

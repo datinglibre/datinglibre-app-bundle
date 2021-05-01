@@ -60,7 +60,6 @@ class ModeratorProfileReportController extends AbstractController
             'messages' => $this->messageService->findMessagesBetweenUsers($report->getReportedId(), $report->getReporterId()),
             'reports' => [$report],
             'closeReportForm' => $closeReportFormType->createView(),
-            'controller_name' => 'ModeratorProfileReportsController',
         ]);
     }
 }

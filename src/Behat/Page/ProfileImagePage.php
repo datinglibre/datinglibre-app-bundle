@@ -12,7 +12,7 @@ class ProfileImagePage extends SymfonyPage
 
     public function getRouteName(): string
     {
-        return "profile_image";
+        return 'user_profile_image';
     }
 
     public function uploadImage(string $image)

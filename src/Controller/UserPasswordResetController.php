@@ -24,7 +24,7 @@ class UserPasswordResetController extends AbstractController
 
             $session->getFlashBag()->add('success', 'user.password_reset_email_sent');
 
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('user_login');
         }
 
         return $this->render('@DatingLibreApp/user/account/password_reset.html.twig', [

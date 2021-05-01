@@ -9,7 +9,7 @@ use DatingLibre\AppBundle\Service\SuspensionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class UserMatchesController extends AbstractController
+class UserMatchesIndexController extends AbstractController
 {
     private MessageRepository $messageRepository;
     private SuspensionService $suspensionService;
@@ -20,15 +20,14 @@ class UserMatchesController extends AbstractController
         $this->suspensionService = $suspensionService;
     }
 
-    public function matches()
+    public function index()
     {
         if ($this->suspensionService->findOpenByUserId($this->getUser()->getId()) !== null) {
-            return new RedirectResponse($this->generateUrl('profile_index'));
+            return new RedirectResponse($this->generateUrl('user_profile_index'));
         }
 
         return $this->render('@DatingLibreApp/user/matches/index.html.twig', [
             'matches' => $this->messageRepository->findLatestMessages($this->getUser()->getId()),
-            'controller_name' => 'MatchesController'
         ]);
     }
 }

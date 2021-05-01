@@ -59,7 +59,6 @@ class ModeratorProfileSuspensionsController extends AbstractController
             'suspensionForm' => $suspensionFormType->createView(),
             'openSuspension' => $this->suspensionService->findOpenByUserId($userId),
             'suspensions' => $this->suspensionService->findAllByUserId($userId),
-            'controller_name' => 'ModerateProfileSuspensionsController',
         ]);
     }
 }

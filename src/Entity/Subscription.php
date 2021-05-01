@@ -21,7 +21,7 @@ class Subscription
 {
     public const CCBILL = 'ccbill';
     public const PROVIDER = 'provider';
-    public const PROVIDER_ID = 'providerId';
+    public const PROVIDER_SUBSCRIPTION_ID = 'providerSubscriptionId';
     public const STATE = 'state';
     // states as below
     public const ACTIVE = 'active';
@@ -52,9 +52,9 @@ class Subscription
     private string $provider;
 
     /**
-     * @ORM\Column(name="provider_id", type="text")
+     * @ORM\Column(name="provider_subscription_id", type="text")
      */
-    private string $providerId;
+    private string $providerSubscriptionId;
 
     /**
      * @ORM\Column(name="state", type="text")
@@ -131,9 +131,9 @@ class Subscription
         $this->provider = $provider;
     }
 
-    public function getProviderId(): string
+    public function getProviderSubscriptionId(): string
     {
-        return $this->providerId;
+        return $this->providerSubscriptionId;
     }
 
     public function getRenewalDate(): ?DateTimeInterface
@@ -146,9 +146,9 @@ class Subscription
         $this->renewalDate = $renewalDate;
     }
 
-    public function setProviderId(string $providerId): void
+    public function setProviderSubscriptionId(string $providerSubscriptionId): void
     {
-        $this->providerId = $providerId;
+        $this->providerSubscriptionId = $providerSubscriptionId;
     }
 
     public function getState(): string

@@ -163,14 +163,14 @@ final class Version20200101000000 extends AbstractMigration
     id UUID NOT NULL PRIMARY KEY,
     user_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
     provider TEXT NOT NULL,
-    provider_id TEXT NOT NULL,
+    provider_subscription_id TEXT NOT NULL,
     state TEXT NOT NULL,
     renewal_date DATE NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    UNIQUE (provider, provider_id)
+    UNIQUE (provider, provider_subscription_id)
 )');
-        $this->addSql('CREATE INDEX subscriptions_provider_id ON datinglibre.subscriptions(provider, provider_id);');
+        $this->addSql('CREATE INDEX subscriptions_provider_id ON datinglibre.subscriptions(provider, provider_subscription_id);');
 
         $this->addSql('CREATE TABLE datinglibre.suspensions (
     id UUID NOT NULL PRIMARY KEY,

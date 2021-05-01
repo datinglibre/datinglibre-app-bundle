@@ -29,7 +29,7 @@
             {% endif %}
 
             <tr {% if row_class is not empty %}class="{{ row_class }}"{% endif %}>
-                <td>{{ subscription.providerId }}</td>
+                <td>{{ subscription.providerSubscriptionId }}</td>
                 <td>{{ ('subscription.' ~ subscription.provider)|trans }}</td>
                 <td>
                     {% if subscription.renewalDate is not null %}{{ subscription.renewalDate|format_date('long') }}{% endif %}

@@ -49,7 +49,7 @@ class SubscriptionService
         $subscription->setUser($user);
         $subscription->setProvider($provider);
         $subscription->setState(Subscription::ACTIVE);
-        $subscription->setProviderId($providerId);
+        $subscription->setProviderSubscriptionId($providerId);
         $subscription->setRenewalDate($renewalDate);
         $this->subscriptionRepository->save($subscription);
     }
@@ -174,7 +174,7 @@ class SubscriptionService
     private function getSubscription(string $provider, ?string $providerSubscriptionId, array $data): ?Subscription
     {
         $subscription = $this->subscriptionRepository->findOneBy([
-            Subscription::PROVIDER_ID => $providerSubscriptionId,
+            Subscription::PROVIDER_SUBSCRIPTION_ID => $providerSubscriptionId,
             Subscription::PROVIDER => $provider
         ]);
 

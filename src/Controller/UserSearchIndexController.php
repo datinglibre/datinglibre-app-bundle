@@ -48,11 +48,11 @@ class UserSearchIndexController extends AbstractController
     {
         if ($this->profileService->find($user->getId()) === null) {
             $this->addFlash('warning', 'profile.incomplete');
-            return new RedirectResponse($this->generateUrl('profile_edit'));
+            return new RedirectResponse($this->generateUrl('user_profile_edit'));
         }
 
         if ($this->suspensionService->findOpenByUserId($user->getId())) {
-            return new RedirectResponse($this->generateUrl('profile_index'));
+            return new RedirectResponse($this->generateUrl('user_profile_index'));
         }
 
         $user = $this->userRepository->find($this->getUser()->getId());
@@ -90,7 +90,7 @@ class UserSearchIndexController extends AbstractController
 
         if ($filterForm->isSubmitted() && $filterForm->isValid()) {
             $this->filterRepository->save($filter);
-            return new RedirectResponse($this->generateUrl('search_index'));
+            return new RedirectResponse($this->generateUrl('user_search_index'));
         }
 
         $previous = (int) $request->query->get(self::PREVIOUS, 0);

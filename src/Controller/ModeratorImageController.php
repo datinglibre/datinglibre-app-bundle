@@ -39,12 +39,11 @@ class ModeratorImageController extends AbstractController
                 $this->imageService->reject($profileImageProjection->getId());
             }
 
-            return new RedirectResponse($this->generateUrl('moderate_profile_images'));
+            return new RedirectResponse($this->generateUrl('moderator_profile_images'));
         }
 
         return $this->render('@DatingLibreApp/moderator/images.html.twig', [
             'profileImage' => $profileImageProjection,
-            'controller_name' => 'ModerateProfileImagesController',
             'moderateForm' => $moderateForm->createView()
         ]);
     }

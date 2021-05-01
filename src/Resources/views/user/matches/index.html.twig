@@ -19,13 +19,13 @@
                 {% for match in matches %}
                     <tr class="d-flex">
                         <td class="col-1">
-                            <a href="{{ path('message_send', {'userId': match.currentRecipientId}) }}">
+                            <a href="{{ path('user_send_message', {'userId': match.currentRecipientId}) }}">
                                 {{ profile_image(match.currentRecipientProfileImageUrl) }}
                             </a>
                         </td>
                         <td class="col-11">
                             <h5 class="media-heading">
-                                <a href="{{ path('message_send', {'userId': match.currentRecipientId}) }}">{{ match.currentRecipientUsername }}</a>
+                                <a href="{{ path('user_send_message', {'userId': match.currentRecipientId}) }}">{{ match.currentRecipientUsername }}</a>
                             </h5>
                             <div>{{ match.content|u.truncate('100', '...') }}</div>
                         </td>

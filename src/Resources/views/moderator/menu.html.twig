@@ -1,6 +1,6 @@
 <div class="list-group">
     {% from '@DatingLibreApp/macros/is_active.html.twig' import is_active %}
-    <a href="{{ path('moderate_profile_images') }}" class="{{ is_active('moderate_profile_images') }} list-group-item list-group-item-action">{{ 'menu.images'|trans }}</a>
+    <a href="{{ path('moderator_profile_images') }}" class="{{ is_active('moderator_profile_images') }} list-group-item list-group-item-action">{{ 'menu.images'|trans }}</a>
     <a href="{{ path('moderator_reports') }}" class="{{ is_active('moderator_reports') }} {{ is_active('moderator_report') }} list-group-item list-group-item-action">{{ 'menu.reports'|trans }}</a>
     <a href="{{ path('moderator_suspensions') }}" class="{{ is_active('moderator_suspensions') }} list-group-item list-group-item-action">{{ 'menu.suspensions'|trans }}</a>
 </div>

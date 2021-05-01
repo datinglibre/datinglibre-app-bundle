@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DatingLibre\AppBundle\Behat;
 
 use Behat\Behat\Context\Context;
+use DatingLibre\AppBundle\Entity\Subscription;
 use DatingLibre\AppBundle\Repository\SubscriptionRepository;
 use DatingLibre\AppBundle\Service\UserService;
 use Webmozart\Assert\Assert;
@@ -43,7 +44,7 @@ class SubscriptionContext implements Context
             [
                 'user' => $user,
                 'provider' => $provider,
-                'providerId' => $providerSubscriptionId
+                'providerSubscriptionId' => $providerSubscriptionId
             ]
         );
 

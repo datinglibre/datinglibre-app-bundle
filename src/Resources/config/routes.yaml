@@ -1,74 +1,74 @@
-login:
+user_login:
     path: /
     controller: DatingLibre\AppBundle\Controller\UserLoginController::login
 
-register:
+user_register:
     path: /register
     controller: DatingLibre\AppBundle\Controller\UserRegisterController::register
     methods: GET|POST
 
-update_password:
+user_password_update:
     path: /user/password
     controller: DatingLibre\AppBundle\Controller\UserPasswordUpdateController::processPasswordReset
     methods: GET|POST
     condition: request.get('userId') matches '/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i'
 
-reset_password:
+user_password_reset:
     path: /user/password
     controller: DatingLibre\AppBundle\Controller\UserPasswordResetController::password
     methods: GET|POST
 
-block_user:
+user_block:
     path: /block/{userId}
     controller: DatingLibre\AppBundle\Controller\UserBlockController::block
     methods: GET|POST
 
-matches_index:
+user_matches_index:
     path: /matches
-    controller: DatingLibre\AppBundle\Controller\UserMatchesController::matches
+    controller: DatingLibre\AppBundle\Controller\UserMatchesIndexController::index
     methods: GET
  
-message_send:
+user_send_message:
     path: /message/{userId}
-    controller: DatingLibre\AppBundle\Controller\UserMessageSendController::message
+    controller: DatingLibre\AppBundle\Controller\UserSendMessageController::message
     methods: GET|POST
  
-moderate_profile_images:
+moderator_profile_images:
     path: /moderator/profile/images
     controller: DatingLibre\AppBundle\Controller\ModeratorImageController::index
     methods: GET|POST
  
-account_delete:
+user_account_delete:
     path: /account/delete
     controller: DatingLibre\AppBundle\Controller\UserAccountDeleteController::delete
     methods: GET|POST
  
-profile_edit:
+user_profile_edit:
     path: /profile/edit
     controller: DatingLibre\AppBundle\Controller\UserProfileEditController::edit
     methods: GET|POST
  
-profile_image:
+user_profile_image:
     path: /profile/image
     controller: DatingLibre\AppBundle\Controller\UserProfileImageController::index
     methods: GET|POST
  
-profile_index:
+user_profile_index:
     path: /profile
     controller: DatingLibre\AppBundle\Controller\UserProfileIndexController::index
     methods: GET
  
-country_regions:
+user_country_regions:
     path: /location/country/{countryId}/regions
     controller: DatingLibre\AppBundle\Controller\UserLocationController::displayRegions
     methods: GET
  
-region_cities:
+user_region_cities:
     path: /location/region/{regionId}/cities
     controller: DatingLibre\AppBundle\Controller\UserLocationController::displayCities
     methods: GET
  
-search_index:
+user_search_index:
     path: /search
     controller: DatingLibre\AppBundle\Controller\UserSearchIndexController::index
     methods: GET|POST
@@ -77,6 +77,26 @@ user_profile_view:
     path: /profile/{userId}/view
     controller: DatingLibre\AppBundle\Controller\UserProfileViewController::index
     methods: GET
+
+user_registration_terms:
+    path: /register/terms
+    controller: DatingLibre\AppBundle\Controller\UserRegisterController::terms
+    methods: GET
+
+user_process_token:
+    path: /token/{secret}
+    controller: DatingLibre\AppBundle\Controller\UserTokenController::processConfirm
+    methods: GET
+
+user_account_subscription:
+    path: /account/subscription
+    controller: DatingLibre\AppBundle\Controller\UserAccountSubscriptionController::viewSubscription
+    methods: GET
+
+user_report:
+    path: /report/{userId}
+    controller: DatingLibre\AppBundle\Controller\UserReportController::report
+    methods: GET|POST
 
 moderator_profile_view:
     path: /moderator/profile/{userId}/view
@@ -91,31 +111,6 @@ moderator_profile_reports:
 moderator_profile_report:
     path: /moderator/profile/{userId}/report/{reportId}
     controller: DatingLibre\AppBundle\Controller\ModeratorProfileReportController::view
-    methods: GET|POST
-
-register_terms:
-    path: /register/terms
-    controller: DatingLibre\AppBundle\Controller\UserRegisterController::terms
-    methods: GET
- 
-process_token:
-    path: /token/{secret}
-    controller: DatingLibre\AppBundle\Controller\UserTokenController::processConfirm
-    methods: GET
- 
-events_index:
-    path: /admin/events
-    controller: DatingLibre\AppBundle\Controller\AdminEventController::displayEvents
-    methods: GET|POST
- 
-account_subscription:
-    path: /account/subscription
-    controller: DatingLibre\AppBundle\Controller\UserAccountSubscriptionController::viewSubscription
-    methods: GET
-
-report_user:
-    path: /report/{userId}
-    controller: DatingLibre\AppBundle\Controller\UserReportController::report
     methods: GET|POST
 
 moderator_reports:
@@ -136,6 +131,11 @@ moderator_profile_suspensions:
 moderator_profile_suspension:
     path: /moderator/profile/{userId}/suspension/{suspensionId}
     controller: DatingLibre\AppBundle\Controller\ModeratorProfileSuspensionController::view
+    methods: GET|POST
+
+admin_events_index:
+    path: /admin/events
+    controller: DatingLibre\AppBundle\Controller\AdminEventController::displayEvents
     methods: GET|POST
 
 ccbill_webhook:

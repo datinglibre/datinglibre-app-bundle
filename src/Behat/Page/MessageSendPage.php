@@ -10,7 +10,7 @@ class MessageSendPage extends SymfonyPage
 {
     public function getRouteName(): string
     {
-        return "message_send";
+        return "user_send_message";
     }
 
     public function sendMessage(string $message)

@@ -33,7 +33,7 @@ class UserProfileIndexController extends AbstractController
 
         if ($profile === null) {
             $this->addFlash('warning', 'profile.incomplete');
-            return new RedirectResponse($this->generateUrl('profile_edit'));
+            return new RedirectResponse($this->generateUrl('user_profile_edit'));
         }
 
         return $this->render('@DatingLibreApp/user/profile/index.html.twig', [

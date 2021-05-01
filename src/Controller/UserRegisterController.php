@@ -24,7 +24,7 @@ class UserRegisterController extends AbstractController
             $userService->signup($user, $form->get('password')->getData());
 
             $session->getFlashBag()->add('success', 'user.registered');
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('user_login');
         }
 
         return $this->render('@DatingLibreApp/user/register/register.html.twig', [

@@ -30,7 +30,6 @@ class AdminEventController extends AbstractController
 
         return $this->render('@DatingLibreApp/admin/event/index.html.twig', [
             'events' => $events,
-            'controller_name' => 'EventController',
             'eventFilterForm' => $eventFormType->createView()
         ]);
     }

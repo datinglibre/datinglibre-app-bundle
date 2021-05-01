@@ -2,7 +2,7 @@
 {% block title %}Profile{% endblock %}
 {% block menu %}
     {% from '@DatingLibreApp/macros/profile.image.html.twig' import profile_image %}
-        <a href="{{ path('profile_image') }}">{{ profile_image(profile.imageUrl) }}</a>
+        <a href="{{ path('user_profile_image') }}">{{ profile_image(profile.imageUrl) }}</a>
     {% include '@DatingLibreApp/user/profile/menu.html.twig' %}
 {% endblock %}
 {% block content %}

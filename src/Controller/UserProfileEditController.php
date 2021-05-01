@@ -21,8 +21,6 @@ class UserProfileEditController extends AbstractController
 {
     private ProfileRepository $profileRepository;
     private UserRepository $userRepository;
-    private RegionRepository $regionRepository;
-    private CountryRepository $countryRepository;
     private UserAttributeService $userAttributeService;
     private ProfileService $profileService;
 
@@ -30,14 +28,10 @@ class UserProfileEditController extends AbstractController
         ProfileRepository $profileRepository,
         ProfileService $profileService,
         UserRepository $userRepository,
-        RegionRepository $regionRepository,
-        CountryRepository $countryRepository,
         UserAttributeService $userAttributeService
     ) {
         $this->profileRepository = $profileRepository;
         $this->userRepository = $userRepository;
-        $this->regionRepository = $regionRepository;
-        $this->countryRepository = $countryRepository;
         $this->userAttributeService = $userAttributeService;
         $this->profileService = $profileService;
     }
@@ -78,7 +72,7 @@ class UserProfileEditController extends AbstractController
             $profile->setAbout($profileFormType->getData()->getAbout());
             $profile->setDob($profileFormType->getData()->getDob());
             $this->profileRepository->save($profile);
-            return new RedirectResponse($this->generateUrl('profile_index'));
+            return new RedirectResponse($this->generateUrl('user_profile_index'));
         }
 
         return $this->render('@DatingLibreApp/user/profile/edit.html.twig', [

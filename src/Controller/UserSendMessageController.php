@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class UserMessageSendController extends AbstractController
+class UserSendMessageController extends AbstractController
 {
     private ProfileRepository $profileRepository;
     private MessageRepository $messageRepository;
@@ -63,7 +63,7 @@ class UserMessageSendController extends AbstractController
 
             $this->addFlash('success', 'message.sent');
             return new RedirectResponse($this->generateUrl(
-                'message_send',
+                'user_send_message',
                 ['userId' => $userId]
             ));
         }

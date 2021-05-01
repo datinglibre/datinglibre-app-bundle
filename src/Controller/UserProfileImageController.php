@@ -48,8 +48,7 @@ class UserProfileImageController extends AbstractController
 
         return $this->render('@DatingLibreApp/user/profile/image.html.twig', [
             'profile' => $this->profileService->findProjection($userId),
-            'imageUpload' => $this->imageUpload,
-            'controller_name' => 'ProfileImageController'
+            'imageUpload' => $this->imageUpload
         ]);
     }
 }

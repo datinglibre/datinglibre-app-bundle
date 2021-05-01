@@ -11,7 +11,7 @@ class ModerateProfileImagesPage extends SymfonyPage
 {
     public function getRouteName(): string
     {
-        return "moderate_profile_images";
+        return 'moderator_profile_images';
     }
 
     public function assertContains(string $content)

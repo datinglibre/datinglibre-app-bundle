@@ -47,7 +47,6 @@ class ModeratorProfileSuspensionController extends AbstractController
         return $this->render('@DatingLibreApp/moderator/profile/suspension.html.twig', [
             'closeSuspensionForm' => $closeSuspensionFormType->createView(),
             'profile' => $profile,
-            'controller_name' => 'ModerateProfileSuspensionController',
         ]);
     }
 }

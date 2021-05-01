@@ -11,7 +11,7 @@ class ProfileIndexPage extends SymfonyPage
 {
     public function getRouteName(): string
     {
-        return "profile_index";
+        return 'user_profile_index';
     }
 
     public function assertDisplaysBlankProfile()

@@ -19,7 +19,7 @@ class ProfileEditPage extends SymfonyPage
 
     public function getRouteName(): string
     {
-        return "profile_edit";
+        return 'user_profile_edit';
     }
 
     public function assertContains($message): void

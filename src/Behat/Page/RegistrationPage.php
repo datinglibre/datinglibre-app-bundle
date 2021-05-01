@@ -10,7 +10,7 @@ class RegistrationPage extends SymfonyPage
 {
     public function getRouteName(): string
     {
-        return "register";
+        return 'user_register';
     }
 
     public function fillInDetails(string $email): void

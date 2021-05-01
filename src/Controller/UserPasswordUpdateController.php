@@ -11,7 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Routing\Annotation\Route;
 
 class UserPasswordUpdateController extends AbstractController
 {
@@ -38,11 +37,10 @@ class UserPasswordUpdateController extends AbstractController
                 $session->getFlashBag()->add('danger', 'user.password_update_failed');
             }
 
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('user_login');
         }
 
         return $this->render('@DatingLibreApp/user/account/password_update.html.twig', [
-            'controller_name' => 'update_password',
             'passwordUpdateForm' => $passwordUpdateFormType->createView(),
         ]);
     }

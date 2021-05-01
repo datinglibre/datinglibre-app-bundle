@@ -63,7 +63,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
     public function supports(Request $request)
     {
-        return 'login' === $request->attributes->get('_route')
+        return 'user_login' === $request->attributes->get('_route')
             && $request->isMethod('POST');
     }
 
@@ -125,18 +125,18 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         }
 
         if ($this->authorizationChecker->isGranted(User::ADMIN)) {
-            return new RedirectResponse($this->urlGenerator->generate('events_index'));
+            return new RedirectResponse($this->urlGenerator->generate('admin_events_index'));
         }
 
         if ($this->authorizationChecker->isGranted(User::MODERATOR)) {
-            return new RedirectResponse($this->urlGenerator->generate('moderate_profile_images'));
+            return new RedirectResponse($this->urlGenerator->generate('moderator_profile_images'));
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('search_index'));
+        return new RedirectResponse($this->urlGenerator->generate('user_search_index'));
     }
 
     protected function getLoginUrl()
     {
-        return $this->urlGenerator->generate('login');
+        return $this->urlGenerator->generate('user_login');
     }
 }
