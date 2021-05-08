@@ -19,8 +19,8 @@ use Symfony\Component\Uid\Uuid;
  */
 class ProfileRepository extends ServiceEntityRepository
 {
-    protected const DEFAULT_MAX_AGE = 100;
-    protected const DEFAULT_MIN_AGE = 18;
+    protected const SYSTEM_MAX_AGE = 100;
+    protected const SYSTEM_MIN_AGE = 18;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Profile::class);
@@ -92,7 +92,7 @@ AND NOT EXISTS (
         OR (b.user_id = p.user_id AND b.blocked_user_id = :userId)
 )
 AND (SELECT EXTRACT(YEAR FROM AGE(dob)) FROM datinglibre.profiles p WHERE p.user_id = :userId) 
-     BETWEEN COALESCE(filter.min_age, :defaultMinAge) AND COALESCE(filter.max_age, :defaultMaxAge)
+     BETWEEN COALESCE(filter.min_age, :systemMinAge) AND COALESCE(filter.max_age, :systemMaxAge)
 AND EXTRACT(YEAR FROM AGE(p.dob)) BETWEEN :minAge AND :maxAge 
 EOD;
 
@@ -133,8 +133,8 @@ EOD;
         $query->setParameter('regionId', $regionId);
         $query->setParameter('minAge', $minAge);
         $query->setParameter('maxAge', $maxAge);
-        $query->setParameter('defaultMaxAge', self::DEFAULT_MAX_AGE);
-        $query->setParameter('defaultMinAge', self::DEFAULT_MIN_AGE);
+        $query->setParameter('systemMaxAge', self::SYSTEM_MAX_AGE);
+        $query->setParameter('systemMinAge', self::SYSTEM_MIN_AGE);
 
 
         if ($previous !== 0) {

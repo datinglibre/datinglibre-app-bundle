@@ -70,7 +70,6 @@ final class Version20200101000000 extends AbstractMigration
     meta JSONB,
     city_id UUID REFERENCES datinglibre.cities,
     moderation_status TEXT NOT NULL,
-    subscription_status TEXT NOT NULL,
     sort_id BIGSERIAL,
     updated_at TIMESTAMP WITH TIME ZONE
 );');

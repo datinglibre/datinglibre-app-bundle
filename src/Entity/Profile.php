@@ -21,16 +21,12 @@ class Profile
     public const UNMODERATED = 'UNMODERATED';
     public const PASSED = 'PASSED';
 
-    // subscription statuses
-    public const NO_SUBSCRIPTION = 'NONE';
-
     public function __construct()
     {
         $this->about = null;
         $this->city = null;
         $this->username = null;
         $this->dob = null;
-        $this->subscriptionStatus = self::NO_SUBSCRIPTION;
         $this->moderationStatus = self::UNMODERATED;
     }
 
@@ -71,12 +67,6 @@ class Profile
      * @ORM\Column(name="moderation_status", type="string")
      */
     private string $moderationStatus;
-
-    /**
-     * @ORM\Column(name="subscription_status", type="string")
-     */
-    private string $subscriptionStatus;
-
 
     public function getUser(): User
     {
@@ -129,16 +119,6 @@ class Profile
     public function getDob(): ?DateTimeInterface
     {
         return $this->dob;
-    }
-
-    public function getSubscriptionStatus(): string
-    {
-        return $this->subscriptionStatus;
-    }
-
-    public function setSubscriptionStatus(string $subscriptionStatus): void
-    {
-        $this->subscriptionStatus = $subscriptionStatus;
     }
 
     public function getModerationStatus(): string
