@@ -189,7 +189,7 @@ class SearchContext implements Context
         Assert::notNull($profile);
 
         Assert::null($profile->getImageUrl());
-        Assert::null($profile->getImageState());
+        Assert::null($profile->getImageStatus());
         Assert::false($profile->isImagePresent());
     }
 
@@ -205,7 +205,7 @@ class SearchContext implements Context
         Assert::notNull($profile);
 
         Assert::notNull($profile->getImageUrl());
-        Assert::notNull($profile->getImageState());
+        Assert::notNull($profile->getImageStatus());
         Assert::true($profile->isImagePresent());
     }
 

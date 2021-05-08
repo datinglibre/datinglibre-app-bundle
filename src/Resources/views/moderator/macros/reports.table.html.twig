@@ -34,7 +34,7 @@
                             </ul>
                         {% endif %}
                     </td>
-                    <td>{{ ('report.' ~ report.status)|trans }}</td>
+                    <td>{{ ('report.' ~ report.status|lower)|trans }}</td>
                     <td>{{ report.updatedAt|format_date('long') }}</td>
                     <td>{{ report.createdAt|format_date('long') }}</td>
                     {% if displayView %}

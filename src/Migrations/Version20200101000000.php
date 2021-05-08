@@ -37,7 +37,7 @@ final class Version20200101000000 extends AbstractMigration
     secure_url_expiry TIMESTAMP WITH TIME ZONE,
     is_profile BOOLEAN NOT NULL,
     user_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
-    state TEXT NOT NULL,
+    status TEXT NOT NULL CHECK (status IN (\'UNMODERATED\', \'ACCEPTED\', \'REJECTED\')),
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL
 );');
@@ -69,14 +69,14 @@ final class Version20200101000000 extends AbstractMigration
     about TEXT,
     meta JSONB,
     city_id UUID REFERENCES datinglibre.cities,
-    moderation_status TEXT NOT NULL,
-    sort_id BIGSERIAL,
+    status TEXT NOT NULL CHECK (status IN (\'UNMODERATED\', \'ACCEPTED\', \'SUSPENDED\', \'PERMANENTLY_SUSPENDED\')),
+    sort_id BIGSERIAL NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE
 );');
         $this->addSql('CREATE INDEX profile_sort_order ON datinglibre.profiles(sort_id);');
         $this->addSql('CREATE TABLE datinglibre.categories (
     id UUID NOT NULL PRIMARY KEY,
-    name TEXT UNIQUE
+    name TEXT UNIQUE NOT NULL
 );');
         $this->addSql('CREATE TABLE datinglibre.attributes (
     id UUID NOT NULL PRIMARY KEY,
@@ -107,8 +107,8 @@ final class Version20200101000000 extends AbstractMigration
     reported_user_id UUID NOT NULL REFERENCES datinglibre.users ON DELETE CASCADE,
     reasons JSONB NOT NULL,
     message TEXT,
-    status TEXT NOT NULL CHECK (status IN (\'open\', \'closed\')),
-    moderator_closed_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
+    status TEXT NOT NULL CHECK (status IN (\'OPEN\', \'CLOSED\')),
+    user_closed_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     UNIQUE (user_id, reported_user_id)
@@ -128,7 +128,7 @@ final class Version20200101000000 extends AbstractMigration
     content TEXT,
     thread_id UUID NOT NULL, 
     type TEXT,
-    sent_time TIMESTAMP WITH TIME ZONE
+    sent_time TIMESTAMP WITH TIME ZONE NOT NULL
 );');
 
         $this->addSql('CREATE TABLE datinglibre.tokens (
@@ -163,7 +163,7 @@ final class Version20200101000000 extends AbstractMigration
     user_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
     provider TEXT NOT NULL,
     provider_subscription_id TEXT NOT NULL,
-    state TEXT NOT NULL,
+    status TEXT NOT NULL CHECK (status IN (\'ACTIVE\', \'CANCELLED\', \'RENEWAL_FAILURE\', \'CHARGEBACK\', \'REFUND\')),
     renewal_date DATE NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -174,15 +174,15 @@ final class Version20200101000000 extends AbstractMigration
         $this->addSql('CREATE TABLE datinglibre.suspensions (
     id UUID NOT NULL PRIMARY KEY,
     user_id UUID REFERENCES datinglibre.users ON DELETE CASCADE,
-    moderator_opened_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
-    moderator_closed_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
-    duration INT NOT NULL,
+    user_opened_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
+    user_closed_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
+    duration INT NULL,
     reasons JSONB NOT NULL,
-    status TEXT NOT NULL CHECK (status IN (\'open\', \'closed\')),
+    status TEXT NOT NULL CHECK (status IN (\'OPEN\', \'CLOSED\')),
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL
 )');
-        $this->addSql('CREATE UNIQUE INDEX unique_open_suspension ON datinglibre.suspensions(user_id) WHERE (status = \'open\')');
+        $this->addSql('CREATE UNIQUE INDEX unique_open_suspension ON datinglibre.suspensions(user_id) WHERE (status = \'OPEN\')');
     }
 
     public function down(Schema $schema): void

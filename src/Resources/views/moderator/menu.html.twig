@@ -3,4 +3,7 @@
     <a href="{{ path('moderator_profile_images') }}" class="{{ is_active('moderator_profile_images') }} list-group-item list-group-item-action">{{ 'menu.images'|trans }}</a>
     <a href="{{ path('moderator_reports') }}" class="{{ is_active('moderator_reports') }} {{ is_active('moderator_report') }} list-group-item list-group-item-action">{{ 'menu.reports'|trans }}</a>
     <a href="{{ path('moderator_suspensions') }}" class="{{ is_active('moderator_suspensions') }} list-group-item list-group-item-action">{{ 'menu.suspensions'|trans }}</a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_permanent_suspension_queue') }}" class="{{ is_active('admin_permanent_suspension_queue') }} list-group-item list-group-item-action">{{ 'menu.permanent_suspensions'|trans }}</a>
+    {% endif %}
 </div>

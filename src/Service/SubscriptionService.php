@@ -48,7 +48,7 @@ class SubscriptionService
         $subscription = new Subscription();
         $subscription->setUser($user);
         $subscription->setProvider($provider);
-        $subscription->setState(Subscription::ACTIVE);
+        $subscription->setStatus(Subscription::ACTIVE);
         $subscription->setProviderSubscriptionId($providerId);
         $subscription->setRenewalDate($renewalDate);
         $this->subscriptionRepository->save($subscription);
@@ -86,7 +86,7 @@ class SubscriptionService
         }
 
         $this->eventService->save($subscription->getUser()->getId(), $event, $data);
-        $subscription->setState(Subscription::CANCELLED);
+        $subscription->setStatus(Subscription::CANCELLED);
         $subscription->setRenewalDate(null);
         $this->subscriptionRepository->save($subscription);
     }
@@ -105,7 +105,7 @@ class SubscriptionService
         }
 
         $this->eventService->save($subscription->getUser()->getId(), $event, $data);
-        $subscription->setState(Subscription::RENEWAL_FAILURE);
+        $subscription->setStatus(Subscription::RENEWAL_FAILURE);
 
         if ($nextRetryDate !== null) {
             $subscription->setRenewalDate($nextRetryDate);
@@ -123,7 +123,7 @@ class SubscriptionService
         }
 
         $this->eventService->save($subscription->getUser()->getId(), $event, $data);
-        $subscription->setState(Subscription::CHARGEBACK);
+        $subscription->setStatus(Subscription::CHARGEBACK);
         $subscription->setRenewalDate(null);
         $this->subscriptionRepository->save($subscription);
     }
@@ -137,7 +137,7 @@ class SubscriptionService
         }
 
         $this->eventService->save($subscription->getUser()->getId(), $event, $data);
-        $subscription->setState(Subscription::REFUND);
+        $subscription->setStatus(Subscription::REFUND);
         $subscription->setRenewalDate(null);
         $this->subscriptionRepository->save($subscription);
     }

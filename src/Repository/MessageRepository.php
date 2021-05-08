@@ -41,7 +41,7 @@ class MessageRepository extends ServiceEntityRepository
         i.secure_url as secure_profile_image_url
         FROM datinglibre.messages m 
         INNER JOIN datinglibre.profiles p ON p.user_id = m.sender_id 
-        LEFT JOIN datinglibre.images i ON p.user_id = i.user_id AND i.state = 'ACCEPTED' AND i.is_profile = TRUE 
+        LEFT JOIN datinglibre.images i ON p.user_id = i.user_id AND i.status = 'ACCEPTED' AND i.is_profile = TRUE 
         WHERE ((m.user_id = :userId AND m.sender_id = :participantId) 
            OR (m.user_id = :participantId AND m.sender_id = :userId))
         ORDER BY m.sent_time ASC   
@@ -102,7 +102,7 @@ EOD;
         JOIN datinglibre.users sender ON m.sender_id = sender.id 
         JOIN datinglibre.users receiver ON m.user_id = receiver.id 
         JOIN datinglibre.profiles current_recipient_profile ON current_recipient_profile.user_id = CASE WHEN m.user_id = :userId THEN sender.id ELSE receiver.id END
-        LEFT JOIN datinglibre.images current_recipient_profile_image ON current_recipient_profile.user_id = current_recipient_profile_image.user_id AND current_recipient_profile_image.state = 'ACCEPTED' AND current_recipient_profile_image.is_profile IS TRUE 
+        LEFT JOIN datinglibre.images current_recipient_profile_image ON current_recipient_profile.user_id = current_recipient_profile_image.user_id AND current_recipient_profile_image.status = 'ACCEPTED' AND current_recipient_profile_image.is_profile IS TRUE 
         JOIN datinglibre.profiles sender_profile ON m.sender_id = sender_profile.user_id
         JOIN datinglibre.profiles receiver_profile ON m.user_id = receiver_profile.user_id 
         WHERE (m.user_id = :userId OR m.sender_id = :userId) 

@@ -19,7 +19,9 @@ class Profile
 {
     // moderation statuses
     public const UNMODERATED = 'UNMODERATED';
-    public const PASSED = 'PASSED';
+    public const ACCEPTED = 'ACCEPTED';
+    public const SUSPENDED = 'SUSPENDED';
+    public const PERMANENTLY_SUSPENDED = 'PERMANENTLY_SUSPENDED';
 
     public function __construct()
     {
@@ -27,7 +29,7 @@ class Profile
         $this->city = null;
         $this->username = null;
         $this->dob = null;
-        $this->moderationStatus = self::UNMODERATED;
+        $this->status = self::UNMODERATED;
     }
 
     /**
@@ -64,9 +66,9 @@ class Profile
     private DateTimeInterface $updatedAt;
 
     /**
-     * @ORM\Column(name="moderation_status", type="string")
+     * @ORM\Column(name="status", type="string")
      */
-    private string $moderationStatus;
+    private string $status;
 
     public function getUser(): User
     {
@@ -121,14 +123,14 @@ class Profile
         return $this->dob;
     }
 
-    public function getModerationStatus(): string
+    public function getStatus(): string
     {
-        return $this->moderationStatus;
+        return $this->status;
     }
 
-    public function setModerationStatus($moderationStatus): void
+    public function setStatus($status): void
     {
-        $this->moderationStatus = $moderationStatus;
+        $this->status = $status;
     }
 
     public function setUpdatedAt($updatedAt): void
@@ -147,6 +149,6 @@ class Profile
     public function prePersist()
     {
         $this->updatedAt = new DateTime('UTC');
-        $this->moderationStatus = $this->moderationStatus === null ? self::UNMODERATED : $this->moderationStatus;
+        $this->status = $this->status === null ? self::UNMODERATED : $this->status;
     }
 }

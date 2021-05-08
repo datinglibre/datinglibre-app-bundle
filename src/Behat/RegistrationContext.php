@@ -4,35 +4,24 @@ declare(strict_types=1);
 
 namespace DatingLibre\AppBundle\Behat;
 
-use DatingLibre\AppBundle\Repository\UserRepository;
-use DatingLibre\AppBundle\Behat\Page\LoginPage;
+use DatingLibre\AppBundle\Behat\Util\EmailUtil;
 use DatingLibre\AppBundle\Behat\Page\RegistrationPage;
 use Behat\Behat\Context\Context;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Webmozart\Assert\Assert;
 
 final class RegistrationContext implements Context
 {
-    private LoginPage $loginPage;
     private RegistrationPage $registrationPage;
-    private UserRepository $userRepository;
-    private HttpClientInterface $httpClient;
     private string $signupEmail;
     private string $alreadyExistsEmail;
-    private ?string $email;
 
     public function __construct(
-        LoginPage $loginPage,
-        RegistrationPage $registrationPage,
-        UserRepository $userRepository
+        RegistrationPage $registrationPage
     ) {
-        $this->httpClient = HttpClient::create();
-        $this->loginPage = $loginPage;
         $this->registrationPage = $registrationPage;
-        $this->userRepository = $userRepository;
     }
 
     /**
@@ -42,8 +31,7 @@ final class RegistrationContext implements Context
     {
         $this->signupEmail = '';
         $this->alreadyExistsEmail = '';
-        $response = $this->httpClient->request('DELETE', sprintf(MailHogConstants::DELETE_EMAILS_URL, 'localhost'));
-        Assert::eq($response->getStatusCode(), 200);
+        EmailUtil::deleteAll();
     }
 
     /**
@@ -61,11 +49,9 @@ final class RegistrationContext implements Context
      */
     public function iShouldReceiveAnEmailToMyAddress(string $email)
     {
-        $emailResponse = $this->httpClient->request('GET', sprintf(MailHogConstants::EMAIL_REST_URL, 'localhost', $email));
-        Assert::eq($emailResponse->getStatusCode(), 200);
-        $emails = json_decode($emailResponse->getContent(), true);
-        $this->signupEmail = quoted_printable_decode($emails['items'][0]['Content']['Body']);
-        Assert::eq($emails['items'][0]['Content']['Headers']['Subject'][0], 'Confirm your account');
+        $signupEmail = EmailUtil::getEmail($email);
+        $this->signupEmail = $signupEmail->getBody();
+        Assert::eq($signupEmail->getSubject(), 'Confirm your account');
         Assert::contains($this->signupEmail, 'Your email address has been used to create an account');
     }
 
@@ -101,11 +87,9 @@ final class RegistrationContext implements Context
      */
     public function iShouldReceiveAnAlreadyExistsEmailTo(string $email)
     {
-        $emailResponse = $this->httpClient->request('GET', sprintf(MailHogConstants::EMAIL_REST_URL, 'localhost', $email));
-        Assert::eq($emailResponse->getStatusCode(), 200);
-        $emails = json_decode($emailResponse->getContent(), true);
-        $this->alreadyExistsEmail = quoted_printable_decode($emails['items'][0]['Content']['Body']);
-        Assert::eq($emails['items'][0]['Content']['Headers']['Subject'][0], 'An account for your email address already exists');
+        $alreadyExistsEmail = EmailUtil::getEmail($email);
+        $this->alreadyExistsEmail = $alreadyExistsEmail->getBody();
+        Assert::eq($alreadyExistsEmail->getSubject(), 'An account for your email address already exists');
         Assert::contains($this->alreadyExistsEmail, 'If you have forgotten your password please use the');
         Assert::contains($this->alreadyExistsEmail, 'password reset form');
     }
@@ -127,7 +111,7 @@ final class RegistrationContext implements Context
 
     private function clickLink($link): ResponseInterface
     {
-        $response = $this->httpClient->request('GET', $link);
+        $response = HttpClient::create()->request('GET', $link);
         Assert::eq($response->getStatusCode(), 200);
 
         return $response;

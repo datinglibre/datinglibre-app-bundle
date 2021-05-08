@@ -77,7 +77,9 @@ SELECT
     s.status AS status
 FROM datinglibre.suspensions s
     INNER JOIN datinglibre.profiles p ON p.user_id = s.user_id 
-WHERE s.created_at + interval '1  hour' * s.duration < now();
+WHERE s.duration IS NOT NULL 
+    AND s.status = 'OPEN'
+    AND s.created_at + interval '1  hour' * s.duration < now();
 EOD;
         $query = $this->getEntityManager()->createNativeQuery($sql, $this->getSuspensionProjectionMapping());
         return $query->getResult();
@@ -96,5 +98,27 @@ EOD;
         $rsm->addFieldResult('sp', 'username', 'username');
         $rsm->addFieldResult('sp', 'elapsed', 'elapsed');
         return $rsm;
+    }
+
+    public function findOpenPermanentSuspensions(): array
+    {
+        $sql =<<<EOD
+SELECT 
+    s.id AS id,
+    s.user_id AS user_id,
+    s.reasons AS reasons,   
+    s.duration AS duration,
+    s.created_at AS created_at,
+    p.username AS username,
+    s.created_at + interval '1  hour' * s.duration < now() AS elapsed,
+    s.status AS status
+FROM datinglibre.suspensions s
+    INNER JOIN datinglibre.profiles p ON p.user_id = s.user_id
+WHERE s.duration IS NULL 
+    AND s.status = 'OPEN' 
+    AND p.status <> 'PERMANENTLY_SUSPENDED'
+EOD;
+        $query = $this->getEntityManager()->createNativeQuery($sql, $this->getSuspensionProjectionMapping());
+        return $query->getResult();
     }
 }

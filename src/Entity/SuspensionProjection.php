@@ -37,12 +37,12 @@ class SuspensionProjection
     /**
      * @ORM\Column(type="integer")
      */
-    private int $duration;
+    private ?int $duration;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private bool $elapsed;
+    private ?bool $elapsed;
 
     /**
      * @ORM\Column(type="string")
@@ -84,12 +84,12 @@ class SuspensionProjection
         $this->username = $username;
     }
 
-    public function getDuration(): int
+    public function getDuration(): ?int
     {
         return $this->duration;
     }
 
-    public function setDuration(int $duration): void
+    public function setDuration(?int $duration): void
     {
         $this->duration = $duration;
     }
@@ -104,12 +104,12 @@ class SuspensionProjection
         $this->reasons = $reasons;
     }
 
-    public function isElapsed(): bool
+    public function isElapsed(): ?bool
     {
         return $this->elapsed;
     }
 
-    public function setElapsed(bool $elapsed): void
+    public function setElapsed(?bool $elapsed): void
     {
         $this->elapsed = $elapsed;
     }

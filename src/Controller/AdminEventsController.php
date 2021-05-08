@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminEventController extends AbstractController
+class AdminEventsController extends AbstractController
 {
     private EventRepository $eventRepository;
 
@@ -20,7 +20,7 @@ class AdminEventController extends AbstractController
         $this->eventRepository = $eventRepository;
     }
 
-    public function displayEvents(Request $request): Response
+    public function index(Request $request): Response
     {
         $eventForm = new EventFilterForm();
         $eventFormType = $this->createForm(EventFilterFormType::class, $eventForm);
@@ -28,7 +28,7 @@ class AdminEventController extends AbstractController
 
         $events = $this->getEvents($eventForm->getYear(), $eventForm->getMonth(), $eventForm->getDay());
 
-        return $this->render('@DatingLibreApp/admin/event/index.html.twig', [
+        return $this->render('@DatingLibreApp/admin/events/index.html.twig', [
             'events' => $events,
             'eventFilterForm' => $eventFormType->createView()
         ]);

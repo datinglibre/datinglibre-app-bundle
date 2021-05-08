@@ -20,8 +20,8 @@ use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
  */
 class Report
 {
-    public const OPEN = 'open';
-    public const CLOSED = 'closed';
+    public const OPEN = 'OPEN';
+    public const CLOSED = 'CLOSED';
 
     /**
      * @var Uuid
@@ -47,9 +47,9 @@ class Report
 
     /**
      * @OneToOne(targetEntity="user")
-     * @JoinColumn(name = "moderator_closed_id", referencedColumnName = "id")
+     * @JoinColumn(name = "user_closed_id", referencedColumnName = "id")
      */
-    private User $moderatorClosed;
+    private User $userClosed;
 
     /**
      * @ORM\Column(name="reasons", type="json", options={"jsonb": true})
@@ -64,7 +64,7 @@ class Report
     /**
      * @ORM\Column(name="status", type="text")
      */
-    private string $status = 'open';
+    private string $status = self::OPEN;
 
     /**
      * @ORM\Column(name="created_at", type="datetimetz")
@@ -127,14 +127,14 @@ class Report
         $this->message = $message;
     }
 
-    public function getModeratorClosed(): User
+    public function getUserClosed(): User
     {
-        return $this->moderatorClosed;
+        return $this->userClosed;
     }
 
-    public function setModeratorClosed(User $moderatorClosed): void
+    public function setUserClosed(User $userClosed): void
     {
-        $this->moderatorClosed = $moderatorClosed;
+        $this->userClosed = $userClosed;
     }
 
     public function getStatus(): string

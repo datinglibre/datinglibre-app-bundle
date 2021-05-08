@@ -199,6 +199,17 @@ services:
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
+  DatingLibre\AppBundle\Controller\AdminSuspensionQueueController:
+    class: DatingLibre\AppBundle\Controller\AdminSuspensionQueueController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\SuspensionService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
 
   DatingLibre\AppBundle\Controller\UserBlockController:
     class: DatingLibre\AppBundle\Controller\UserBlockController
@@ -268,7 +279,10 @@ services:
       - { name: container.service_subscriber }
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository', '@DatingLibre\AppBundle\Repository\UserRepository', '@DatingLibre\AppBundle\Repository\MessageRepository' ]
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository',
+                 '@DatingLibre\AppBundle\Service\SuspensionService',
+                 '@DatingLibre\AppBundle\Repository\UserRepository',
+                 '@DatingLibre\AppBundle\Repository\MessageRepository' ]
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
@@ -285,6 +299,16 @@ services:
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
+  DatingLibre\AppBundle\Controller\ModeratorProfileEnqueuePermanentSuspension:
+    class: DatingLibre\AppBundle\Controller\ModeratorProfileEnqueuePermanentSuspension
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
 
   DatingLibre\AppBundle\Controller\UserPasswordResetController:
     class: DatingLibre\AppBundle\Controller\UserPasswordResetController
@@ -458,6 +482,18 @@ services:
     calls:
     - [ setContainer, [ '@service_container' ] ]
 
+  DatingLibre\AppBundle\Controller\AdminProfilePermanentlySuspendController:
+    class: DatingLibre\AppBundle\Controller\AdminProfilePermanentlySuspendController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository', '@DatingLibre\AppBundle\Service\SuspensionService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
   DatingLibre\AppBundle\Controller\UserTokenController:
     class: DatingLibre\AppBundle\Controller\UserTokenController
     public: true
@@ -470,8 +506,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\AdminEventController:
-    class: DatingLibre\AppBundle\Controller\AdminEventController
+  DatingLibre\AppBundle\Controller\AdminEventsController:
+    class: DatingLibre\AppBundle\Controller\AdminEventsController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -675,6 +711,14 @@ services:
     autoconfigure: true
     arguments: [ '@DatingLibre\AppBundle\Repository\CategoryRepository' ]
 
+  DatingLibre\AppBundle\Form\PermanentSuspensionFormType:
+    class: DatingLibre\AppBundle\Form\PermanentSuspensionFormType
+    tags:
+      - { name: form.type }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '%datinglibre.rules%' ]
+
   DatingLibre\AppBundle\Security\LoginFormAuthenticator:
     class: DatingLibre\AppBundle\Security\LoginFormAuthenticator
     autowire: true
@@ -739,7 +783,13 @@ services:
     class: DatingLibre\AppBundle\Service\UserService
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Repository\UserRepository', '@DatingLibre\AppBundle\Service\EmailService', '@DatingLibre\AppBundle\Service\TokenService', '@DatingLibre\AppBundle\Service\ProfileService', '@security.user_password_encoder.generic', '@translator.default', '%datinglibre.admin_email%' ]
+    arguments: [ '@DatingLibre\AppBundle\Repository\UserRepository',
+                 '@DatingLibre\AppBundle\Service\EmailService',
+                 '@DatingLibre\AppBundle\Service\TokenService',
+                 '@DatingLibre\AppBundle\Service\ProfileService',
+                 '@security.user_password_encoder.generic',
+                 '@translator.default',
+                 '%datinglibre.admin_email%' ]
 
   DatingLibre\AppBundle\Service\EventService:
     class: DatingLibre\AppBundle\Service\EventService
@@ -751,7 +801,14 @@ services:
     class: DatingLibre\AppBundle\Service\SuspensionService
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Repository\UserRepository', '@DatingLibre\AppBundle\Repository\SuspensionRepository']
+    arguments: [ '@monolog.logger',
+                 '@doctrine.orm.default_entity_manager',
+                 '@DatingLibre\AppBundle\Repository\UserRepository',
+                 '@DatingLibre\AppBundle\Repository\ProfileRepository',
+                 '@DatingLibre\AppBundle\Repository\SuspensionRepository',
+                 '@DatingLibre\AppBundle\Service\EmailService',
+                 '@translator.default',
+                 '%datinglibre.admin_email%']
 
   DatingLibre\AppBundle\Service\SubscriptionService:
     class: DatingLibre\AppBundle\Service\SubscriptionService

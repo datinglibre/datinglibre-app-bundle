@@ -16,6 +16,7 @@ use Symfony\Component\Uid\Uuid;
  */
 class Image
 {
+    // statuses
     public const UNMODERATED = 'UNMODERATED';
     public const ACCEPTED = 'ACCEPTED';
     public const REJECTED = 'REJECTED';
@@ -62,9 +63,9 @@ class Image
     private $secureUrlExpiry;
 
     /**
-     * @ORM\Column(name="state", type="string")
+     * @ORM\Column(name="status", type="string")
      */
-    private $state;
+    private $status;
 
     /**
      * @ORM\Column(name="created_at", type="datetimetz")
@@ -98,9 +99,9 @@ class Image
         return $this;
     }
 
-    public function setState($state)
+    public function setStatus($status)
     {
-        $this->state = $state;
+        $this->status = $status;
         return $this;
     }
 
@@ -140,6 +141,11 @@ class Image
         $this->user = $user;
     }
 
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
     public function getUpdatedAt()
     {
         return $this->updatedAt;
@@ -157,7 +163,7 @@ class Image
     {
         $this->createdAt = new DateTime('UTC');
         $this->updatedAt = new DateTime('UTC');
-        $this->state = self::UNMODERATED;
+        $this->status = self::UNMODERATED;
     }
 
     /**

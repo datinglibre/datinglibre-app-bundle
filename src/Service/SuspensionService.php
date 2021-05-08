@@ -4,23 +4,49 @@ declare(strict_types=1);
 
 namespace DatingLibre\AppBundle\Service;
 
+use DatingLibre\AppBundle\Entity\Email;
+use DatingLibre\AppBundle\Entity\Profile;
 use DatingLibre\AppBundle\Entity\Suspension;
+use DatingLibre\AppBundle\Repository\ProfileRepository;
 use DatingLibre\AppBundle\Repository\SuspensionRepository;
 use DatingLibre\AppBundle\Repository\UserRepository;
+use Doctrine\ORM\EntityManager;
+use Exception;
+use Psr\Log\LoggerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SuspensionService
 {
+    private LoggerInterface $logger;
     private UserRepository $userRepository;
+    private ProfileRepository $profileRepository;
     private SuspensionRepository $suspensionRepository;
+    private EmailService $emailService;
+    private TranslatorInterface $translator;
+    private string $adminEmail;
+    private EntityManager $entityManager;
 
     public function __construct(
+        LoggerInterface $logger,
+        EntityManager $entityManager,
         UserRepository $userRepository,
-        SuspensionRepository $suspensionRepository
+        ProfileRepository $profileRepository,
+        SuspensionRepository $suspensionRepository,
+        EmailService $emailService,
+        TranslatorInterface $translator,
+        string $adminEmail
     ) {
         $this->userRepository = $userRepository;
         $this->suspensionRepository = $suspensionRepository;
+        $this->profileRepository = $profileRepository;
+        $this->emailService = $emailService;
+        $this->adminEmail = $adminEmail;
+        $this->translator = $translator;
+        $this->entityManager = $entityManager;
+        $this->logger = $logger;
     }
 
     public function findById(Uuid $suspensionId): ?Suspension
@@ -28,7 +54,15 @@ class SuspensionService
         return $this->suspensionRepository->find($suspensionId);
     }
 
-    public function suspend(Uuid $moderatorId, Uuid $userId, array $reasons, int $duration): Suspension
+    public function enqueuePermanentSuspension(Uuid $moderatorId, Uuid $userId, array $reasons): Suspension
+    {
+        return $this->suspend($moderatorId, $userId, $reasons, null);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function suspend(Uuid $moderatorId, Uuid $userId, array $reasons, ?int $duration): Suspension
     {
         $moderator = $this->userRepository->findOneBy(['id' => $moderatorId]);
         $user = $this->userRepository->findOneBy(['id' => $userId]);
@@ -37,17 +71,47 @@ class SuspensionService
             throw new NotFoundHttpException();
         }
 
-        $suspension = new Suspension();
-        $suspension->setModeratorOpened($moderator);
-        $suspension->setUser($user);
-        $suspension->setDuration($duration);
-        $suspension->setReasons($reasons);
-        return $this->suspensionRepository->save($suspension);
+        $profile = $this->profileRepository->find($user->getId());
+
+        $this->entityManager->beginTransaction();
+
+        try {
+            $suspension = new Suspension();
+            $suspension->setUserOpened($moderator);
+            $suspension->setUser($user);
+            $suspension->setDuration($duration);
+            $suspension->setReasons($reasons);
+            $suspension = $this->suspensionRepository->save($suspension);
+
+            $email = (new TemplatedEmail())
+                ->from($this->adminEmail)
+                ->context(['reasons' => $reasons, 'hours' => $duration])
+                ->subject($this->translator->trans('suspension.suspended_subject'))
+                ->to($user->getEmail())
+                ->htmlTemplate('@DatingLibreApp/admin/suspension/email/suspended.html.twig');
+
+            $this->emailService->send($email, $user, Email::SUSPENSION);
+
+            $profile->setStatus(Profile::SUSPENDED);
+            $this->profileRepository->save($profile);
+
+            $this->entityManager->commit();
+            return $suspension;
+        } catch (Exception $e) {
+            $this->entityManager->rollback();
+            $this->logger->error($e->getMessage());
+            throw $e;
+        }
     }
 
     public function findOpenByUserId(Uuid $userId): ?Suspension
     {
-        return $this->suspensionRepository->findOneBy(['user' => $userId, 'status' => Suspension::OPEN]);
+        return $this->suspensionRepository->findOneBy(
+            [
+                'user' => $userId,
+                'status' => Suspension::OPEN
+            ]
+        );
     }
 
     public function findAllByUserId(Uuid $userId): array
@@ -60,6 +124,9 @@ class SuspensionService
         return $this->suspensionRepository->getElapsedSuspensions();
     }
 
+    /**
+     * @throws Exception
+     */
     public function close(Uuid $moderatorId, Uuid $suspensionId): void
     {
         $suspension = $this->suspensionRepository->find($suspensionId);
@@ -69,8 +136,74 @@ class SuspensionService
             return;
         }
 
-        $suspension->setModeratorClosed($moderator);
-        $suspension->setStatus(Suspension::CLOSED);
-        $this->suspensionRepository->save($suspension);
+        $this->entityManager->beginTransaction();
+
+        try {
+            $profile = $this->profileRepository->find($suspension->getUser()->getId());
+            $profile->setStatus(Profile::ACCEPTED);
+            $this->profileRepository->save($profile);
+
+            $suspension->setUserClosed($moderator);
+            $suspension->setStatus(Suspension::CLOSED);
+            $this->suspensionRepository->save($suspension);
+            $this->entityManager->commit();
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
+            $this->entityManager->rollback();
+            throw $e;
+        }
+    }
+
+    public function findOpenPermanentSuspension(Uuid $userId): ?Suspension
+    {
+        return $this->suspensionRepository->findOneBy(
+            [
+                'user' => $userId,
+                'status' => Suspension::OPEN,
+                'duration' => null
+            ]
+        );
+    }
+
+    public function findOpenPermanentSuspensions(): array
+    {
+        return $this->suspensionRepository->findOpenPermanentSuspensions();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function permanentlySuspend(Uuid $userId, Uuid $suspendedUserId, array $reasons): void
+    {
+        $this->entityManager->beginTransaction();
+
+        try {
+            $permanentSuspension = $this->findOpenPermanentSuspension($suspendedUserId) ?? new Suspension();
+            $user = $this->userRepository->find($userId);
+            $suspendedUser = $this->userRepository->find($suspendedUserId);
+            $profile = $this->profileRepository->find($suspendedUserId);
+
+            $permanentSuspension->setUser($suspendedUser);
+            $permanentSuspension->setUserOpened($user);
+            $permanentSuspension->setReasons($reasons);
+            $this->suspensionRepository->save($permanentSuspension);
+
+            $profile->setStatus(Profile::PERMANENTLY_SUSPENDED);
+            $this->profileRepository->save($profile);
+
+            $email = (new TemplatedEmail())
+                ->from($this->adminEmail)
+                ->context(['reasons' => $reasons])
+                ->subject($this->translator->trans('suspension.permanently_suspended_subject'))
+                ->to($suspendedUser->getEmail())
+                ->htmlTemplate('@DatingLibreApp/admin/suspension/email/permanently_suspended.html.twig');
+
+            $this->emailService->send($email, $suspendedUser, Email::PERMANENT_SUSPENSION);
+            $this->entityManager->commit();
+        } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage());
+            $this->entityManager->rollback();
+            throw $exception;
+        }
     }
 }

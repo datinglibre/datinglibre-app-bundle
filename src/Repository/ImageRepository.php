@@ -47,14 +47,14 @@ class ImageRepository extends ServiceEntityRepository
         $rsm->addFieldResult('ip', 'user_id', 'userId');
         $rsm->addFieldResult('ip', 'secure_url', 'secureUrl');
         $rsm->addFieldResult('ip', 'secure_url_expiry', 'secureUrlExpiry');
-        $rsm->addFieldResult('ip', 'state', 'state');
+        $rsm->addFieldResult('ip', 'status', 'status');
 
         $query = $this->getEntityManager()->createNativeQuery(<<<EOD
 SELECT id,
         user_id, 
         secure_url,
         secure_url_expiry,
-        state 
+        status
         FROM datinglibre.images 
         WHERE user_id = :userId AND is_profile = :isProfile
 EOD, $rsm);
@@ -80,11 +80,11 @@ SELECT id,
         secure_url_expiry,
         user_id 
         FROM datinglibre.images 
-        WHERE state = :state
+        WHERE status = :status
         LIMIT 1
 EOD, $rsm);
 
-        $query->setParameter('state', Image::UNMODERATED);
+        $query->setParameter('status', Image::UNMODERATED);
         return $query->getOneOrNullResult();
     }
 

@@ -3,6 +3,10 @@
     <a href="{{ path('moderator_profile_view', {'userId': profile.id}) }}" class="{{ is_active('moderator_profile_view') }} list-group-item list-group-item-action">{{ 'menu.view'|trans }}</a>
     <a href="{{ path('moderator_profile_reports', {'userId': profile.id}) }}" class="{{ is_active('moderator_profile_reports') }} {{ is_active('moderator_profile_report') }} list-group-item list-group-item-action">{{ 'menu.reports'|trans }}</a>
     <a href="{{ path('moderator_profile_suspensions', {'userId': profile.id}) }}" class="{{ is_active('moderator_profile_suspension') }} list-group-item list-group-item-action">{{ 'menu.suspensions'|trans }}</a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_profile_permanently_suspend', {'userId': profile.id}) }}" class="{{ is_active('admin_profile_permanently_suspend') }} list-group-item list-group-item-action">{{ 'menu.permanently_suspend'|trans }}</a>
+    {% else %}
+        <a href="{{ path('moderator_profile_enqueue_permanent_suspension', {'userId': profile.id}) }}" class="{{ is_active('moderator_profile_enqueue_permanent_suspension') }} list-group-item list-group-item-action">{{ 'menu.permanently_suspend'|trans }}</a>
+    {% endif %}
 </div>
-
 

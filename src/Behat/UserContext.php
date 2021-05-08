@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace DatingLibre\AppBundle\Behat;
 
+use DatingLibre\AppBundle\Behat\Util\EmailUtil;
 use DatingLibre\AppBundle\Entity\User;
 use DatingLibre\AppBundle\Repository\UserRepository;
 use DatingLibre\AppBundle\Service\UserService;
 use DatingLibre\AppBundle\Behat\Page\LoginPage;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Webmozart\Assert\Assert;
 
 class UserContext extends RawMinkContext
@@ -20,7 +19,6 @@ class UserContext extends RawMinkContext
     private UserRepository $userRepository;
     private UserService $userService;
     private LoginPage $loginPage;
-    private HttpClientInterface $httpClient;
     private string $passwordResetEmail;
 
     public function __construct(
@@ -31,7 +29,6 @@ class UserContext extends RawMinkContext
         $this->userRepository = $userRepository;
         $this->userService = $userService;
         $this->loginPage = $loginPage;
-        $this->httpClient = HttpClient::create();
     }
 
     /**
@@ -119,11 +116,9 @@ class UserContext extends RawMinkContext
      */
     public function iShouldReceiveAPasswordResetEmailTo(string $email)
     {
-        $emailResponse = $this->httpClient->request('GET', sprintf(MailHogConstants::EMAIL_REST_URL, 'localhost', $email));
-        Assert::eq($emailResponse->getStatusCode(), 200);
-        $emails = json_decode($emailResponse->getContent(), true);
-        Assert::eq($emails['items'][0]['Content']['Headers']['Subject'][0], 'Reset password');
-        $this->passwordResetEmail = quoted_printable_decode($emails['items'][0]['Content']['Body']);
+        $emailResponse = EmailUtil::getEmail($email);
+        Assert::eq($emailResponse->getSubject(), 'Reset password');
+        $this->passwordResetEmail = $emailResponse->getBody();
         Assert::contains($this->passwordResetEmail, 'Click the link below to reset your password. Please ignore this email if you did not request to reset your password');
     }
 

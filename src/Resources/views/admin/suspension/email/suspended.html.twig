@@ -1,0 +1,6 @@
+{{ 'suspension.suspended_body'|trans({'%hours%': hours}) }}
+<ul>
+    {% for reason in reasons %}
+        <li>{{ reason|trans({}, 'rules') }}</li>
+    {% endfor %}
+</ul>

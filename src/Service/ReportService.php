@@ -81,7 +81,7 @@ class ReportService
         $report = $this->reportRepository->find($reportId);
         $moderator = $this->userRepository->find($moderatorId);
         $report->setStatus(Report::CLOSED);
-        $report->setModeratorClosed($moderator);
+        $report->setUserClosed($moderator);
         return $this->reportRepository->save($report);
     }
 }

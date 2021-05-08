@@ -15,9 +15,11 @@
             {{ profile.about|nl2br }}
         </div>
     </div>
-    {{ form_start(closeSuspensionForm) }}
-    {{ form_row(closeSuspensionForm.suspension) }}
-    <p class="alert alert-danger">{{ 'suspension.close_confirm'|trans }}</p>
-    {{ form_widget(closeSuspensionForm.submit, {'attr': {'class': 'btn btn-danger'}}) }}
-    {{ form_end(closeSuspensionForm) }}
+    {% if profile.isPermanentlySuspended %}
+        <div class="alert alert-danger">{{ 'suspension.permanently_suspended'|trans }}</div>
+    {% endif %}
+    {{ form_start(confirmPermanentSuspensionForm) }}
+    {{ form_row(confirmPermanentSuspensionForm.reasons) }}
+    {{ form_widget(confirmPermanentSuspensionForm.submit, {'attr': {'class': 'btn btn-danger'}}) }}
+    {{ form_end(confirmPermanentSuspensionForm) }}
 {% endblock %}

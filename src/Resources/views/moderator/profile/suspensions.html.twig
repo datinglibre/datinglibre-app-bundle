@@ -29,7 +29,7 @@
             <th colspan="col">{{ 'suspension.action'|trans }}</th>
             </thead>
             {% for suspension in suspensions %}
-                <tr class="{% if suspension.elapsed and suspension.status == 'open' %}table-warning{% endif %}">
+                <tr class="{% if suspension.elapsed and suspension.status == 'OPEN' %}table-warning{% endif %}">
                     <td>
                         {% if suspension.reasons is not empty %}
                             <ul>
@@ -40,10 +40,24 @@
                         {% endif %}
                     </td>
                     <td>{{ suspension.createdAt|format_datetime('long') }}</td>
-                    <td>{{ suspension.duration }}</td>
-                    <td>{% if suspension.elapsed %}{{ 'suspension.yes'|trans }}{% else %}{{ 'suspension.no'|trans }}{% endif %}</td>
-                    <td>{{ ('suspension.' ~ suspension.status)|trans }}</td>
-                    <td>{% if suspension.elapsed and suspension.status == 'open' %}
+                    <td>{% if suspension.duration is null %}
+                            {{ 'suspension.permanent'|trans }}
+                        {% else %}
+                            {{ suspension.duration }}
+                        {% endif %}
+                    </td>
+                    <td>{% if suspension.elapsed is null %}
+                            {{ 'suspension.not_applicable'|trans }}
+                        {% else %}
+                            {% if suspension.elapsed %}{{ 'suspension.yes'|trans }}{% else %}{{ 'suspension.no'|trans }}{% endif %}
+                        {% endif %}
+                    </td>
+                    <td>{{ ('suspension.' ~ suspension.status|lower)|trans }}</td>
+                    <td>{% if suspension.elapsed and suspension.status == 'OPEN' %}
+                            <a href="{{ path('moderator_profile_suspension', {'userId': profile.id, 'suspensionId': suspension.id}) }}"
+                               class="btn btn-primary btn-sm">{{ 'suspension.close'|trans }}</a>
+                        {% endif %}
+                        {% if suspension.duration is null and is_granted('ROLE_ADMIN') and suspension.status == 'OPEN' %}
                             <a href="{{ path('moderator_profile_suspension', {'userId': profile.id, 'suspensionId': suspension.id}) }}"
                                class="btn btn-primary btn-sm">{{ 'suspension.close'|trans }}</a>
                         {% endif %}

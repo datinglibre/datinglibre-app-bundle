@@ -128,15 +128,29 @@ moderator_profile_suspensions:
     controller: DatingLibre\AppBundle\Controller\ModeratorProfileSuspensionsController::index
     methods: GET|POST
 
+moderator_profile_enqueue_permanent_suspension:
+    path: /moderator/profile/{userId}/suspend
+    controller: DatingLibre\AppBundle\Controller\ModeratorProfileEnqueuePermanentSuspension::enqueue
+    methods: GET|POST
+
 moderator_profile_suspension:
     path: /moderator/profile/{userId}/suspension/{suspensionId}
     controller: DatingLibre\AppBundle\Controller\ModeratorProfileSuspensionController::view
     methods: GET|POST
 
+admin_profile_permanently_suspend:
+    path: /admin/profile/{userId}/suspension
+    controller: DatingLibre\AppBundle\Controller\AdminProfilePermanentlySuspendController::view
+
 admin_events_index:
     path: /admin/events
-    controller: DatingLibre\AppBundle\Controller\AdminEventController::displayEvents
+    controller: DatingLibre\AppBundle\Controller\AdminEventsController::index
     methods: GET|POST
+
+admin_permanent_suspension_queue:
+    path: /admin/permanentSuspensions
+    controller: DatingLibre\AppBundle\Controller\AdminSuspensionQueueController::view
+    methods: GET
 
 ccbill_webhook:
     path: /ccbill/webhook

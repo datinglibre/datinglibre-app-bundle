@@ -18,8 +18,8 @@ use Symfony\Component\Uid\Uuid;
  */
 class Suspension
 {
-    public const OPEN = 'open';
-    public const CLOSED = 'closed';
+    public const OPEN = 'OPEN';
+    public const CLOSED = 'CLOSED';
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="CUSTOM")
@@ -36,20 +36,20 @@ class Suspension
 
     /**
      * @ORM\OneToOne(targetEntity="user")
-     * @ORM\JoinColumn(name = "moderator_opened_id", referencedColumnName = "id")
+     * @ORM\JoinColumn(name = "user_opened_id", referencedColumnName = "id")
      */
-    private User $moderatorOpened;
+    private User $userOpened;
 
     /**
      * @ORM\OneToOne(targetEntity="user")
-     * @ORM\JoinColumn(name = "moderator_closed_id", referencedColumnName = "id")
+     * @ORM\JoinColumn(name = "user_closed_id", referencedColumnName = "id")
      */
-    private User $moderatorClosed;
+    private User $userClosed;
 
     /**
      * @ORM\Column(name="duration", type="integer")
      */
-    private int $duration;
+    private ?int $duration;
 
     /**
      * @ORM\Column(name="reasons", type="json")
@@ -108,32 +108,32 @@ class Suspension
         $this->user = $user;
     }
 
-    public function getModeratorOpened(): User
+    public function getUserOpened(): User
     {
-        return $this->moderatorOpened;
+        return $this->userOpened;
     }
 
-    public function setModeratorOpened(User $moderator): void
+    public function setUserOpened(User $moderator): void
     {
-        $this->moderatorOpened = $moderator;
+        $this->userOpened = $moderator;
     }
 
-    public function getModeratorClosed(): User
+    public function getUserClosed(): User
     {
-        return $this->moderatorClosed;
+        return $this->userClosed;
     }
 
-    public function setModeratorClosed(User $moderatorClosed): void
+    public function setUserClosed(User $userClosed): void
     {
-        $this->moderatorClosed = $moderatorClosed;
+        $this->userClosed = $userClosed;
     }
 
-    public function getDuration(): int
+    public function getDuration(): ?int
     {
         return $this->duration;
     }
 
-    public function setDuration(int $duration): void
+    public function setDuration(?int $duration): void
     {
         $this->duration = $duration;
     }

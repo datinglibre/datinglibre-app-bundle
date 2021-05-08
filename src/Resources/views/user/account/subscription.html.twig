@@ -21,10 +21,10 @@
         <tbody>
         {% for subscription in subscriptions %}
             {% set row_class = 'table-warning' %}
-            {% if subscription.state is same as 'renewal_failure' %}
+            {% if subscription.isRenewalFailure %}
                 {% set row_class = 'table-danger' %}
             {% endif %}
-            {% if subscription.state is same as 'active' %}
+            {% if subscription.isActive %}
                 {% set row_class = 'table-success' %}
             {% endif %}
 
@@ -36,7 +36,7 @@
                     {% if subscription.renewalDate is null %}{{ 'subscription.ended'|trans }}{% endif %}
                 </td>
                 <td>{{ subscription.updatedAt|format_date('long') }}</td>
-                <td>{{ ('subscription.' ~ subscription.state)|trans }}</td>
+                <td>{{ ('subscription.' ~ subscription.status|lower)|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>

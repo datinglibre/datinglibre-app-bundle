@@ -8,7 +8,7 @@ use DatingLibre\AppBundle\Service\SuspensionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class ModeratorSuspensionsController extends AbstractController
+class AdminSuspensionQueueController extends AbstractController
 {
     private SuspensionService $suspensionService;
 
@@ -17,11 +17,10 @@ class ModeratorSuspensionsController extends AbstractController
         $this->suspensionService = $suspensionService;
     }
 
-    public function index(): Response
+    public function view(): Response
     {
-        $elapsedSuspensions = $this->suspensionService->getElapsedSuspensions();
-        return $this->render('@DatingLibreApp/moderator/suspensions/index.html.twig', [
-            'suspensions' => $elapsedSuspensions
+        return $this->render('@DatingLibreApp/admin/suspensions/index.html.twig', [
+            'suspensions' => $this->suspensionService->findOpenPermanentSuspensions()
         ]);
     }
 }

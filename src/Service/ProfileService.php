@@ -76,7 +76,7 @@ class ProfileService
             if ($imageProjection == null) {
                 return $profileProjection;
             } else {
-                $profileProjection->setImageState($imageProjection->getState());
+                $profileProjection->setImageStatus($imageProjection->getStatus());
                 $profileProjection->setImageUrl($imageProjection->getSecureUrl());
                 return $profileProjection;
             }

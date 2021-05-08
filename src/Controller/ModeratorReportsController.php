@@ -20,7 +20,7 @@ class ModeratorReportsController extends AbstractController
 
     public function index(Request $request): Response
     {
-        return $this->render('@DatingLibreApp/moderator/report/index.html.twig', [
+        return $this->render('@DatingLibreApp/moderator/reports/index.html.twig', [
             'controller_name' => 'ModerateReportsController',
             'reports' => $this->reportService->findCreated()
         ]);

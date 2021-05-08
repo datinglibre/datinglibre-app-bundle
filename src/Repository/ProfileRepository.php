@@ -49,7 +49,8 @@ class ProfileRepository extends ServiceEntityRepository
         $rsm->addFieldResult('pv', 'about', 'about');
         $rsm->addFieldResult('pv', 'sort_id', 'sortId');
         $rsm->addFieldResult('pv', 'secure_url', 'imageUrl');
-        $rsm->addFieldResult('pv', 'image_state', 'imageState');
+        $rsm->addFieldResult('pv', 'profile_status', 'profileStatus');
+        $rsm->addFieldResult('pv', 'image_status', 'imageStatus');
         $sql = <<<EOD
 SELECT p.user_id,
     u.last_login,
@@ -57,19 +58,21 @@ SELECT p.user_id,
     p.username,
     p.about,
     p.meta,
+    p.status as profile_status,   
     profileImage.secure_url,
-    profileImage.state as image_state, 
+    profileImage.status as image_status, 
     city.name as city_name,
     region.name as region_name,
-    p.moderation_status, 
+    p.status, 
     p.sort_id as sort_id
 FROM datinglibre.profiles AS p
 INNER JOIN datinglibre.cities AS city ON p.city_id = city.id 
 INNER JOIN datinglibre.regions AS region ON city.region_id = region.id
 INNER JOIN datinglibre.users AS u ON u.id = p.user_id
-LEFT JOIN datinglibre.images profileImage ON profileImage.user_id = p.user_id AND profileImage.is_profile = TRUE AND profileImage.state = 'ACCEPTED'
+LEFT JOIN datinglibre.images profileImage ON profileImage.user_id = p.user_id AND profileImage.is_profile = TRUE AND profileImage.status = 'ACCEPTED'
 LEFT JOIN datinglibre.filters filter ON filter.user_id = p.user_id
 WHERE p.user_id <> :userId
+AND (p.status = 'UNMODERATED' OR p.status = 'ACCEPTED') 
 AND EXISTS (SELECT matching_user_id FROM (
         SELECT ua.user_id AS matching_user_id FROM datinglibre.requirements r 
         LEFT JOIN datinglibre.user_attributes ua ON ua.attribute_id = r.attribute_id 
@@ -174,7 +177,8 @@ EOD;
         $rsm->addFieldResult('pv', 'region_name', 'regionName', false);
         $rsm->addFieldResult('pv', 'last_login', 'lastLogin');
         $rsm->addFieldResult('pv', 'secure_url', 'imageUrl');
-        $rsm->addFieldResult('pv', 'image_state', 'imageState');
+        $rsm->addFieldResult('pv', 'profile_status', 'profileStatus');
+        $rsm->addFieldResult('pv', 'image_status', 'imageStatus');
         $query = $this->getEntityManager()->createNativeQuery(<<<EOD
 SELECT p.user_id,
            EXTRACT(YEAR FROM AGE(p.dob)) as age,
@@ -182,10 +186,10 @@ SELECT p.user_id,
            p.about,
            p.meta,
            image.secure_url,
-           image.state, 
            city.name as city_name,
            region.name as region_name,
-           image.state as image_state,
+           p.status as profile_status,
+           image.status as image_status,
            u.last_login as last_login
            FROM datinglibre.profiles p 
            INNER JOIN datinglibre.users u ON u.id = p.user_id
@@ -211,21 +215,23 @@ EOD, $rsm);
         $rsm->addFieldResult('pp', 'region_name', 'regionName', false);
         $rsm->addFieldResult('pp', 'last_login', 'lastLogin');
         $rsm->addFieldResult('pp', 'secure_url', 'imageUrl');
-        $rsm->addFieldResult('pp', 'image_state', 'imageState');
+        $rsm->addFieldResult('pp', 'profile_status', 'profileStatus');
+        $rsm->addFieldResult('pp', 'image_status', 'imageStatus');
 
         $query = $this->getEntityManager()->createNativeQuery(<<<EOD
             SELECT p.user_id AS user_id,
             EXTRACT(YEAR FROM AGE(p.dob)) as age,
             p.username AS username, 
             p.about AS about,
+            p.status as profile_status,      
             i.secure_url,
-            i.state AS image_state, 
+            i.status AS image_status, 
             city.name AS city_name, 
             region.name AS region_name, 
-            p.moderation_status AS moderation_status,
+            p.status AS status,
             u.last_login as last_login
             FROM datinglibre.profiles p
-            LEFT JOIN datinglibre.images i ON p.user_id = i.user_id AND i.state = 'ACCEPTED' AND i.is_profile IS TRUE
+            LEFT JOIN datinglibre.images i ON p.user_id = i.user_id AND i.status = 'ACCEPTED' AND i.is_profile IS TRUE
             INNER JOIN datinglibre.users u ON p.user_id = u.id
             INNER JOIN datinglibre.cities city ON p.city_id = city.id 
             INNER JOIN datinglibre.regions region ON city.region_id = region.id
@@ -233,14 +239,11 @@ EOD, $rsm);
             AND NOT EXISTS 
             (SELECT b FROM datinglibre.blocks b WHERE
              (b.user_id = :currentUserId AND b.blocked_user_id = :userId) OR (b.user_id = :userId AND b.blocked_user_id = :currentUserId)
-            ) 
-            AND p.moderation_status = :unmoderated OR p.moderation_status = :passed
+            )
 EOD, $rsm);
 
         $query->setParameter('userId', $userId);
         $query->setParameter('currentUserId', $currentUserId);
-        $query->setParameter('unmoderated', Profile::UNMODERATED);
-        $query->setParameter('passed', Profile::PASSED);
 
         return $query->getOneOrNullResult();
     }

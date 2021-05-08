@@ -20,7 +20,7 @@ class ImageService
     private UserRepository $userRepository;
     private S3Client $s3Client;
     private string $imagesBucket;
-    // pre-signed URLs max expiry is 7 days, make it a bit earlier so enough time to refresh them
+    // pre-signed URLs max expiry is 7 days, make it day earlier so enough time to refresh them
     protected const EXPIRY_INTERVAL = 'P6D';
 
     public function __construct(
@@ -60,15 +60,15 @@ class ImageService
 
     public function accept(string $id)
     {
-        $this->saveState($id, Image::ACCEPTED);
+        $this->saveStatus($id, Image::ACCEPTED);
     }
 
     public function reject(string $id)
     {
-        $this->saveState($id, Image::REJECTED);
+        $this->saveStatus($id, Image::REJECTED);
     }
 
-    public function saveState(string $id, string $state): void
+    public function saveStatus(string $id, string $status): void
     {
         $image = $this->imageRepository->find($id);
 
@@ -76,7 +76,7 @@ class ImageService
             return;
         }
 
-        $image->setState($state);
+        $image->setStatus($status);
         $this->imageRepository->save($image);
     }
 

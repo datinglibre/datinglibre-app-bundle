@@ -1,0 +1,6 @@
+{{ 'suspension.permanently_suspended_body'|trans }}
+<ul>
+{% for reason in reasons %}
+    <li>{{ reason|trans({}, 'rules') }}</li>
+{% endfor %}
+</ul>

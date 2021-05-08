@@ -22,13 +22,13 @@ class Subscription
     public const CCBILL = 'ccbill';
     public const PROVIDER = 'provider';
     public const PROVIDER_SUBSCRIPTION_ID = 'providerSubscriptionId';
-    public const STATE = 'state';
+    public const STATUS = 'status';
     // states as below
-    public const ACTIVE = 'active';
-    public const CANCELLED = 'cancelled';
-    public const RENEWAL_FAILURE = 'renewal_failure';
-    public const CHARGEBACK = 'chargeback';
-    public const REFUND = 'refund';
+    public const ACTIVE = 'ACTIVE';
+    public const CANCELLED = 'CANCELLED';
+    public const RENEWAL_FAILURE = 'RENEWAL_FAILURE';
+    public const CHARGEBACK = 'CHARGEBACK';
+    public const REFUND = 'REFUND';
 
     /**
      * @var Uuid
@@ -57,9 +57,9 @@ class Subscription
     private string $providerSubscriptionId;
 
     /**
-     * @ORM\Column(name="state", type="text")
+     * @ORM\Column(name="status", type="text")
      */
-    private string $state;
+    private string $status;
 
     /**
      * @ORM\Column(name="renewal_date", type="date")
@@ -151,13 +151,23 @@ class Subscription
         $this->providerSubscriptionId = $providerSubscriptionId;
     }
 
-    public function getState(): string
+    public function getStatus(): string
     {
-        return $this->state;
+        return $this->status;
     }
 
-    public function setState(string $state): void
+    public function setStatus(string $status): void
     {
-        $this->state = $state;
+        $this->status = $status;
+    }
+
+    public function isActive(): bool
+    {
+        return self::ACTIVE === $this->getStatus();
+    }
+
+    public function isRenewalFailure(): bool
+    {
+        return self::RENEWAL_FAILURE === $this->getStatus();
     }
 }

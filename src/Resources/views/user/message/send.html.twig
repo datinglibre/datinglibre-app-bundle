@@ -8,6 +8,13 @@
 {% block content %}
     <div class="panel panel-default">
     <div class="panel-body">
+        <h2>
+            {{ profile.username }}
+            <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
+        </h2>
+    {% if recipientSuspension is not null %}
+        <div class="alert alert-danger">{{ 'message.suspended'|trans({'%hours%': recipientSuspension.duration}) }}</div>
+    {% endif %}
     {% if messages is not empty %}
     {% from '@DatingLibreApp/macros/profile.image.html.twig' import profile_image %}
         <table class="table table-striped">

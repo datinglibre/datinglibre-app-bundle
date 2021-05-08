@@ -4,6 +4,7 @@ site:
   admin: "Admin"
   moderator: "Moderator"
 submit: "Submit"
+confirm: "Confirm"
 user:
   email: "Email"
   remember_me: "Remember me"
@@ -82,18 +83,23 @@ menu:
   report: "Report"
   events: "Events"
   suspensions: "Suspensions"
+  suspend: "Suspend"
   suspension: "Suspension"
+  permanently_suspend: "Permanently suspend"
+  permanent_suspensions: "Permanent suspensions"
 message:
   title: "Message"
   send: "Send"
   message: "Message"
   sent: "Sent message"
+  suspended: "This user has been suspended for at least %hours% hours. They will be unable to reply."
 matches:
   title: "Matches"
   empty: "No matches"
 block:
   block: "Block"
   reason: "Reason"
+  confirm_message: "Are you sure you want to block this profile?"
   placeholder: "Please choose a reason"
   success: "Blocked user"
 report:
@@ -121,7 +127,7 @@ moderate:
   accepted: "Accepted"
   rejected: "Rejected"
   no_images: "No images to moderate"
-  no_suspensions: "No elapsed suspensions"
+  no_suspensions: "No suspensions"
 registration:
   read_terms_and_conditions: "Read terms and conditions"
   agree_terms: "I agree to the terms and conditions"
@@ -170,5 +176,16 @@ suspension:
   success: "User suspended"
   missing: "Missing"
   closed_confirmation: "Closed suspension"
+  suspended_subject: "Your profile has been suspended"
+  suspended_body: "Your profile has been suspended for %hours% hours for breaking the following rules:"
+  permanent_queue_confirm: "Are you sure you want to suspend and enter this profile into the permanent suspension queue?"
+  permanently_suspend_confirm: "Are you sure you want to permanently suspend this user?"
+  permanently_suspended: "Profile has been permanently suspended"
+  permanently_suspended_subject: "Your profile has been permanently suspended"
+  permanently_suspended_body: "Your profile has been permanently suspended for violating the following rules: "
+  confirm_enqueue_permanent_suspension: "Confirm"
+  not_applicable: "N/a"
+  permanent: "Permanent"
+  permanent_suspension_enqueued: "Profile has been entered into queue for permanent suspension"
 filter:
   day_optional: "Day (optional)"

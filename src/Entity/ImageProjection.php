@@ -40,7 +40,7 @@ class ImageProjection
     /**
      * @ORM\Column(type="string")
      */
-    private $state;
+    private $status;
 
     public function getId()
     {
@@ -83,13 +83,13 @@ class ImageProjection
         $this->secureUrlExpiry = $secureUrlExpiry;
     }
 
-    public function getState()
+    public function getStatus()
     {
-        return $this->state;
+        return $this->status;
     }
 
-    public function setState($state): void
+    public function setStatus($state): void
     {
-        $this->state = $state;
+        $this->status = $state;
     }
 }

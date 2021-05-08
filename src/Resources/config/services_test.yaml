@@ -62,9 +62,7 @@ services:
   DatingLibre\AppBundle\Behat\RegistrationContext:
     public: true
     arguments:
-      - '@DatingLibre\AppBundle\Behat\Page\LoginPage'
       - '@DatingLibre\AppBundle\Behat\Page\RegistrationPage'
-      - '@DatingLibre\AppBundle\Repository\UserRepository'
 
   DatingLibre\AppBundle\Behat\SearchContext:
     public: true

@@ -21,6 +21,8 @@ class Email
     public const SIGNUP = 'SIGNUP';
     public const PASSWORD_RESET = 'PASSWORD_RESET';
     public const ALREADY_EXISTS = 'ALREADY_EXISTS';
+    public const PERMANENT_SUSPENSION = 'PERMANENT_SUSPENSION';
+    public const SUSPENSION = 'SUSPENSION';
 
     /**
      * @var Uuid

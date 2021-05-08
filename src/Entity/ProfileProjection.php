@@ -50,6 +50,11 @@ class ProfileProjection
     private $lastLogin;
 
     /**
+     * @ORM\Column(type="string", name="profile_status")
+     */
+    private string $profileStatus;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $sortId;
@@ -62,7 +67,7 @@ class ProfileProjection
     /**
      * @ORM\Column(type="string")
      */
-    private $imageState;
+    private $imageStatus;
 
     public function getId(): ?string
     {
@@ -164,29 +169,34 @@ class ProfileProjection
         return $this->imageUrl;
     }
 
-    public function setImageState($imageState)
+    public function setImageStatus($imageStatus)
     {
-        $this->imageState = $imageState;
+        $this->imageStatus = $imageStatus;
         return $this;
     }
 
-    public function getImageState()
+    public function getImageStatus()
     {
-        return $this->imageState;
+        return $this->imageStatus;
     }
 
     public function isImagePresent()
     {
-        return null !== $this->getImageState();
+        return null !== $this->getImageStatus();
     }
 
     public function isImageUnmoderated(): bool
     {
-        return Image::UNMODERATED === $this->getImageState();
+        return Image::UNMODERATED === $this->getImageStatus();
     }
 
     public function isImageRejected(): bool
     {
-        return Image::REJECTED === $this->getImageState();
+        return Image::REJECTED === $this->getImageStatus();
+    }
+
+    public function isPermanentlySuspended(): bool
+    {
+        return Profile::PERMANENTLY_SUSPENDED === $this->profileStatus;
     }
 }

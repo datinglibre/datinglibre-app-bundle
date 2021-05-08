@@ -10,6 +10,7 @@ use DatingLibre\AppBundle\Form\MessageFormType;
 use DatingLibre\AppBundle\Repository\MessageRepository;
 use DatingLibre\AppBundle\Repository\ProfileRepository;
 use DatingLibre\AppBundle\Repository\UserRepository;
+use DatingLibre\AppBundle\Service\SuspensionService;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,17 +19,20 @@ use Symfony\Component\HttpFoundation\Request;
 class UserSendMessageController extends AbstractController
 {
     private ProfileRepository $profileRepository;
+    private SuspensionService $suspensionService;
     private MessageRepository $messageRepository;
     private UserRepository $userRepository;
 
     public function __construct(
         ProfileRepository $profileRepository,
+        SuspensionService $suspensionService,
         UserRepository $userRepository,
         MessageRepository $messageRepository
     ) {
         $this->profileRepository = $profileRepository;
         $this->messageRepository = $messageRepository;
         $this->userRepository = $userRepository;
+        $this->suspensionService = $suspensionService;
     }
 
     public function message(Request $request, Uuid $userId)
@@ -44,6 +48,8 @@ class UserSendMessageController extends AbstractController
             $sender->getId(),
             $userId
         );
+
+        $recipientSuspension = $this->suspensionService->findOpenByUserId($recipient->getId());
 
         if ($recipientProfile === null) {
             throw $this->createNotFoundException();
@@ -74,8 +80,8 @@ class UserSendMessageController extends AbstractController
                 $recipient->getId()
             ),
             'profile' => $recipientProfile,
-            'messageForm' => $messageFormType->createView(),
-            'controller_name' => 'MessageSendController'
+            'recipientSuspension' => $recipientSuspension,
+            'messageForm' => $messageFormType->createView()
         ]);
     }
 }
