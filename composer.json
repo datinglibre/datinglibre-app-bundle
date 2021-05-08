@@ -14,7 +14,7 @@
         "ext-calendar": "*",
         "datinglibre/ccbill": "0.5.*",
         "doctrine/doctrine-migrations-bundle": "^3.0",
-        "aws/aws-sdk-php": "3.174.*",
+        "aws/aws-sdk-php": "^3.174.3",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.1",
         "doctrine/orm": "^2.7",
