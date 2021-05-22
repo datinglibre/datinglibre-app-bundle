@@ -16,12 +16,11 @@ class UserRegisterController extends AbstractController
 {
     public function register(Request $request, SessionInterface $session, UserService $userService): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->createForm(RegistrationFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userService->signup($user, $form->get('password')->getData());
+            $userService->signup($form->get('email')->getData(), $form->get('password')->getData());
 
             $session->getFlashBag()->add('success', 'user.registered');
             return $this->redirectToRoute('user_login');

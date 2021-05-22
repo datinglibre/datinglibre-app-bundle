@@ -783,13 +783,14 @@ services:
     class: DatingLibre\AppBundle\Service\UserService
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Repository\UserRepository',
+    arguments: [ '@doctrine.orm.default_entity_manager',
+                 '@DatingLibre\AppBundle\Repository\UserRepository',
                  '@DatingLibre\AppBundle\Service\EmailService',
                  '@DatingLibre\AppBundle\Service\TokenService',
                  '@DatingLibre\AppBundle\Service\ProfileService',
                  '@security.user_password_encoder.generic',
                  '@translator.default',
-                 '%datinglibre.admin_email%' ]
+                 '%datinglibre.admin_email%']
 
   DatingLibre\AppBundle\Service\EventService:
     class: DatingLibre\AppBundle\Service\EventService

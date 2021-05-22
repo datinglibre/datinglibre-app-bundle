@@ -12,6 +12,8 @@ use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManager;
+use Exception;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -19,6 +21,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserService
 {
+    private EntityManager $entityManager;
     private UserRepository $userRepository;
     private EmailService $emailService;
     private TokenService $tokenService;
@@ -28,6 +31,7 @@ class UserService
     private string $adminEmail;
 
     public function __construct(
+        EntityManager $entityManager,
         UserRepository $userRepository,
         EmailService $emailService,
         TokenService $tokenService,
@@ -43,6 +47,7 @@ class UserService
         $this->tokenService = $tokenService;
         $this->adminEmail = $adminEmail;
         $this->translator = $translator;
+        $this->entityManager = $entityManager;
     }
 
     public function create(
@@ -82,34 +87,45 @@ class UserService
         }
     }
 
-    public function signup(User $newUser, string $password): void
+    /**
+     * @throws Exception
+     */
+    public function signup(string $email, string $password): void
     {
-        $existingUser = $this->findByEmail($newUser->getEmail());
+        $existingUser = $this->findByEmail($email);
 
         if (null !== $existingUser) {
             $email = (new TemplatedEmail())
                 ->from($this->adminEmail)
                 ->subject($this->translator->trans('registration.already_exists_subject'))
-                ->to($newUser->getEmail())
+                ->to($existingUser->getEmail())
                 ->htmlTemplate('@DatingLibreApp/user/account/email/already_exists.html.twig');
 
             $this->emailService->send($email, $existingUser, Email::ALREADY_EXISTS);
             return;
         }
 
-        $newUser->setPassword($this->passwordEncoder->encodePassword($newUser, $password));
-        $savedUser = $this->userRepository->save($newUser);
+        $this->entityManager->beginTransaction();
+        try {
+            $user = new User();
+            $user->setEmail($email);
+            $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
+            $savedUser = $this->userRepository->save($user);
+            $token = $this->tokenService->save($savedUser, Token::SIGNUP);
 
-        $token = $this->tokenService->save($savedUser, Token::SIGNUP);
+            $email = (new TemplatedEmail())
+                ->from($this->adminEmail)
+                ->subject($this->translator->trans('user.signup_subject'))
+                ->to($savedUser->getEmail())
+                ->htmlTemplate('@DatingLibreApp/user/account/email/confirm.html.twig')
+                ->context(['secret' => $token->getSecret(), 'userId' => $savedUser->getId()->toRfc4122()]);
 
-        $email = (new TemplatedEmail())
-            ->from($this->adminEmail)
-            ->subject($this->translator->trans('user.signup_subject'))
-            ->to($savedUser->getEmail())
-            ->htmlTemplate('@DatingLibreApp/user/account/email/confirm.html.twig')
-            ->context(['secret' => $token->getSecret(), 'userId' => $savedUser->getId()->toRfc4122()]);
-
-        $this->emailService->send($email, $savedUser, Email::SIGNUP);
+            $this->emailService->send($email, $savedUser, Email::SIGNUP);
+            $this->entityManager->commit();
+        } catch (Exception $e) {
+            $this->entityManager->rollback();
+            throw $e;
+        }
     }
 
     public function updatePassword(string $userId, string $secret, string $newPassword): bool
