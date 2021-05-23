@@ -43,6 +43,17 @@ class SuspensionContext implements Context
     }
 
     /**
+     * @Given the administrator :administratorEmail has permanently suspended :userEmail
+     */
+    public function permanentlySuspend(string $administratorEamil, string $userEmail)
+    {
+        $admin = $this->userService->findByEmail($administratorEamil);
+        $user = $this->userService->findByEmail($userEmail);
+
+        $this->suspensionService->permanentlySuspend($admin->getId(), $user->getId(), ['spam']);
+    }
+
+    /**
      * @Given the moderator :moderatorEmail has closed the suspension for :suspendedEmail
      */
     public function closeSuspension($moderatorEmail, $suspendedEmail)

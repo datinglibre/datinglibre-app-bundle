@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace DatingLibre\AppBundle\Controller;
 
 use DatingLibre\AppBundle\Service\SubscriptionService;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserAccountSubscriptionController extends AbstractController
 {
@@ -17,7 +17,7 @@ class UserAccountSubscriptionController extends AbstractController
         $this->subscriptionService = $subscriptionService;
     }
 
-    public function viewSubscription(Request $request)
+    public function viewSubscription(): Response
     {
         return $this->render(
             '@DatingLibreApp/user/account/subscription.html.twig',

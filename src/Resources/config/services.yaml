@@ -562,7 +562,7 @@ services:
       - { name: container.service_subscriber }
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Service\CcBillService' ]
+    arguments: [ '@DatingLibre\AppBundle\Service\CcBillEventService' ]
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
@@ -798,6 +798,19 @@ services:
     autoconfigure: true
     arguments: [ '@DatingLibre\AppBundle\Repository\EventRepository', '@DatingLibre\AppBundle\Repository\UserRepository' ]
 
+  DatingLibre\AppBundle\Service\CcBillService:
+    class: DatingLibre\AppBundle\Service\CcBillService
+    autowire: true
+    autoconfigure: true
+
+  DatingLibre\AppBundle\Service\SubscriptionService:
+    class: DatingLibre\AppBundle\Service\SubscriptionService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\SubscriptionRepository' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
   DatingLibre\AppBundle\Service\SuspensionService:
     class: DatingLibre\AppBundle\Service\SuspensionService
     autowire: true
@@ -808,14 +821,17 @@ services:
                  '@DatingLibre\AppBundle\Repository\ProfileRepository',
                  '@DatingLibre\AppBundle\Repository\SuspensionRepository',
                  '@DatingLibre\AppBundle\Service\EmailService',
+                 '@DatingLibre\AppBundle\Service\SubscriptionService',
                  '@translator.default',
                  '%datinglibre.admin_email%']
 
-  DatingLibre\AppBundle\Service\SubscriptionService:
-    class: DatingLibre\AppBundle\Service\SubscriptionService
+  DatingLibre\AppBundle\Service\SubscriptionEventService:
+    class: DatingLibre\AppBundle\Service\SubscriptionEventService
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Repository\SubscriptionRepository', '@DatingLibre\AppBundle\Repository\UserRepository', '@DatingLibre\AppBundle\Service\EventService' ]
+    arguments: [ '@DatingLibre\AppBundle\Repository\UserRepository',
+                 '@DatingLibre\AppBundle\Service\EventService',
+                 '@DatingLibre\AppBundle\Service\SubscriptionService']
 
   DatingLibre\AppBundle\Service\MessageService:
     class: DatingLibre\AppBundle\Service\MessageService
@@ -823,11 +839,12 @@ services:
     autoconfigure: true
     arguments: [ '@DatingLibre\AppBundle\Repository\MessageRepository' ]
 
-  DatingLibre\AppBundle\Service\CcBillService:
-    class: DatingLibre\AppBundle\Service\CcBillService
+  DatingLibre\AppBundle\Service\CcBillEventService:
+    class: DatingLibre\AppBundle\Service\CcBillEventService
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Service\EventService', '@DatingLibre\AppBundle\Service\SubscriptionService' ]
+    arguments: [ '@DatingLibre\AppBundle\Service\EventService',
+                 '@DatingLibre\AppBundle\Service\SubscriptionEventService' ]
 
   DatingLibre\AppBundle\Service\UuidValueResolver:
     class: DatingLibre\AppBundle\Service\UuidValueResolver

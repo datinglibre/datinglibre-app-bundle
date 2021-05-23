@@ -156,7 +156,7 @@ services:
       - '@DatingLibre\AppBundle\Service\UserService'
       - '@DatingLibre\AppBundle\Repository\EventRepository'
       - '@DatingLibre\AppBundle\Repository\SubscriptionRepository'
-      - '@DatingLibre\AppBundle\Service\CcBillService'
+      - '@DatingLibre\AppBundle\Service\CcBillEventService'
 
   DatingLibre\AppBundle\Behat\ReportContext:
     public: true

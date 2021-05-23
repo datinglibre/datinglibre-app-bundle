@@ -16,9 +16,10 @@ use DatingLibre\CcBill\Event\NewSaleSuccessEvent;
 use DatingLibre\CcBill\Event\RefundEvent;
 use DatingLibre\CcBill\Event\RenewalFailureEvent;
 use DatingLibre\CcBill\Event\RenewalSuccessEvent;
+use Exception;
 use Symfony\Component\Uid\Uuid;
 
-class CcBillService
+class CcBillEventService
 {
     private const EMAIL = 'email';
     private const SUBSCRIPTION_ID = 'subscriptionId';
@@ -32,20 +33,22 @@ class CcBillService
     private const REASON = 'reason';
     private const SOURCE = 'source';
     private const PAYMENT_TYPE = 'paymentType';
-    private const LAST_4 = 'lastFour';
     private const NEXT_BILLING_DATE = 'nextBillingDate';
 
-    private SubscriptionService $subscriptionService;
     private EventService $eventService;
+    private SubscriptionEventService $subscriptionService;
 
     public function __construct(
         EventService $eventService,
-        SubscriptionService $subscriptionService
+        SubscriptionEventService $subscriptionEventService
     ) {
-        $this->subscriptionService = $subscriptionService;
         $this->eventService = $eventService;
+        $this->subscriptionService = $subscriptionEventService;
     }
 
+    /**
+     * @throws Exception
+     */
     public function processEvent(CcBillEvent $event): void
     {
         if ($event instanceof NewSaleSuccessEvent) {
@@ -69,7 +72,7 @@ class CcBillService
         }
     }
 
-    public function renewalSuccess(RenewalSuccessEvent $event): void
+    private function renewalSuccess(RenewalSuccessEvent $event): void
     {
         $this->subscriptionService->renew(
             Subscription::CCBILL,
@@ -82,12 +85,11 @@ class CcBillService
                 self::SUBSCRIPTION_ID => $event->getSubscriptionId(),
                 self::PAYMENT_TYPE => $event->getPaymentType(),
                 self::CARD_TYPE => $event->getCardType(),
-                self::LAST_4 => $event->getLast4()
             ]
         );
     }
 
-    public function renewalFailure(RenewalFailureEvent $event): void
+    private function renewalFailure(RenewalFailureEvent $event): void
     {
         $this->subscriptionService->failRenewal(
             Subscription::CCBILL,
@@ -97,16 +99,22 @@ class CcBillService
             [
                 self::TIMESTAMP => $event->getTimestamp()->format(self::DATETIME_FORMAT),
                 self::TRANSACTION_ID => $event->getTransactionId(),
-                self::CARD_TYPE => $event->getCardType(),
-                self::PAYMENT_TYPE => $event->getPaymentType()
+                self::PAYMENT_TYPE => $event->getPaymentType(),
+                self::CARD_TYPE => $event->getCardType()
             ]
         );
     }
 
-    public function newSaleSuccess(NewSaleSuccessEvent $event): void
+    /**
+     * If the subscription payment successful, but we don't have at
+     * least a valid user UUID to associate it to, it should fail.
+     *
+     * @throws Exception
+     */
+    private function newSaleSuccess(NewSaleSuccessEvent $event): void
     {
         $this->subscriptionService->create(
-            $this->parseUserId($event->getCustom1()),
+            $this->requireUserId($event->getCustom1()),
             Subscription::CCBILL,
             $event->getSubscriptionId(),
             Event::CCBILL_NEW_SALE,
@@ -116,13 +124,12 @@ class CcBillService
                 self::TRANSACTION_ID => $event->getTransactionId(),
                 self::SUBSCRIPTION_ID => $event->getSubscriptionId(),
                 self::PAYMENT_TYPE => $event->getPaymentType(),
-                self::CARD_TYPE => $event->getCardType(),
-                self::LAST_4 => $event->getLast4()
+                self::CARD_TYPE => $event->getCardType()
             ]
         );
     }
 
-    public function newSaleFailure(NewSaleFailureEvent $event): void
+    private function newSaleFailure(NewSaleFailureEvent $event): void
     {
         $this->eventService->save(
             $this->parseUserId($event->getCustom1()),
@@ -132,13 +139,12 @@ class CcBillService
                 self::EMAIL => $event->getEmail(),
                 self::TRANSACTION_ID => $event->getTransactionId(),
                 self::PAYMENT_TYPE => $event->getPaymentType(),
-                self::CARD_TYPE => $event->getCardType(),
-                self::LAST_4 => $event->getLast4()
+                self::CARD_TYPE => $event->getCardType()
             ]
         );
     }
 
-    public function cancellation(CancellationEvent $event)
+    private function cancellation(CancellationEvent $event)
     {
         $this->subscriptionService->cancel(
             Subscription::CCBILL,
@@ -153,7 +159,7 @@ class CcBillService
         );
     }
 
-    public function chargeback(ChargebackEvent $event)
+    private function chargeback(ChargebackEvent $event)
     {
         $this->subscriptionService->chargeback(
             Subscription::CCBILL,
@@ -165,13 +171,12 @@ class CcBillService
                 self::TRANSACTION_ID => $event->getTransactionId(),
                 self::REASON => $event->getReason(),
                 self::PAYMENT_TYPE => $event->getPaymentType(),
-                self::CARD_TYPE => $event->getCardType(),
-                self::LAST_4 => $event->getLast4()
+                self::CARD_TYPE => $event->getCardType()
             ]
         );
     }
 
-    public function refund(RefundEvent $event): void
+    private function refund(RefundEvent $event): void
     {
         $this->subscriptionService->refund(
             Subscription::CCBILL,
@@ -183,13 +188,12 @@ class CcBillService
                 self::TRANSACTION_ID => $event->getTransactionId(),
                 self::REASON => $event->getReason(),
                 self::PAYMENT_TYPE => $event->getPaymentType(),
-                self::CARD_TYPE => $event->getCardType(),
-                self::LAST_4 => $event->getLast4()
+                self::CARD_TYPE => $event->getCardType()
             ]
         );
     }
 
-    public function billingDateChange(BillingDateChangeEvent $event)
+    private function billingDateChange(BillingDateChangeEvent $event)
     {
         $this->subscriptionService->changeBillingDate(
             Subscription::CCBILL,
@@ -219,5 +223,17 @@ class CcBillService
     private function parseUserId(?string $userId): ?Uuid
     {
         return $userId !== null && Uuid::isValid($userId) ? Uuid::fromString($userId) : null;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function requireUserId(?string $userId): Uuid
+    {
+        if ($userId === null || !Uuid::isValid($userId)) {
+            throw new Exception(sprintf('Invalid userId [%s]', $userId));
+        }
+
+        return Uuid::fromString($userId);
     }
 }

@@ -7,7 +7,7 @@ namespace DatingLibre\AppBundle\Behat;
 use Behat\Behat\Context\Context;
 use DatingLibre\AppBundle\Repository\EventRepository;
 use DatingLibre\AppBundle\Repository\SubscriptionRepository;
-use DatingLibre\AppBundle\Service\ccBillService;
+use DatingLibre\AppBundle\Service\CcBillEventService;
 use DatingLibre\AppBundle\Service\UserService;
 use DatingLibre\CcBill\Event\BillingDateChangeEvent;
 use DatingLibre\CcBill\Event\CancellationEvent;
@@ -19,13 +19,15 @@ use DatingLibre\CcBill\Event\NewSaleSuccessEvent;
 use DatingLibre\CcBill\Event\RefundEvent;
 use DatingLibre\CcBill\Event\RenewalFailureEvent;
 use DatingLibre\CcBill\Event\RenewalSuccessEvent;
+use Exception;
+use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
 class CcBillContext implements Context
 {
     private UserService $userService;
     private SubscriptionRepository $subscriptionRepository;
-    private ccBillService $ccBillService;
+    private CcBillEventService $ccBillEventService;
     private EventRepository $eventRepository;
 
     protected const TEST_SUBSCRIPTION_ID = '1000000000';
@@ -91,12 +93,12 @@ class CcBillContext implements Context
         UserService $userService,
         EventRepository $eventRepository,
         SubscriptionRepository $subscriptionRepository,
-        CcBillService $ccBillService
+        CcBillEventService $ccBillEventService
     ) {
         $this->userService = $userService;
         $this->eventRepository = $eventRepository;
         $this->subscriptionRepository = $subscriptionRepository;
-        $this->ccBillService = $ccBillService;
+        $this->ccBillEventService = $ccBillEventService;
     }
 
     /**
@@ -115,7 +117,7 @@ class CcBillContext implements Context
     {
         $user = $this->userService->findByEmail($email);
 
-        $this->ccBillService->processEvent(NewSaleSuccessEvent::fromArray($this->getSalePayload(
+        $this->ccBillEventService->processEvent(NewSaleSuccessEvent::fromArray($this->getSalePayload(
             [
                 CcBillEventConstants::SUBSCRIPTION_ID => $providerSubscriptionId,
                 CcBillEventConstants::CUSTOM_1 => $user->getId()->toRfc4122()
@@ -130,7 +132,7 @@ class CcBillContext implements Context
     {
         $user = $this->userService->findByEmail($email);
 
-        $this->ccBillService->processEvent(NewSaleFailureEvent::fromArray($this->getSalePayload(
+        $this->ccBillEventService->processEvent(NewSaleFailureEvent::fromArray($this->getSalePayload(
             [
                 CcBillEventConstants::FAILURE_REASON => 'failed',
                 CcBillEventConstants::FAILURE_CODE => 'abc',
@@ -144,7 +146,7 @@ class CcBillContext implements Context
      */
     public function raiseErrorEvent(): void
     {
-        $this->ccBillService->processEvent(new ErrorEvent(123, '{"subscriptionId": "123"}'));
+        $this->ccBillEventService->processEvent(new ErrorEvent(123, '{"subscriptionId": "123"}'));
     }
 
     /**
@@ -160,13 +162,45 @@ class CcBillContext implements Context
     }
 
     /**
-     * @Given a new sale success event without a user ID
+     * @Given a new sale success event with an unknown user ID
      */
-    public function aNewSaleSuccessEventWithoutAUserId(): void
+    public function aNewSaleSuccessEventWithAnUnknownAUserId(): void
     {
-        $this->ccBillService->processEvent(NewSaleSuccessEvent::fromArray($this->getSalePayload(
-            [CcBillEventConstants::SUBSCRIPTION_ID => self::TEST_SUBSCRIPTION_ID]
-        )));
+        $exceptionThrown = false;
+
+        try {
+            $this->ccBillEventService->processEvent(NewSaleSuccessEvent::fromArray($this->getSalePayload(
+                [
+                    CcBillEventConstants::SUBSCRIPTION_ID => self::TEST_SUBSCRIPTION_ID,
+                    CcBillEventConstants::CUSTOM_1 => Uuid::v4()->toRfc4122()
+                ]
+            )));
+        } catch (Exception $e) {
+            $exceptionThrown = true;
+        }
+
+        Assert::true($exceptionThrown);
+    }
+
+    /**
+     * @Given a new sale success event with a missing user ID
+     */
+    public function aNewSaleSuccessEventWithAMissingAUserId(): void
+    {
+        $exceptionThrown = false;
+
+        try {
+            $this->ccBillEventService->processEvent(NewSaleSuccessEvent::fromArray($this->getSalePayload(
+                [
+                    CcBillEventConstants::SUBSCRIPTION_ID => self::TEST_SUBSCRIPTION_ID,
+                ]
+            )));
+        } catch (Exception $e) {
+            $exceptionThrown = true;
+            Assert::eq($e->getMessage(), 'Invalid userId []');
+        }
+
+        Assert::true($exceptionThrown);
     }
 
     /**
@@ -187,7 +221,7 @@ class CcBillContext implements Context
         string $nextRenewalDate
     ): void {
         // next renewal date: next billing date for recurring subscriptions
-        $this->ccBillService->processEvent(RenewalSuccessEvent::fromArray($this->getRenewalPayload(
+        $this->ccBillEventService->processEvent(RenewalSuccessEvent::fromArray($this->getRenewalPayload(
             [
                 CcBillEventConstants::SUBSCRIPTION_ID => $providerSubscriptionId,
                 CcBillEventConstants::NEXT_RENEWAL_DATE => $nextRenewalDate
@@ -200,7 +234,7 @@ class CcBillContext implements Context
      */
     public function thereHasBeenAFailedRebillForSubscription(string $providerSubscriptionId, string $nextRetryDate): void
     {
-        $this->ccBillService->processEvent(RenewalFailureEvent::fromArray($this->getRenewalFailurePayload(
+        $this->ccBillEventService->processEvent(RenewalFailureEvent::fromArray($this->getRenewalFailurePayload(
             [
                 CcBillEventConstants::SUBSCRIPTION_ID => $providerSubscriptionId,
                 CcBillEventConstants::NEXT_RETRY_DATE => $nextRetryDate
@@ -213,7 +247,7 @@ class CcBillContext implements Context
      */
     public function thereHasBeenACancellationFor(string $providerSubscriptionId): void
     {
-        $this->ccBillService->processEvent(CancellationEvent::fromArray($this->getCancellationPayload(
+        $this->ccBillEventService->processEvent(CancellationEvent::fromArray($this->getCancellationPayload(
             [CcBillEventConstants::SUBSCRIPTION_ID => $providerSubscriptionId]
         )));
     }
@@ -223,7 +257,7 @@ class CcBillContext implements Context
      */
     public function thereHasBeenAChargebackFor(string $providerSubscriptionId)
     {
-        $this->ccBillService->processEvent(ChargebackEvent::fromArray($this->getChargebackPayload(
+        $this->ccBillEventService->processEvent(ChargebackEvent::fromArray($this->getChargebackPayload(
             [CcBillEventConstants::SUBSCRIPTION_ID => $providerSubscriptionId]
         )));
     }
@@ -233,7 +267,7 @@ class CcBillContext implements Context
      */
     public function thereHasBeenARefundFor(string $providerSubscriptionId)
     {
-        $this->ccBillService->processEvent(RefundEvent::fromArray($this->getRefundPayload(
+        $this->ccBillEventService->processEvent(RefundEvent::fromArray($this->getRefundPayload(
             [CcBillEventConstants::SUBSCRIPTION_ID => $providerSubscriptionId]
         )));
     }
@@ -243,7 +277,7 @@ class CcBillContext implements Context
      */
     public function thereHasBeenABillingDateChange(string $providerSubscriptionId, string $date)
     {
-        $this->ccBillService->processEvent(BillingDateChangeEvent::fromArray($this->getBillingDateChangePayload(
+        $this->ccBillEventService->processEvent(BillingDateChangeEvent::fromArray($this->getBillingDateChangePayload(
             [
                 CcBillEventConstants::SUBSCRIPTION_ID => $providerSubscriptionId,
                 CcBillEventConstants::NEXT_RENEWAL_DATE => $date

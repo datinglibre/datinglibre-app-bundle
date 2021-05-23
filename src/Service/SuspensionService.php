@@ -15,6 +15,7 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Mime\Message;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -28,6 +29,7 @@ class SuspensionService
     private TranslatorInterface $translator;
     private string $adminEmail;
     private EntityManager $entityManager;
+    private SubscriptionService $subscriptionService;
 
     public function __construct(
         LoggerInterface $logger,
@@ -36,6 +38,7 @@ class SuspensionService
         ProfileRepository $profileRepository,
         SuspensionRepository $suspensionRepository,
         EmailService $emailService,
+        SubscriptionService $subscriptionService,
         TranslatorInterface $translator,
         string $adminEmail
     ) {
@@ -43,6 +46,7 @@ class SuspensionService
         $this->suspensionRepository = $suspensionRepository;
         $this->profileRepository = $profileRepository;
         $this->emailService = $emailService;
+        $this->subscriptionService = $subscriptionService;
         $this->adminEmail = $adminEmail;
         $this->translator = $translator;
         $this->entityManager = $entityManager;
@@ -83,6 +87,9 @@ class SuspensionService
             $suspension->setReasons($reasons);
             $suspension = $this->suspensionRepository->save($suspension);
 
+            $profile->setStatus(Profile::SUSPENDED);
+            $this->profileRepository->save($profile);
+
             $email = (new TemplatedEmail())
                 ->from($this->adminEmail)
                 ->context(['reasons' => $reasons, 'hours' => $duration])
@@ -91,10 +98,6 @@ class SuspensionService
                 ->htmlTemplate('@DatingLibreApp/admin/suspension/email/suspended.html.twig');
 
             $this->emailService->send($email, $user, Email::SUSPENSION);
-
-            $profile->setStatus(Profile::SUSPENDED);
-            $this->profileRepository->save($profile);
-
             $this->entityManager->commit();
             return $suspension;
         } catch (Exception $e) {
@@ -175,14 +178,15 @@ class SuspensionService
      */
     public function permanentlySuspend(Uuid $userId, Uuid $suspendedUserId, array $reasons): void
     {
+        $permanentSuspension = $this->findOpenPermanentSuspension($suspendedUserId) ?? new Suspension();
+        $user = $this->userRepository->find($userId);
+        $suspendedUser = $this->userRepository->find($suspendedUserId);
+        $profile = $this->profileRepository->find($suspendedUserId);
+
+        $this->subscriptionService->cancel($suspendedUser->getId());
+
         $this->entityManager->beginTransaction();
-
         try {
-            $permanentSuspension = $this->findOpenPermanentSuspension($suspendedUserId) ?? new Suspension();
-            $user = $this->userRepository->find($userId);
-            $suspendedUser = $this->userRepository->find($suspendedUserId);
-            $profile = $this->profileRepository->find($suspendedUserId);
-
             $permanentSuspension->setUser($suspendedUser);
             $permanentSuspension->setUserOpened($user);
             $permanentSuspension->setReasons($reasons);

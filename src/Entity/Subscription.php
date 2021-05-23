@@ -19,7 +19,9 @@ use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
  */
 class Subscription
 {
+    // providers
     public const CCBILL = 'ccbill';
+    public const DATINGLIBRE = 'datinglibre';
     public const PROVIDER = 'provider';
     public const PROVIDER_SUBSCRIPTION_ID = 'providerSubscriptionId';
     public const STATUS = 'status';
@@ -169,5 +171,10 @@ class Subscription
     public function isRenewalFailure(): bool
     {
         return self::RENEWAL_FAILURE === $this->getStatus();
+    }
+
+    public function isCancelled()
+    {
+        return self::CANCELLED === $this->getStatus();
     }
 }

@@ -50,4 +50,33 @@ class SubscriptionContext implements Context
 
         Assert::notNull($subscription);
     }
+
+    /**
+     * @Then the subscription for :email is cancelled
+     */
+    public function subscriptionIsCancelled(string $email)
+    {
+        $user = $this->userService->findByEmail($email);
+
+        $subscription = $this->subscriptionRepository->findOneBy(['user' => $user]);
+
+        Assert::notNull($subscription);
+        Assert::true($subscription->isCancelled());
+    }
+
+    /**
+     * @Given the user :email has a :provider subscription with ID :providerSubscriptionId
+     */
+    public function theUserHasASubscriptionWithID(string $email, string $provider, string $providerSubscriptionId)
+    {
+        $user = $this->userService->findByEmail($email);
+
+        $subscription = new Subscription();
+        $subscription->setUser($user);
+        $subscription->setProvider($provider);
+        $subscription->setProviderSubscriptionId($providerSubscriptionId);
+        $subscription->setStatus(Subscription::ACTIVE);
+
+        $this->subscriptionRepository->save($subscription);
+    }
 }
