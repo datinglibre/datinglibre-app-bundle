@@ -30,6 +30,8 @@ class Configuration implements ConfigurationInterface
             ->booleanNode('is_demo')->end()
             ->scalarNode('admin_email')->end()
             ->scalarNode('images_bucket')->end()
+            ->scalarNode('site_name')->end()
+            ->scalarNode('site_description')->end()
             ->end();
 
         return $treeBuilder;

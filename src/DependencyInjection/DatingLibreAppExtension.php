@@ -25,5 +25,7 @@ class DatingLibreAppExtension extends Extension
         $container->setParameter('datinglibre.is_demo', $configuration['is_demo']);
         $container->setParameter('datinglibre.admin_email', $configuration['admin_email']);
         $container->setParameter('datinglibre.images_bucket', $configuration['images_bucket']);
+        $container->setParameter('datinglibre.site_name', $configuration['site_name']);
+        $container->setParameter('datinglibre.site_description', $configuration['site_description']);
     }
 }

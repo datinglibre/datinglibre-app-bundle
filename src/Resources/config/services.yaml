@@ -162,6 +162,13 @@ services:
     calls:
       - [ setName, [ 'app:users:create' ] ]
 
+  DatingLibre\AppBundle\Twig\DatingLibreExtension:
+    class: DatingLibre\AppBundle\Twig\DatingLibreExtension
+    tags:
+      - { name: twig.runtime }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '%datinglibre.site_name%', '%datinglibre.site_description%' ]
 
   DatingLibre\AppBundle\Command\PurgeUsersCommand:
     class: DatingLibre\AppBundle\Command\PurgeUsersCommand

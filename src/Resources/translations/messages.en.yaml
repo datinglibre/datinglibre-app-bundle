@@ -1,6 +1,4 @@
 site:
-  name: "Dating Libre"
-  description: "A demonstration of an open source dating platform"
   admin: "Admin"
   moderator: "Moderator"
 submit: "Submit"
