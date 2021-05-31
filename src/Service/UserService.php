@@ -14,9 +14,9 @@ use DateTimeZone;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 use Exception;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserService
@@ -25,7 +25,7 @@ class UserService
     private UserRepository $userRepository;
     private EmailService $emailService;
     private TokenService $tokenService;
-    private UserPasswordEncoderInterface $passwordEncoder;
+    private UserPasswordHasherInterface $passwordHasher;
     private ProfileService $profileService;
     private TranslatorInterface $translator;
     private string $adminEmail;
@@ -36,12 +36,12 @@ class UserService
         EmailService $emailService,
         TokenService $tokenService,
         ProfileService $profileService,
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $passwordHasher,
         TranslatorInterface $translator,
         string $adminEmail
     ) {
         $this->userRepository = $userRepository;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
         $this->profileService = $profileService;
         $this->emailService = $emailService;
         $this->tokenService = $tokenService;
@@ -50,22 +50,18 @@ class UserService
         $this->entityManager = $entityManager;
     }
 
-    public function create(
-        string $email,
-        string $password,
-        bool $enabled,
-        array $roles
-    ): User {
+    public function create(string $email, string $password, bool $enabled, array $roles): User
+    {
         $user = new User();
         $user->setEmail($email);
-        $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
+        $user->setPassword($this->passwordHasher->hashPassword($user, $password));
         $user->setRoles($roles);
         $user->setEnabled($enabled);
 
         return $this->userRepository->save($user);
     }
 
-    public function delete(?Uuid $deletedById, Uuid $userId)
+    public function delete(?Uuid $deletedById, Uuid $userId): void
     {
         $this->profileService->delete($userId);
         $this->userRepository->delete($userId);
@@ -79,7 +75,7 @@ class UserService
             return false;
         }
 
-        if ($this->passwordEncoder->isPasswordValid($user, $password)) {
+        if ($this->passwordHasher->isPasswordValid($user, $password)) {
             $this->delete(null, $user->getId());
             return true;
         } else {
@@ -109,7 +105,7 @@ class UserService
         try {
             $user = new User();
             $user->setEmail($email);
-            $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
+            $user->setPassword($this->passwordHasher->hashPassword($user, $password));
             $user->setRoles([User::USER]);
             $savedUser = $this->userRepository->save($user);
             $token = $this->tokenService->save($savedUser, Token::SIGNUP);
@@ -129,7 +125,7 @@ class UserService
         }
     }
 
-    public function updatePassword(string $userId, string $secret, string $newPassword): bool
+    public function updatePassword(Uuid $userId, string $secret, string $newPassword): bool
     {
         $user = $this->userRepository->find($userId);
 
@@ -138,7 +134,7 @@ class UserService
         }
 
         if ($this->tokenService->verify($user, $secret, Token::PASSWORD_RESET)) {
-            $user->setPassword($this->passwordEncoder->encodePassword($user, $newPassword));
+            $user->setPassword($this->passwordHasher->hashPassword($user, $newPassword));
             $this->userRepository->save($user);
             return true;
         }
@@ -192,6 +188,9 @@ class UserService
         return false;
     }
 
+    /**
+     * @throws Exception
+     */
     public function purge(string $type, int $hours): void
     {
         $users = [];

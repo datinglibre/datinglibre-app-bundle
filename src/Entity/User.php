@@ -7,8 +7,9 @@ namespace DatingLibre\AppBundle\Entity;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -16,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="datinglibre.users")
  * @ORM\HasLifecycleCallbacks
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     public const EMAIL = 'email';
     public const ENABLED = 'enabled';
@@ -29,50 +30,50 @@ class User implements UserInterface
      *
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidV4Generator::class)
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      * @ORM\Column(type="uuid")
      */
-    private $id;
+    private Uuid $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $email;
+    private string $email;
 
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private string $password;
 
     /**
-     * @var DateTime Created at
+     * @var DateTimeInterface Created at
      * @ORM\Column(name="created_at", type="datetimetz")
      */
-    private $createdAt;
+    private DateTimeInterface $createdAt;
 
     /**
      * @var boolean Is user enabled
      * @ORM\Column(type="boolean")
      */
-    private $enabled = false;
+    private bool $enabled = false;
 
     /**
      * @ORM\Column(type="datetimetz")
      */
-    private $lastLogin;
+    private DateTimeInterface $lastLogin;
 
     public function getId(): ?Uuid
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -84,69 +85,52 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         return $this->roles;
     }
 
-    public function setRoles(array $roles): self
+    public function setRoles(array $roles): void
     {
         $this->roles = $roles;
-
-        return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(string $password): void
     {
         $this->password = $password;
-
-        return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getSalt()
     {
         // not needed when using the "bcrypt" algorithm in security.yaml
     }
 
-    /**
-     * @see UserInterface
-     */
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
 
-    public function getUsername()
+    public function getUserIdentifier(): string
     {
         return $this->email;
     }
 
-    /**
-     * @return bool
-     */
+    public function getUsername(): string
+    {
+        return $this->email;
+    }
+
     public function isEnabled(): bool
     {
         return $this->enabled;
     }
 
-    /**
-     * @param bool $enabled
-     */
     public function setEnabled(bool $enabled): void
     {
         $this->enabled = $enabled;
@@ -160,19 +144,17 @@ class User implements UserInterface
         $this->createdAt = new DateTime('UTC');
     }
 
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
     }
 
-
-    public function setLastLogin(DateTimeInterface $lastLogin)
+    public function setLastLogin(DateTimeInterface $lastLogin): void
     {
         $this->lastLogin = $lastLogin;
-        return $this;
     }
 
-    public function getLastLogin()
+    public function getLastLogin(): DateTimeInterface
     {
         return $this->lastLogin;
     }

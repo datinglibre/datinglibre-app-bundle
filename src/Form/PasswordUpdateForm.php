@@ -4,29 +4,31 @@ declare(strict_types=1);
 
 namespace DatingLibre\AppBundle\Form;
 
+use Symfony\Component\Uid\Uuid;
+
 class PasswordUpdateForm
 {
-    private $secret;
-    private $userId;
-    private $password;
-    private $confirmedPassword;
+    private string $secret;
+    private string $userId;
+    private string $password;
+    private string $confirmedPassword;
 
-    public function getSecret()
+    public function getSecret(): string
     {
         return $this->secret;
     }
 
-    public function setSecret($secret): void
+    public function setSecret(string $secret): void
     {
         $this->secret = $secret;
     }
 
-    public function getUserId()
+    public function getUserId(): string
     {
         return $this->userId;
     }
 
-    public function setUserId($userId): void
+    public function setUserId(string $userId): void
     {
         $this->userId = $userId;
     }

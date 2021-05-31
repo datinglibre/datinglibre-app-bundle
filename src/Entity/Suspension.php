@@ -7,7 +7,7 @@ namespace DatingLibre\AppBundle\Entity;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use DatingLibre\AppBundle\Repository\SuspensionRepository;
 use Symfony\Component\Uid\Uuid;
 
@@ -23,7 +23,7 @@ class Suspension
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidV4Generator::class)
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      * @ORM\Column(type="uuid")
      */
     private Uuid $id;

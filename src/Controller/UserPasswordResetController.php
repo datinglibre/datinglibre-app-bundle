@@ -20,7 +20,7 @@ class UserPasswordResetController extends AbstractController
         $passwordResetFormType->handleRequest($request);
 
         if ($passwordResetFormType->isSubmitted() && $passwordResetFormType->isValid()) {
-            $userService->resetPassword(strtolower($passwordResetFormType->getData()['email']));
+            $userService->resetPassword(trim(strtolower($passwordResetFormType->getData()['email'])));
 
             $session->getFlashBag()->add('success', 'user.password_reset_email_sent');
 

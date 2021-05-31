@@ -726,12 +726,6 @@ services:
     autoconfigure: true
     arguments: [ '%datinglibre.rules%' ]
 
-  DatingLibre\AppBundle\Security\LoginFormAuthenticator:
-    class: DatingLibre\AppBundle\Security\LoginFormAuthenticator
-    autowire: true
-    autoconfigure: true
-    arguments: [ '@doctrine.orm.default_entity_manager', '@router.default', '@security.csrf.token_manager', '@security.user_password_encoder.generic', '@security.authorization_checker' ]
-
   DatingLibre\AppBundle\Service\BlockService:
     class: DatingLibre\AppBundle\Service\BlockService
     autowire: true
@@ -795,7 +789,7 @@ services:
                  '@DatingLibre\AppBundle\Service\EmailService',
                  '@DatingLibre\AppBundle\Service\TokenService',
                  '@DatingLibre\AppBundle\Service\ProfileService',
-                 '@security.user_password_encoder.generic',
+                 '@security.user_password_hasher',
                  '@translator.default',
                  '%datinglibre.admin_email%']
 
