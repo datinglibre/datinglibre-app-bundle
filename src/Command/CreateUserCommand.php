@@ -79,8 +79,7 @@ class CreateUserCommand extends Command
         }
 
         if (strtoupper($role) === self::USER) {
-            // User role always added automatically
-            return [];
+            return [User::USER];
         }
 
         throw new Exception(sprintf(

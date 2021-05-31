@@ -51,7 +51,7 @@ class ImageContext extends RawMinkContext implements Context
     {
         $content = file_get_contents($this->getMinkParameter('files_path')
             . DIRECTORY_SEPARATOR . $image);
-        $user = $this->userService->create($email, 'password', true, []);
+        $user = $this->userService->create($email, 'password', true, [User::USER]);
         $this->imageService->save($user->getId(), $content, 'jpg', true);
     }
 

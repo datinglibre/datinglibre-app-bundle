@@ -66,7 +66,7 @@ class UserContext extends RawMinkContext
      */
     public function aUserWithEmailAndPasswordExists(string $email, string $password)
     {
-        $this->userService->create($email, $password, true, []);
+        $this->userService->create($email, $password, true, [User::USER]);
     }
 
     /**

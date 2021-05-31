@@ -71,7 +71,7 @@ class UserService
         $this->userRepository->delete($userId);
     }
 
-    public function deleteByPassword(?Uuid $userId, string $password)
+    public function deleteByPassword(?Uuid $userId, string $password): bool
     {
         $user = $this->userRepository->find($userId);
 
@@ -110,6 +110,7 @@ class UserService
             $user = new User();
             $user->setEmail($email);
             $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
+            $user->setRoles([User::USER]);
             $savedUser = $this->userRepository->save($user);
             $token = $this->tokenService->save($savedUser, Token::SIGNUP);
 

@@ -22,6 +22,7 @@ class User implements UserInterface
     public const ENABLED = 'enabled';
     public const MODERATOR = 'ROLE_MODERATOR';
     public const ADMIN = 'ROLE_ADMIN';
+    public const USER = 'ROLE_USER';
 
     /**
      * @var Uuid
@@ -88,11 +89,7 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return $this->roles;
     }
 
     public function setRoles(array $roles): self
@@ -107,7 +104,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return $this->password;
     }
 
     public function setPassword(string $password): self

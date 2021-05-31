@@ -31,11 +31,8 @@ use Webmozart\Assert\Assert;
 class ProfileEditContext implements Context
 {
     private UserService $userService;
-    private LoginPage $loginPage;
     private ProfileIndexPage $profileViewPage;
     private ProfileEditPage $profileEditPage;
-    private ProfileService $profileService;
-    private SearchPage $searchPage;
     private ProfileRepository $profileRepository;
     private CityRepository $cityRepository;
     private CountryRepository $countryRepository;
@@ -48,24 +45,18 @@ class ProfileEditContext implements Context
         UserService $userService,
         UserRepository $userRepository,
         ProfileRepository $profileRepository,
-        ProfileService $profileService,
         UserAttributeService $userAttributeService,
         RequirementService $requirementService,
         CityRepository $cityRepository,
         RegionRepository $regionRepository,
         CountryRepository $countryRepository,
-        LoginPage $loginPage,
         ProfileIndexPage $profileIndexPage,
-        ProfileEditPage $profileEditPage,
-        SearchPage $searchPage
+        ProfileEditPage $profileEditPage
     ) {
         $this->userService = $userService;
         $this->userRepository = $userRepository;
         $this->profileRepository = $profileRepository;
-        $this->profileService = $profileService;
-        $this->loginPage = $loginPage;
         $this->profileViewPage = $profileIndexPage;
-        $this->searchPage = $searchPage;
         $this->profileEditPage = $profileEditPage;
         $this->cityRepository = $cityRepository;
         $this->countryRepository = $countryRepository;
@@ -107,14 +98,9 @@ class ProfileEditContext implements Context
         }
     }
 
-    private function createProfile(
-        string $email,
-        ?int $age,
-        ?string $city,
-        DateTimeInterface $lastLogin,
-        ?string $state
-    ): User {
-        $user = $this->userService->create($email, 'password', true, []);
+    private function createProfile(string $email, ?int $age, ?string $city, DateTimeInterface $lastLogin, ?string $status): User
+    {
+        $user = $this->userService->create($email, 'password', true, [User::USER]);
         $user->setLastLogin($lastLogin ?? new DateTime());
         $this->userRepository->save($user);
 
@@ -129,8 +115,8 @@ class ProfileEditContext implements Context
             $profile->setCity($this->getCity($city));
         }
 
-        if ($state !== null) {
-            $profile->setState($state);
+        if ($status !== null) {
+            $profile->setStatus($status);
         }
 
         $profile->setUsername(str_replace('@example.com', '', $email));
