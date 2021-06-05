@@ -33,14 +33,12 @@ class Subscription
     public const REFUND = 'REFUND';
 
     /**
-     * @var Uuid
-     *
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      * @ORM\Column(type="uuid")
      */
-    private $id;
+    private Uuid $id;
 
     /**
      * @ManyToOne(targetEntity="User")
@@ -67,6 +65,12 @@ class Subscription
      * @ORM\Column(name="renewal_date", type="date")
      */
     private ?DateTimeInterface $renewalDate;
+
+    /**
+     * @ORM\Column(name="expiry_date", type="date")
+     */
+    private ?DateTimeInterface $expiryDate;
+
 
     /**
      * @ORM\Column(name="created_at", type="datetimetz")
@@ -148,6 +152,16 @@ class Subscription
         $this->renewalDate = $renewalDate;
     }
 
+    public function getExpiryDate(): ?DateTimeInterface
+    {
+        return $this->expiryDate;
+    }
+
+    public function setExpiryDate(?DateTimeInterface $expiryDate): void
+    {
+        $this->expiryDate = $expiryDate;
+    }
+
     public function setProviderSubscriptionId(string $providerSubscriptionId): void
     {
         $this->providerSubscriptionId = $providerSubscriptionId;
@@ -173,7 +187,7 @@ class Subscription
         return self::RENEWAL_FAILURE === $this->getStatus();
     }
 
-    public function isCancelled()
+    public function isCancelled(): bool
     {
         return self::CANCELLED === $this->getStatus();
     }

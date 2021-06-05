@@ -79,6 +79,7 @@ class CcBillEventService
             $event->getSubscriptionId(),
             Event::CCBILL_RENEWAL,
             $event->getNextRenewalDate(),
+            $event->getNextRenewalDate(),
             [
                 self::TIMESTAMP => $event->getTimestamp()->format(self::DATETIME_FORMAT),
                 self::TRANSACTION_ID => $event->getTransactionId(),
@@ -118,6 +119,7 @@ class CcBillEventService
             Subscription::CCBILL,
             $event->getSubscriptionId(),
             Event::CCBILL_NEW_SALE,
+            $event->getNextRenewalDate(),
             $event->getNextRenewalDate(),
             [
                 self::TIMESTAMP => $event->getTimestamp()->format(self::DATETIME_FORMAT),

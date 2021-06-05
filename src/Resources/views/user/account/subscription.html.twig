@@ -14,6 +14,7 @@
                 <th scope="col">{{ 'subscription.id'|trans }}</th>
                 <th scope="col">{{ 'subscription.provider'|trans }}</th>
                 <th scope="col">{{ 'subscription.renewal_date'|trans }}</th>
+                <th scope="col">{{ 'subscription.expiry_date'|trans }}</th>
                 <th scope="col">{{ 'subscription.updated'|trans }}</th>
                 <th scope="col">{{ 'subscription.status'|trans }}</th>
             </tr>
@@ -33,7 +34,11 @@
                 <td>{{ ('subscription.' ~ subscription.provider)|trans }}</td>
                 <td>
                     {% if subscription.renewalDate is not null %}{{ subscription.renewalDate|format_date('long') }}{% endif %}
-                    {% if subscription.renewalDate is null %}{{ 'subscription.ended'|trans }}{% endif %}
+                    {% if subscription.renewalDate is null %}{{ 'subscription.not_applicable'|trans }}{% endif %}
+                </td>
+                <td>
+                    {% if subscription.expiryDate is not null %}{{ subscription.expiryDate|format_date('long') }}{% endif %}
+                    {% if subscription.expiryDate is null %}{{ 'subscription.lifetime'|trans }}{% endif %}
                 </td>
                 <td>{{ subscription.updatedAt|format_date('long') }}</td>
                 <td>{{ ('subscription.' ~ subscription.status|lower)|trans }}</td>

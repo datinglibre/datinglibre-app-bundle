@@ -139,6 +139,8 @@ subscription:
   id: "ID"
   provider: "Provider"
   renewal_date: "Renewal date"
+  expiry_date: "Expiry date"
+  lifetime: "Lifetime"
   status: "Status"
   cancelled: "Cancelled"
   active: "Active"
@@ -146,7 +148,7 @@ subscription:
   renewal_failure: "Renewal failure"
   chargeback: "Chargeback"
   ccbill: "CCBill"
-  ended: "Ended"
+  not_applicable: "N/a"
   refund: "Refund"
 event:
   date: "Date"

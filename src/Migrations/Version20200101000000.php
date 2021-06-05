@@ -165,6 +165,7 @@ final class Version20200101000000 extends AbstractMigration
     provider_subscription_id TEXT NOT NULL,
     status TEXT NOT NULL CHECK (status IN (\'ACTIVE\', \'CANCELLED\', \'RENEWAL_FAILURE\', \'CHARGEBACK\', \'REFUND\')),
     renewal_date DATE NULL,
+    expiry_date DATE NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
     UNIQUE (provider, provider_subscription_id)

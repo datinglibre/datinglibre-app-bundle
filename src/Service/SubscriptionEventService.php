@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DatingLibre\AppBundle\Service;
 
+use DateTimeImmutable;
 use DateTimeInterface;
 use DatingLibre\AppBundle\Entity\Event;
 use DatingLibre\AppBundle\Entity\Subscription;
@@ -35,7 +36,7 @@ class SubscriptionEventService
     /**
      * @throws Exception
      */
-    public function create(Uuid $userId, string $provider, string $providerId, string $event, DateTimeInterface $renewalDate, array $data): void
+    public function create(Uuid $userId, string $provider, string $providerId, string $event, DateTimeInterface $renewalDate, DateTimeInterface $expiryDate, array $data): void
     {
         $user = $this->userRepository->findOneBy(['id' => $userId]);
 
@@ -51,10 +52,11 @@ class SubscriptionEventService
         $subscription->setStatus(Subscription::ACTIVE);
         $subscription->setProviderSubscriptionId($providerId);
         $subscription->setRenewalDate($renewalDate);
+        $subscription->setExpiryDate($expiryDate);
         $this->subscriptionService->save($subscription);
     }
 
-    public function renew(string $provider, ?string $providerSubscriptionId, string $event, DateTimeInterface $nextRenewalDate, array $data): void
+    public function renew(string $provider, ?string $providerSubscriptionId, string $event, DateTimeInterface $nextRenewalDate, DateTimeInterface $expiryDate, array $data): void
     {
         $subscription = $this->subscriptionService->findOneByProviderAndSubscriptionId($provider, $providerSubscriptionId);
 
@@ -65,6 +67,7 @@ class SubscriptionEventService
 
         $this->eventService->save($subscription->getUser()->getId(), $event, $data);
         $subscription->setRenewalDate($nextRenewalDate);
+        $subscription->setExpiryDate($expiryDate);
         $this->subscriptionService->save($subscription);
     }
 
@@ -114,6 +117,7 @@ class SubscriptionEventService
         $this->eventService->save($subscription->getUser()->getId(), $event, $data);
         $subscription->setStatus(Subscription::CHARGEBACK);
         $subscription->setRenewalDate(null);
+        $subscription->setExpiryDate(new DateTimeImmutable());
         $this->subscriptionService->save($subscription);
     }
 
@@ -129,6 +133,7 @@ class SubscriptionEventService
         $this->eventService->save($subscription->getUser()->getId(), $event, $data);
         $subscription->setStatus(Subscription::REFUND);
         $subscription->setRenewalDate(null);
+        $subscription->setExpiryDate(new DateTimeImmutable());
         $this->subscriptionService->save($subscription);
     }
 
