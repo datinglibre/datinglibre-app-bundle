@@ -73,9 +73,11 @@ class SubscriptionService
             case Subscription::DATINGLIBRE:
                 break;
             default:
-                throw new Exception(sprintf(self::UNRECOGNIZED_SUBSCRIPTION_PROVIDER,
+                throw new Exception(sprintf(
+                    self::UNRECOGNIZED_SUBSCRIPTION_PROVIDER,
                     $subscription->getId(),
-                    $subscription->getProvider()));
+                    $subscription->getProvider()
+                ));
         }
     }
 }

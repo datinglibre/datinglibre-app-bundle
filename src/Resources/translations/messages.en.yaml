@@ -150,6 +150,8 @@ subscription:
   ccbill: "CCBill"
   not_applicable: "N/a"
   refund: "Refund"
+  datinglibre: "DatingLibre"
+  buy_subscription: "Buy a subscription with"
 event:
   date: "Date"
   filter: "Filter"

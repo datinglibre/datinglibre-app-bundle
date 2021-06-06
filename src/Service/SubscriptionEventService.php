@@ -137,7 +137,8 @@ class SubscriptionEventService
         $this->subscriptionService->save($subscription);
     }
 
-    public function changeBillingDate(string $provider, ?string $providerSubscriptionId, string $event, DateTimeInterface $nextBillingDate, array $data): void {
+    public function changeBillingDate(string $provider, ?string $providerSubscriptionId, string $event, DateTimeInterface $nextBillingDate, array $data): void
+    {
         $subscription = $this->subscriptionService->findOneByProviderAndSubscriptionId($provider, $providerSubscriptionId);
 
         if ($subscription === null) {

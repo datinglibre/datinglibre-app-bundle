@@ -533,7 +533,7 @@ services:
       - { name: container.service_subscriber }
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Service\SubscriptionService' ]
+    arguments: [ '%datinglibre.payment_providers%', '@DatingLibre\AppBundle\Service\SubscriptionService' ]
     calls:
       - [ setContainer, [ '@service_container' ] ]
 

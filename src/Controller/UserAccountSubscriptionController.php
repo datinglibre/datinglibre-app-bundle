@@ -11,9 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 class UserAccountSubscriptionController extends AbstractController
 {
     private SubscriptionService $subscriptionService;
+    private array $paymentProviders;
 
-    public function __construct(SubscriptionService $subscriptionService)
+    public function __construct(array $paymentProviders, SubscriptionService $subscriptionService)
     {
+        $this->paymentProviders = $paymentProviders;
         $this->subscriptionService = $subscriptionService;
     }
 
@@ -22,8 +24,9 @@ class UserAccountSubscriptionController extends AbstractController
         return $this->render(
             '@DatingLibreApp/user/account/subscription.html.twig',
             [
-                'controller_name' => 'AccountSubscriptionController',
-                'subscriptions' => $this->subscriptionService->findByUserId($this->getUser()->getId())
+                'userId' => $this->getUser()->getId(),
+                'subscriptions' => $this->subscriptionService->findByUserId($this->getUser()->getId()),
+                'paymentProviders' => $this->paymentProviders
             ]
         );
     }
