@@ -101,7 +101,8 @@ class CcBillEventService
                 self::TIMESTAMP => $event->getTimestamp()->format(self::DATETIME_FORMAT),
                 self::TRANSACTION_ID => $event->getTransactionId(),
                 self::PAYMENT_TYPE => $event->getPaymentType(),
-                self::CARD_TYPE => $event->getCardType()
+                self::CARD_TYPE => $event->getCardType(),
+                self::REASON => $event->getFailureReason()
             ]
         );
     }
@@ -141,7 +142,8 @@ class CcBillEventService
                 self::EMAIL => $event->getEmail(),
                 self::TRANSACTION_ID => $event->getTransactionId(),
                 self::PAYMENT_TYPE => $event->getPaymentType(),
-                self::CARD_TYPE => $event->getCardType()
+                self::CARD_TYPE => $event->getCardType(),
+                self::REASON => $event->getFailureReason()
             ]
         );
     }
