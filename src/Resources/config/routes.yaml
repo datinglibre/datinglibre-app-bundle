@@ -141,9 +141,9 @@ admin_profile_permanently_suspend:
     path: /admin/profile/{userId}/suspension
     controller: DatingLibre\AppBundle\Controller\AdminProfilePermanentlySuspendController::view
 
-admin_events_index:
-    path: /admin/events
-    controller: DatingLibre\AppBundle\Controller\AdminEventsController::index
+admin_subscription_events_index:
+    path: /admin/subscription/events
+    controller: DatingLibre\AppBundle\Controller\AdminSubscriptionEventsController::index
     methods: GET|POST
 
 admin_permanent_suspension_queue:

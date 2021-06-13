@@ -69,6 +69,7 @@ nav:
   moderate: "Moderate"
   logout: "Logout"
   events: "Events"
+  subscriptions: "Subscriptions"
 menu:
   view: "View"
   edit: "Edit"

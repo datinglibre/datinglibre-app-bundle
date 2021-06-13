@@ -8,9 +8,12 @@
                 <a class="nav-link" href="{{ path('moderator_profile_images') }}">{{ 'nav.moderate'|trans  }}</a>
             </li>
             {% if is_granted('ROLE_ADMIN') %}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('admin_events_index') }}">{{ 'nav.events'|trans  }}</a>
-            </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ 'nav.subscriptions'|trans }}</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{{ path('admin_subscription_events_index') }}">{{ 'nav.events'|trans  }}</a>
+                    </div>
+                </li>
             {% endif %}
         </ul>
         <ul class="nav navbar-nav navbar-right">

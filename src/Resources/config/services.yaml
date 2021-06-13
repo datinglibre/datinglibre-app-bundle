@@ -513,8 +513,8 @@ services:
       - [ setContainer, [ '@service_container' ] ]
 
 
-  DatingLibre\AppBundle\Controller\AdminEventsController:
-    class: DatingLibre\AppBundle\Controller\AdminEventsController
+  DatingLibre\AppBundle\Controller\AdminSubscriptionEventsController:
+    class: DatingLibre\AppBundle\Controller\AdminSubscriptionEventsController
     public: true
     tags:
       - { name: controller.service_arguments }
