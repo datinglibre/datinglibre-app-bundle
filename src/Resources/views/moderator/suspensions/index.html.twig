@@ -1,8 +1,5 @@
 {% extends '@DatingLibreApp/moderator/moderator.html.twig' %}
 {% block title %}{{ 'menu.suspensions'|trans }} - {{ 'site.moderator'|trans }}{% endblock %}
-{% block menu %}
-    {% include '@DatingLibreApp/moderator/menu.html.twig' %}
-{% endblock %}
 {% block content %}
     {% from '@DatingLibreApp/macros/suspensions.table.html.twig' import suspensions_table %}
     {{ suspensions_table(suspensions, true) }}

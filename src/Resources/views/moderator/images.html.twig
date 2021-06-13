@@ -1,8 +1,5 @@
 {% extends '@DatingLibreApp/moderator/moderator.html.twig' %}
 {% block title %}{{ 'menu.images'|trans }} - {{ 'site.moderator'|trans }}{% endblock %}
-{% block menu %}
-    {% include '@DatingLibreApp/moderator/menu.html.twig' %}
-{% endblock %}
 {% block content %}
     {% if profileImage is null %}
         <div class="alert alert-success" role="alert">

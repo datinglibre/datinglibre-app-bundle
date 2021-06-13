@@ -147,7 +147,7 @@ admin_subscription_events_index:
     methods: GET|POST
 
 admin_permanent_suspension_queue:
-    path: /admin/permanentSuspensions
+    path: /admin/suspensions/permanent
     controller: DatingLibre\AppBundle\Controller\AdminSuspensionQueueController::view
     methods: GET
 

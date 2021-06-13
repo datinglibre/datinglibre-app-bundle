@@ -4,9 +4,8 @@
         <a class="navbar-brand" href="{{ path('user_login') }}">{{ datinglibre('site_name') }}</a>
         <div class="collapse navbar-collapse" id="site_navbar">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('moderator_profile_images') }}">{{ 'nav.moderate'|trans  }}</a>
-                </li>
+                {% from '@DatingLibreApp/moderator/nav/moderate.menu.html.twig' import moderate_menu %}
+                {{ moderate_menu() }}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ 'nav.subscriptions'|trans }}</a>
                     <div class="dropdown-menu">

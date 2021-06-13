@@ -1,0 +1,13 @@
+{% macro moderate_menu() %}
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ 'nav.moderate'|trans }}</a>
+    <div class="dropdown-menu">
+        <a class="dropdown-item" href="{{ path('moderator_profile_images') }}">{{ 'menu.images'|trans }}</a>
+        <a class="dropdown-item" href="{{ path('moderator_reports') }}">{{ 'menu.reports'|trans }}</a>
+        <a class="dropdown-item" href="{{ path('moderator_suspensions') }}">{{ 'menu.suspensions'|trans }}</a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="dropdown-item" href="{{ path('admin_permanent_suspension_queue') }}">{{ 'menu.permanent_suspensions'|trans }}</a>
+        {% endif %}
+    </div>
+</li>
+{% endmacro %}
