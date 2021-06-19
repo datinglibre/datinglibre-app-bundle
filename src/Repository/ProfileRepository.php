@@ -19,8 +19,9 @@ use Symfony\Component\Uid\Uuid;
  */
 class ProfileRepository extends ServiceEntityRepository
 {
-    protected const SYSTEM_MAX_AGE = 100;
-    protected const SYSTEM_MIN_AGE = 18;
+    private const MAX_AGE = 100;
+    private const MIN_AGE = 18;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Profile::class);
@@ -136,8 +137,8 @@ EOD;
         $query->setParameter('regionId', $regionId);
         $query->setParameter('minAge', $minAge);
         $query->setParameter('maxAge', $maxAge);
-        $query->setParameter('systemMaxAge', self::SYSTEM_MAX_AGE);
-        $query->setParameter('systemMinAge', self::SYSTEM_MIN_AGE);
+        $query->setParameter('systemMaxAge', self::MAX_AGE);
+        $query->setParameter('systemMinAge', self::MIN_AGE);
 
 
         if ($previous !== 0) {
@@ -167,18 +168,7 @@ EOD;
 
     public function findProjection(Uuid $userId): ?ProfileProjection
     {
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('DatingLibre\AppBundle\Entity\ProfileProjection', 'pv');
-        $rsm->addFieldResult('pv', 'user_id', 'id');
-        $rsm->addFieldResult('pv', 'username', 'username');
-        $rsm->addFieldResult('pv', 'age', 'age');
-        $rsm->addFieldResult('pv', 'about', 'about');
-        $rsm->addFieldResult('pv', 'city_name', 'cityName', false);
-        $rsm->addFieldResult('pv', 'region_name', 'regionName', false);
-        $rsm->addFieldResult('pv', 'last_login', 'lastLogin');
-        $rsm->addFieldResult('pv', 'secure_url', 'imageUrl');
-        $rsm->addFieldResult('pv', 'profile_status', 'profileStatus');
-        $rsm->addFieldResult('pv', 'image_status', 'imageStatus');
+        $rsm = $this->getProjectionResultSetMapping();
         $query = $this->getEntityManager()->createNativeQuery(<<<EOD
 SELECT p.user_id,
            EXTRACT(YEAR FROM AGE(p.dob)) as age,
@@ -203,21 +193,35 @@ EOD, $rsm);
         return $query->getOneOrNullResult();
     }
 
+    public function findProjectionByEmail(string $email): ?ProfileProjection
+    {
+        $rsm = $this->getProjectionResultSetMapping();
+        $query = $this->getEntityManager()->createNativeQuery(<<<EOD
+SELECT p.user_id,
+           EXTRACT(YEAR FROM AGE(p.dob)) as age,
+           p.username,
+           p.about,
+           p.meta,
+           image.secure_url,
+           city.name as city_name,
+           region.name as region_name,
+           p.status as profile_status,
+           image.status as image_status,
+           u.last_login as last_login
+           FROM datinglibre.profiles p 
+           INNER JOIN datinglibre.users u ON u.id = p.user_id
+           LEFT JOIN datinglibre.images image ON image.user_id = p.user_id AND image.is_profile IS TRUE 
+           LEFT JOIN datinglibre.cities city ON city.id = p.city_id
+           LEFT JOIN datinglibre.regions region ON region.id = city.region_id 
+           WHERE u.email = :email
+EOD, $rsm);
+
+        $query->setParameter('email', $email);
+        return $query->getOneOrNullResult();
+    }
+
     public function findProjectionByCurrentUser(Uuid $currentUserId, Uuid $userId): ?ProfileProjection
     {
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('DatingLibre\AppBundle\Entity\ProfileProjection', 'pp');
-        $rsm->addFieldResult('pp', 'user_id', 'id');
-        $rsm->addFieldResult('pp', 'username', 'username');
-        $rsm->addFieldResult('pp', 'age', 'age');
-        $rsm->addFieldResult('pp', 'about', 'about');
-        $rsm->addFieldResult('pp', 'city_name', 'cityName', false);
-        $rsm->addFieldResult('pp', 'region_name', 'regionName', false);
-        $rsm->addFieldResult('pp', 'last_login', 'lastLogin');
-        $rsm->addFieldResult('pp', 'secure_url', 'imageUrl');
-        $rsm->addFieldResult('pp', 'profile_status', 'profileStatus');
-        $rsm->addFieldResult('pp', 'image_status', 'imageStatus');
-
         $query = $this->getEntityManager()->createNativeQuery(<<<EOD
             SELECT p.user_id AS user_id,
             EXTRACT(YEAR FROM AGE(p.dob)) as age,
@@ -240,7 +244,7 @@ EOD, $rsm);
             (SELECT b FROM datinglibre.blocks b WHERE
              (b.user_id = :currentUserId AND b.blocked_user_id = :userId) OR (b.user_id = :userId AND b.blocked_user_id = :currentUserId)
             )
-EOD, $rsm);
+EOD, $this->getProjectionResultSetMapping());
 
         $query->setParameter('userId', $userId);
         $query->setParameter('currentUserId', $currentUserId);
@@ -252,5 +256,49 @@ EOD, $rsm);
     {
         $this->getEntityManager()->remove($profile);
         $this->getEntityManager()->flush();
+    }
+
+    public function findProjectionByUsername(string $username)
+    {
+        $rsm = $this->getProjectionResultSetMapping();
+        $query = $this->getEntityManager()->createNativeQuery(<<<EOD
+SELECT p.user_id,
+           EXTRACT(YEAR FROM AGE(p.dob)) as age,
+           p.username,
+           p.about,
+           p.meta,
+           image.secure_url,
+           city.name as city_name,
+           region.name as region_name,
+           p.status as profile_status,
+           image.status as image_status,
+           u.last_login as last_login
+           FROM datinglibre.profiles p 
+           INNER JOIN datinglibre.users u ON u.id = p.user_id
+           LEFT JOIN datinglibre.images image ON image.user_id = p.user_id AND image.is_profile IS TRUE 
+           LEFT JOIN datinglibre.cities city ON city.id = p.city_id
+           LEFT JOIN datinglibre.regions region ON region.id = city.region_id 
+           WHERE LOWER(p.username) = LOWER(:username)
+EOD, $rsm);
+
+        $query->setParameter('username', $username);
+        return $query->getOneOrNullResult();
+    }
+
+    public function getProjectionResultSetMapping(): ResultSetMapping
+    {
+        $rsm = new ResultSetMapping();
+        $rsm->addEntityResult('DatingLibre\AppBundle\Entity\ProfileProjection', 'pv');
+        $rsm->addFieldResult('pv', 'user_id', 'id');
+        $rsm->addFieldResult('pv', 'username', 'username');
+        $rsm->addFieldResult('pv', 'age', 'age');
+        $rsm->addFieldResult('pv', 'about', 'about');
+        $rsm->addFieldResult('pv', 'city_name', 'cityName', false);
+        $rsm->addFieldResult('pv', 'region_name', 'regionName', false);
+        $rsm->addFieldResult('pv', 'last_login', 'lastLogin');
+        $rsm->addFieldResult('pv', 'secure_url', 'imageUrl');
+        $rsm->addFieldResult('pv', 'profile_status', 'profileStatus');
+        $rsm->addFieldResult('pv', 'image_status', 'imageStatus');
+        return $rsm;
     }
 }

@@ -501,6 +501,30 @@ services:
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
+  DatingLibre\AppBundle\Controller\AdminSearchEmailController:
+    class: DatingLibre\AppBundle\Controller\AdminSearchEmailController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+  DatingLibre\AppBundle\Controller\ModeratorSearchUsernameController:
+    class: DatingLibre\AppBundle\Controller\ModeratorSearchUsernameController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
   DatingLibre\AppBundle\Controller\UserTokenController:
     class: DatingLibre\AppBundle\Controller\UserTokenController
     public: true
@@ -688,7 +712,7 @@ services:
       - { name: form.type }
     autowire: true
     autoconfigure: true
-    arguments: [ '@doctrine.orm.default_entity_manager', '@DatingLibre\AppBundle\Repository\CategoryRepository', '@DatingLibre\AppBundle\Repository\CountryRepository', '@DatingLibre\AppBundle\Repository\RegionRepository' ]
+    arguments: [ '@DatingLibre\AppBundle\Repository\CategoryRepository', '@DatingLibre\AppBundle\Repository\CountryRepository', '@DatingLibre\AppBundle\Repository\RegionRepository' ]
 
   DatingLibre\AppBundle\Form\RegionFieldSubscriber:
     class: DatingLibre\AppBundle\Form\RegionFieldSubscriber

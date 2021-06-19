@@ -41,11 +41,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush($user);
     }
 
-    public function loadUserByUsername(string $email): ?UserInterface {
+    public function loadUserByUsername(string $email): ?UserInterface
+    {
         return $this->loadUserByIdentifier($email);
     }
 
-    public function loadUserByIdentifier(string $identifier): ?UserInterface {
+    public function loadUserByIdentifier(string $identifier): ?UserInterface
+    {
         return $this->getEntityManager()->createQuery('SELECT u FROM DatingLibre\AppBundle\Entity\User u WHERE u.email = :email')
             ->setParameter('email', trim(strtolower($identifier)))
             ->getOneOrNullResult();

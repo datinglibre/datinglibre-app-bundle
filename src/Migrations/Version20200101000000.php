@@ -18,13 +18,14 @@ final class Version20200101000000 extends AbstractMigration
     {
         $this->addSql('CREATE TABLE datinglibre.users (
     id UUID NOT NULL PRIMARY KEY,
-    email TEXT UNIQUE NOT NULL,
+    email TEXT NOT NULL,
     password TEXT NOT NULL,
     roles JSONB NOT NULL,
     ip TEXT,
     enabled boolean NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     last_login TIMESTAMP WITH TIME ZONE);');
+        $this->addSql('CREATE UNIQUE INDEX unique_email_index ON datinglibre.users (LOWER(email));');
 
         $this->addSql('CREATE TABLE datinglibre.countries (
     id UUID NOT NULL PRIMARY KEY,
@@ -41,9 +42,8 @@ final class Version20200101000000 extends AbstractMigration
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL
 );');
-        // enforce one default profile image per user
-        $this->addSql('CREATE UNIQUE INDEX profile_image ON datinglibre.images (user_id)
-    WHERE is_profile IS TRUE;');
+        // limit one default profile image per user
+        $this->addSql('CREATE UNIQUE INDEX profile_image ON datinglibre.images (user_id) WHERE is_profile IS TRUE;');
         $this->addSql('CREATE TABLE datinglibre.regions (
     id UUID NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
@@ -58,10 +58,7 @@ final class Version20200101000000 extends AbstractMigration
     longitude DOUBLE PRECISION NOT NULL,
     latitude DOUBLE PRECISION NOT NULL
 );');
-        $this->addSql('CREATE INDEX city_location_index ON datinglibre.cities USING gist (
-    public.geography(public.st_makepoint(longitude, latitude))
-);');
-
+        $this->addSql('CREATE INDEX city_location_index ON datinglibre.cities USING gist (public.geography(public.st_makepoint(longitude, latitude)));');
         $this->addSql('CREATE TABLE datinglibre.profiles (
     user_id UUID NOT NULL PRIMARY KEY REFERENCES datinglibre.users ON DELETE CASCADE,
     username TEXT UNIQUE,
@@ -73,6 +70,7 @@ final class Version20200101000000 extends AbstractMigration
     sort_id BIGSERIAL NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE
 );');
+        $this->addSql('CREATE UNIQUE INDEX unique_username_index ON datinglibre.profiles (LOWER(username));');
         $this->addSql('CREATE INDEX profile_sort_order ON datinglibre.profiles(sort_id);');
         $this->addSql('CREATE TABLE datinglibre.categories (
     id UUID NOT NULL PRIMARY KEY,

@@ -49,9 +49,9 @@ class ImageContext extends RawMinkContext implements Context
      */
     public function iUpload(string $image, string $email): void
     {
-        $content = file_get_contents($this->getMinkParameter('files_path')
-            . DIRECTORY_SEPARATOR . $image);
-        $user = $this->userService->create($email, 'password', true, [User::USER]);
+        $content = file_get_contents($this->getMinkParameter('files_path') . DIRECTORY_SEPARATOR . $image);
+        $user = $this->userService->findByEmail($email);
+        Assert::notNull($user);
         $this->imageService->save($user->getId(), $content, 'jpg', true);
     }
 

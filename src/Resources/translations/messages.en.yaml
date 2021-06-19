@@ -70,6 +70,8 @@ nav:
   logout: "Logout"
   events: "Events"
   subscriptions: "Subscriptions"
+  email: "Email"
+  username: "Username"
 menu:
   view: "View"
   edit: "Edit"

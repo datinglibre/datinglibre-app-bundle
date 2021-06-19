@@ -26,17 +26,14 @@ class ProfileFormType extends AbstractType
     private CategoryRepository $categoryRepository;
     private CountryRepository $countryRepository;
     private RegionRepository $regionRepository;
-    private EntityManagerInterface $entityManager;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
         CategoryRepository $categoryRepository,
         CountryRepository $countryRepository,
         RegionRepository $regionRepository
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->countryRepository = $countryRepository;
-        $this->entityManager = $entityManager;
         $this->regionRepository = $regionRepository;
     }
 
@@ -78,7 +75,8 @@ class ProfileFormType extends AbstractType
                         'maxMessage' => 'profile.username_invalid_length',
                         'min' => 3,
                         'max' => 32,
-                    ]), ],
+                    ]),
+                ],
             ]
         );
 

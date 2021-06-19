@@ -151,6 +151,16 @@ admin_permanent_suspension_queue:
     controller: DatingLibre\AppBundle\Controller\AdminSuspensionQueueController::view
     methods: GET
 
+admin_search_email:
+    controller: DatingLibre\AppBundle\Controller\AdminSearchEmailController::index
+    path: /admin/search/email
+    methods: GET|POST
+
+moderator_search_username:
+    controller: DatingLibre\AppBundle\Controller\ModeratorSearchUsernameController::index
+    path: /moderator/search/username
+    methods: GET|POST
+
 ccbill_webhook:
     path: /ccbill/webhook
     controller: DatingLibre\AppBundle\Controller\CcBillWebhookController::webhook

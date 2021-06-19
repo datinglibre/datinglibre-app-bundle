@@ -1,0 +1,10 @@
+{% extends '@DatingLibreApp/admin/admin.html.twig' %}
+{% block title %}{{ 'nav.search'|trans }} - {{ 'site.admin'|trans }}{% endblock %}
+{% block menu %}
+    {% form_theme emailSearchForm 'bootstrap_4_layout.html.twig' %}
+    {{ form(emailSearchForm) }}
+{% endblock %}
+{% block content %}
+    {% from '@DatingLibreApp/moderator/search/profile.list.single.html.twig' import profile_list_single %}
+    {{ profile_list_single(profile) }}
+{% endblock %}
