@@ -47,7 +47,7 @@ class ReportProjection
     private string $status;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="text[]")
      */
     private array $reasons;
 

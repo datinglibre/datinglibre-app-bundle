@@ -30,7 +30,7 @@ class SuspensionProjection
     private string $username;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="text[]")
      */
     private array $reasons;
 

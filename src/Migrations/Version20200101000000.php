@@ -20,7 +20,7 @@ final class Version20200101000000 extends AbstractMigration
     id UUID NOT NULL PRIMARY KEY,
     email TEXT NOT NULL,
     password TEXT NOT NULL,
-    roles JSONB NOT NULL,
+    roles TEXT[] NOT NULL,
     ip TEXT,
     enabled boolean NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -68,6 +68,7 @@ final class Version20200101000000 extends AbstractMigration
     city_id UUID REFERENCES datinglibre.cities,
     status TEXT NOT NULL CHECK (status IN (\'UNMODERATED\', \'ACCEPTED\', \'SUSPENDED\', \'PERMANENTLY_SUSPENDED\')),
     sort_id BIGSERIAL NOT NULL,
+    interests TEXT[],
     updated_at TIMESTAMP WITH TIME ZONE
 );');
         $this->addSql('CREATE UNIQUE INDEX unique_username_index ON datinglibre.profiles (LOWER(username));');
@@ -103,7 +104,7 @@ final class Version20200101000000 extends AbstractMigration
     id UUID NOT NULL PRIMARY KEY,
     user_id UUID NULL REFERENCES datinglibre.users ON DELETE SET NULL,
     reported_user_id UUID NOT NULL REFERENCES datinglibre.users ON DELETE CASCADE,
-    reasons JSONB NOT NULL,
+    reasons TEXT[] NOT NULL,
     message TEXT,
     status TEXT NOT NULL CHECK (status IN (\'OPEN\', \'CLOSED\')),
     user_closed_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
@@ -117,7 +118,8 @@ final class Version20200101000000 extends AbstractMigration
     region_id UUID REFERENCES datinglibre.regions ON DELETE CASCADE,
     distance INTEGER CHECK (distance > 0),
     min_age INTEGER CHECK (min_age >= 18 AND min_age <= max_age),
-    max_age INTEGER CHECK (max_age >= 18 AND max_age >= min_age)
+    max_age INTEGER CHECK (max_age >= 18 AND max_age >= min_age),
+    interests TEXT[]
 )');
         $this->addSql('CREATE TABLE datinglibre.messages (
     id UUID NOT NULL PRIMARY KEY,
@@ -176,7 +178,7 @@ final class Version20200101000000 extends AbstractMigration
     user_opened_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
     user_closed_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
     duration INT NULL,
-    reasons JSONB NOT NULL,
+    reasons TEXT[] NOT NULL,
     status TEXT NOT NULL CHECK (status IN (\'OPEN\', \'CLOSED\')),
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL

@@ -52,7 +52,7 @@ class Report
     private User $userClosed;
 
     /**
-     * @ORM\Column(name="reasons", type="json", options={"jsonb": true})
+     * @ORM\Column(name="reasons", type="text[]")
      */
     private array $reasons;
 

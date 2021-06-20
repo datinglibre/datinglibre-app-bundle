@@ -30,17 +30,17 @@ class Filter
     /**
      * @ORM\Column(type="integer")
      */
-    private $distance = 100_000;
+    private ?int $distance = 100_000;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $minAge = 18;
+    private int $minAge = 18;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $maxAge = 100;
+    private ?int $maxAge = 100;
 
     public function __construct()
     {

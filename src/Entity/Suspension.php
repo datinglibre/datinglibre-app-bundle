@@ -52,7 +52,7 @@ class Suspension
     private ?int $duration;
 
     /**
-     * @ORM\Column(name="reasons", type="json")
+     * @ORM\Column(name="reasons", type="text[]")
      */
     private array $reasons;
 
