@@ -6,6 +6,25 @@ This Symfony bundle is designed to be developed with [DatingLibre](https://githu
 
 See the [development](https://github.com/datinglibre/DatingLibre/wiki/Development) section of the [Wiki](https://github.com/datinglibre/DatingLibre/wiki).
 
+## Installation
+
+The `datinglibre-app-bundle` includes many Behat test classes to test your implementation of DatingLibre.
+
+These can be excluded from the production installation, by excluding them from the autoloader.
+
+Add the following classmap exclusion to the `autoload` section of `composer.json`:
+
+    "autoload": {
+            "psr-4": {
+                "App\\": "src/"
+        },
+        "exclude-from-classmap": ["**/Behat/**"]
+    }
+
+Install on production with 
+
+    composer install --no-dev --classmap-authoritative
+
 ## Licence
 
 Copyright 2020-2021 DatingLibre.
