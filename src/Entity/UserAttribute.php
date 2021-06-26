@@ -21,41 +21,32 @@ class UserAttribute
      * @OneToOne(targetEntity="Attribute")
      * @JoinColumn(name = "attribute_id", referencedColumnName = "id")
      */
-    private $attribute;
+    private Attribute $attribute;
 
     /**
      * @Id()
      * @OneToOne(targetEntity="user")
      * @JoinColumn(name = "user_id", referencedColumnName = "id")
      */
-    private $user;
-
-    public function getAttribute(): Attribute
-    {
-        return $this->attribute;
-    }
-
-    public function setAttribute(Attribute $attribute): self
-    {
-        $this->attribute = $attribute;
-
-        return $this;
-    }
+    private User $user;
 
     public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser($user): self
+    public function setUser($user): void
     {
         $this->user = $user;
-        return $this;
     }
 
-    public function setId($id): self
+    public function getAttribute(): Attribute
     {
-        $this->id = $id;
-        return $this;
+        return $this->attribute;
+    }
+
+    public function setAttribute(Attribute $attribute): void
+    {
+        $this->attribute = $attribute;
     }
 }

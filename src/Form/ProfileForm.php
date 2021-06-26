@@ -16,12 +16,14 @@ class ProfileForm
     private $dob;
     private ?Attribute $color;
     private ?Attribute $shape;
+    private array $interests;
     private ?City $city;
     private ?Region $region;
     private ?Country $country;
 
     public function __construct()
     {
+        $this->interests = [];
         $this->city = null;
         $this->region = null;
         $this->country = null;
@@ -113,5 +115,15 @@ class ProfileForm
     public function setShape(?Attribute $shape): void
     {
         $this->shape = $shape;
+    }
+
+    public function setInterests(array $interests)
+    {
+        $this->interests = $interests;
+    }
+
+    public function getInterests(): array
+    {
+        return $this->interests;
     }
 }

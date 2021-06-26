@@ -42,6 +42,7 @@ profile:
     rejected: "Your profile image has failed moderation. Please upload a different image"
     disabled: "Saving a profile image is currently disabled"
   suspended: "Your profile has been suspended"
+  interests: "Interests"
 account:
   delete_confirmation: "Confirm your password below to permanently delete your account"
   account: "Account"

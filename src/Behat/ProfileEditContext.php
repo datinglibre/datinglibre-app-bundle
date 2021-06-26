@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DatingLibre\AppBundle\Behat;
 
+use DatingLibre\AppBundle\Behat\Util\TableUtil;
 use DatingLibre\AppBundle\Entity\City;
 use DatingLibre\AppBundle\Entity\Country;
 use DatingLibre\AppBundle\Entity\Profile;
@@ -14,14 +15,12 @@ use DatingLibre\AppBundle\Repository\CountryRepository;
 use DatingLibre\AppBundle\Repository\ProfileRepository;
 use DatingLibre\AppBundle\Repository\RegionRepository;
 use DatingLibre\AppBundle\Repository\UserRepository;
-use DatingLibre\AppBundle\Service\ProfileService;
 use DatingLibre\AppBundle\Service\RequirementService;
 use DatingLibre\AppBundle\Service\UserAttributeService;
+use DatingLibre\AppBundle\Service\UserInterestService;
 use DatingLibre\AppBundle\Service\UserService;
-use DatingLibre\AppBundle\Behat\Page\LoginPage;
 use DatingLibre\AppBundle\Behat\Page\ProfileEditPage;
 use DatingLibre\AppBundle\Behat\Page\ProfileIndexPage;
-use DatingLibre\AppBundle\Behat\Page\SearchPage;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use DateTime;
@@ -39,6 +38,7 @@ class ProfileEditContext implements Context
     private RegionRepository $regionRepository;
     private UserRepository $userRepository;
     private UserAttributeService $userAttributeService;
+    private UserInterestService $userInterestService;
     private RequirementService $requirementService;
 
     public function __construct(
@@ -46,6 +46,7 @@ class ProfileEditContext implements Context
         UserRepository $userRepository,
         ProfileRepository $profileRepository,
         UserAttributeService $userAttributeService,
+        UserInterestService $userInterestService,
         RequirementService $requirementService,
         CityRepository $cityRepository,
         RegionRepository $regionRepository,
@@ -62,6 +63,7 @@ class ProfileEditContext implements Context
         $this->countryRepository = $countryRepository;
         $this->regionRepository = $regionRepository;
         $this->userAttributeService = $userAttributeService;
+        $this->userInterestService = $userInterestService;
         $this->requirementService = $requirementService;
     }
 
@@ -89,11 +91,24 @@ class ProfileEditContext implements Context
             );
 
             if (array_key_exists('requirements', $row)) {
-                $this->requirementService->createRequirementsByAttributeNames($user, explode(',', $row['requirements']));
+                $this->requirementService->createRequirementsByAttributeNames(
+                    $user,
+                    TableUtil::parseCsvRow($row['requirements'])
+                );
             }
 
             if (array_key_exists('attributes', $row)) {
-                $this->userAttributeService->createUserAttributesByAttributeNames($user, explode(',', $row['attributes']));
+                $this->userAttributeService->createUserAttributesByAttributeNames(
+                    $user,
+                    TableUtil::parseCsvRow($row['attributes'])
+                );
+            }
+
+            if (array_key_exists('interests', $row) && !empty($row['interests'])) {
+                $this->userInterestService->createUserInterestsByNames(
+                    $user,
+                    TableUtil::parseCsvRow($row['interests'])
+                );
             }
         }
     }

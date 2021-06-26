@@ -95,23 +95,28 @@ AND NOT EXISTS (
         WHERE (b.user_id = :userId AND b.blocked_user_id = p.user_id) 
         OR (b.user_id = p.user_id AND b.blocked_user_id = :userId)
 )
-AND (SELECT EXTRACT(YEAR FROM AGE(dob)) FROM datinglibre.profiles p WHERE p.user_id = :userId) 
+AND (SELECT EXTRACT(YEAR FROM AGE(dob)) FROM datinglibre.profiles p WHERE p.user_id = :userId)
      BETWEEN COALESCE(filter.min_age, :systemMinAge) AND COALESCE(filter.max_age, :systemMaxAge)
-AND EXTRACT(YEAR FROM AGE(p.dob)) BETWEEN :minAge AND :maxAge 
+     AND EXTRACT(YEAR FROM AGE(p.dob)) BETWEEN :minAge AND :maxAge
+AND NOT EXISTS (
+    SELECT 1 FROM datinglibre.user_interest_filters uif 
+    LEFT JOIN datinglibre.user_interests ui ON ui.interest_id = uif.interest_id AND ui.user_id = p.user_id
+    WHERE uif.user_id = :userId AND ui.interest_id IS NULL
+)
 EOD;
 
         $radiusSql = 'ST_DWithin(Geography(ST_MakePoint(city.longitude, city.latitude)), Geography(ST_MakePoint(:longitude, :latitude)), :radius, false)';
         $regionSql = 'region.id = :regionId ';
 
-        if (null !== $distance && null === $regionId) {
+        if ($distance !== null && $regionId === null) {
             $sql .= 'AND ' . $radiusSql;
         }
 
-        if (null !== $regionId && null === $distance) {
+        if ($regionId !== null && $distance == null) {
             $sql .= 'AND ' . $regionSql;
         }
 
-        if (null !== $regionId && null !== $distance) {
+        if ($regionId !== null &&  $distance !== null) {
             $sql .= 'AND (' . $radiusSql . 'OR ' . $regionSql . ') ';
         }
 

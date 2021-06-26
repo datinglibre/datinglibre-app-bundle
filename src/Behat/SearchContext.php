@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace DatingLibre\AppBundle\Behat;
 
+use DatingLibre\AppBundle\Behat\Util\TableUtil;
 use DatingLibre\AppBundle\Entity\Filter;
 use DatingLibre\AppBundle\Entity\ProfileProjection;
 use DatingLibre\AppBundle\Entity\User;
 use DatingLibre\AppBundle\Repository\ProfileRepository;
 use DatingLibre\AppBundle\Repository\FilterRepository;
-use DatingLibre\AppBundle\Repository\UserRepository;
+use DatingLibre\AppBundle\Service\UserInterestFilterService;
 use DatingLibre\AppBundle\Service\UserService;
 use DatingLibre\AppBundle\Behat\Page\SearchPage;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
-use DatingLibre\AppBundle\Repository\CityRepository;
 use DatingLibre\AppBundle\Repository\RegionRepository;
 use Webmozart\Assert\Assert;
 
@@ -22,29 +22,26 @@ class SearchContext implements Context
 {
     private UserService $userService;
     private ProfileRepository $profileRepository;
-    private UserRepository $userRepository;
-    private CityRepository $cityRepository;
     private RegionRepository $regionRepository;
     private SearchPage $searchPage;
     private FilterRepository $filterRepository;
     private array $profiles;
+    private UserInterestFilterService $userInterestFilterService;
 
     public function __construct(
         UserService $userService,
-        UserRepository $userRepository,
         ProfileRepository $profileRepository,
-        CityRepository $cityRepository,
         RegionRepository $regionRepository,
         SearchPage $searchPage,
-        FilterRepository $filterRepository
+        FilterRepository $filterRepository,
+        UserInterestFilterService $userInterestFilterService
     ) {
         $this->userService = $userService;
-        $this->userRepository = $userRepository;
         $this->profileRepository = $profileRepository;
-        $this->cityRepository = $cityRepository;
         $this->searchPage = $searchPage;
         $this->filterRepository = $filterRepository;
         $this->regionRepository = $regionRepository;
+        $this->userInterestFilterService = $userInterestFilterService;
     }
 
     /**
@@ -168,6 +165,23 @@ class SearchContext implements Context
         }
     }
 
+    /**
+     * @Given the following interest filters exist:
+     */
+    public function theFollowingInterestFiltersExist(TableNode $table)
+    {
+        foreach ($table as $row) {
+            $user = $this->userService->findByEmail($row['email']);
+            Assert::notNull($user);
+
+            $interests = TableUtil::parseCsvRow($row['interests']);
+
+            $this->userInterestFilterService->createUserInterestFilterByNames(
+                $user,
+                $interests
+            );
+        }
+    }
 
     /**
      * @Given I select the profile :username

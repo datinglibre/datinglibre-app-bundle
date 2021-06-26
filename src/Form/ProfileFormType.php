@@ -8,10 +8,11 @@ use DatingLibre\AppBundle\Entity\Attribute;
 use DatingLibre\AppBundle\Entity\Country;
 use DatingLibre\AppBundle\Repository\CategoryRepository;
 use DatingLibre\AppBundle\Repository\CountryRepository;
+use DatingLibre\AppBundle\Repository\InterestRepository;
 use DatingLibre\AppBundle\Repository\RegionRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -26,15 +27,18 @@ class ProfileFormType extends AbstractType
     private CategoryRepository $categoryRepository;
     private CountryRepository $countryRepository;
     private RegionRepository $regionRepository;
+    private InterestRepository $interestRepository;
 
     public function __construct(
         CategoryRepository $categoryRepository,
         CountryRepository $countryRepository,
-        RegionRepository $regionRepository
+        RegionRepository $regionRepository,
+        InterestRepository $interestRepository
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->countryRepository = $countryRepository;
         $this->regionRepository = $regionRepository;
+        $this->interestRepository = $interestRepository;
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -60,6 +64,19 @@ class ProfileFormType extends AbstractType
                 ]
             );
         }
+
+        $profileFormBuilder->add(
+            'interests',
+            ChoiceType::class,
+            [
+                'choices' => $this->interestRepository->findAll(),
+                'choice_label' => 'name',
+                'choice_translation_domain' => 'interests',
+                'choice_value' => 'id',
+                'multiple' => true,
+                'expanded' => true
+            ]
+        );
 
         $profileFormBuilder->add(
             'username',

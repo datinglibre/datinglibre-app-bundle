@@ -6,14 +6,18 @@ namespace DatingLibre\AppBundle\Controller;
 
 use DatingLibre\AppBundle\Entity\Filter;
 use DatingLibre\AppBundle\Entity\User;
+use DatingLibre\AppBundle\Form\FilterForm;
 use DatingLibre\AppBundle\Form\FilterFormType;
 use DatingLibre\AppBundle\Form\RequirementsForm;
 use DatingLibre\AppBundle\Form\RequirementsFormType;
 use DatingLibre\AppBundle\Repository\FilterRepository;
+use DatingLibre\AppBundle\Repository\InterestRepository;
 use DatingLibre\AppBundle\Repository\UserRepository;
 use DatingLibre\AppBundle\Service\ProfileService;
 use DatingLibre\AppBundle\Service\RequirementService;
 use DatingLibre\AppBundle\Service\SuspensionService;
+use DatingLibre\AppBundle\Service\UserInterestFilterService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +30,8 @@ class UserSearchIndexController extends AbstractController
     private FilterRepository $filterRepository;
     private RequirementService $requirementService;
     private SuspensionService $suspensionService;
+    private InterestRepository $interestRepository;
+    private UserInterestFilterService $userInterestFilterService;
     protected const PREVIOUS = 'previous';
     protected const NEXT = 'next';
     protected const LIMIT = 10;
@@ -34,6 +40,8 @@ class UserSearchIndexController extends AbstractController
         ProfileService $profileService,
         UserRepository $userRepository,
         FilterRepository $filterRepository,
+        InterestRepository $interestRepository,
+        UserInterestFilterService $userInterestFilterService,
         RequirementService $requirementService,
         SuspensionService $suspensionService
     ) {
@@ -42,8 +50,13 @@ class UserSearchIndexController extends AbstractController
         $this->filterRepository = $filterRepository;
         $this->requirementService = $requirementService;
         $this->suspensionService = $suspensionService;
+        $this->interestRepository = $interestRepository;
+        $this->userInterestFilterService = $userInterestFilterService;
     }
 
+    /**
+     * @throws Exception
+     */
     public function index(UserInterface $user, Request $request)
     {
         if ($this->profileService->find($user->getId()) === null) {
@@ -58,37 +71,54 @@ class UserSearchIndexController extends AbstractController
         $user = $this->userRepository->find($this->getUser()->getId());
         $profile = $this->profileService->find($user->getId());
         $filter = $this->filterRepository->find($user->getId()) ?? $this->createDefaultFilter($user);
+        $userInterestFilters = $this->userInterestFilterService->findByUser($user);
 
-        $filterForm = $this->createForm(
+        $filterForm = new FilterForm();
+        $filterForm->setDistance($filter->getDistance());
+        $filterForm->setMaxAge($filter->getMaxAge());
+        $filterForm->setMinAge($filter->getMinAge());
+        $filterForm->setRegion($filter->getRegion());
+        $filterForm->setInterests($userInterestFilters);
+
+        $filterFormType = $this->createForm(
             FilterFormType::class,
-            $filter,
-            ['regions' => $profile->getCity()->getRegion()->getCountry()->getRegions()]
+            $filterForm,
+            [
+                'regions' => $profile->getCity()->getRegion()->getCountry()->getRegions(),
+                'interests' => $this->interestRepository->findAll()
+            ]
         );
 
 
-        $requirements = new RequirementsForm();
-        $requirements->setColors($this->requirementService->getMultipleByUserAndCategory($user->getId(), 'color'));
-        $requirements->setShapes($this->requirementService->getMultipleByUserAndCategory($user->getId(), 'shape'));
-        $requirementsForm = $this->createForm(RequirementsFormType::class, $requirements);
+        $requirementsForm = new RequirementsForm();
+        $requirementsForm->setColors($this->requirementService->getMultipleByUserAndCategory($user->getId(), 'color'));
+        $requirementsForm->setShapes($this->requirementService->getMultipleByUserAndCategory($user->getId(), 'shape'));
+        $requirementsFormType = $this->createForm(RequirementsFormType::class, $requirementsForm);
 
-        $filterForm->handleRequest($request);
-        $requirementsForm->handleRequest($request);
+        $filterFormType->handleRequest($request);
+        $requirementsFormType->handleRequest($request);
 
-        if ($requirementsForm->isSubmitted() && $requirementsForm->isValid()) {
+        if ($requirementsFormType->isSubmitted() && $requirementsFormType->isValid()) {
             $this->requirementService->createRequirementsInCategory(
                 $user,
                 'color',
-                $requirementsForm->getData()->getColors()
+                $requirementsForm->getColors()
             );
 
             $this->requirementService->createRequirementsInCategory(
                 $user,
                 'shape',
-                $requirementsForm->getData()->getShapes()
+                $requirementsForm->getShapes()
             );
         }
 
-        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+        if ($filterFormType->isSubmitted() && $filterFormType->isValid()) {
+            $filter->setUser($user);
+            $filter->setRegion($filterForm->getRegion());
+            $filter->setMinAge($filterForm->getMinAge());
+            $filter->setMaxAge($filterForm->getMaxAge());
+            $filter->setDistance($filterForm->getDistance());
+            $this->userInterestFilterService->createUserInterestFiltersByInterests($user, $filterForm->getInterests());
             $this->filterRepository->save($filter);
             return new RedirectResponse($this->generateUrl('user_search_index'));
         }
@@ -112,8 +142,8 @@ class UserSearchIndexController extends AbstractController
             'previous' => $this->getPrevious($profiles, $next),
             'page' => 'search_index',
             'profiles' => $profiles,
-            'filterForm' => $filterForm->createView(),
-            'requirementsForm' => $requirementsForm->createView()
+            'filterForm' => $filterFormType->createView(),
+            'requirementsForm' => $requirementsFormType->createView()
         ]);
     }
 

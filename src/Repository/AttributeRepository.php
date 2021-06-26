@@ -22,12 +22,15 @@ class AttributeRepository extends ServiceEntityRepository
         parent::__construct($registry, Attribute::class);
     }
 
+    /**
+     * @throws NoResultException
+     */
     public function getAttributesByNames(array $attributeNames): array
     {
         $attributes = [];
 
         foreach ($attributeNames as $attributeName) {
-            $attribute = $this->findOneBy(['name' => trim($attributeName)]);
+            $attribute = $this->findOneBy(['name' => $attributeName]);
 
             if (null === $attribute) {
                 throw new NoResultException();

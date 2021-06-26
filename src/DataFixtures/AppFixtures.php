@@ -6,32 +6,33 @@ namespace DatingLibre\AppBundle\DataFixtures;
 
 use DatingLibre\AppBundle\Entity\Attribute;
 use DatingLibre\AppBundle\Entity\Category;
+use DatingLibre\AppBundle\Entity\Interest;
 use DatingLibre\AppBundle\Entity\User;
 use DatingLibre\AppBundle\Entity\City;
 use DatingLibre\AppBundle\Entity\Country;
 use DatingLibre\AppBundle\Entity\Region;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-    private UserPasswordEncoderInterface $encoder;
+    private UserPasswordHasherInterface $hasher;
     private ObjectManager $objectManager;
     private array $categories;
     private array $attributes;
-    private array $reportReasons;
+    private array $interests;
 
     public function __construct(
-        UserPasswordEncoderInterface $encoder,
+        UserPasswordHasherInterface $hasher,
         array $categories,
         array $attributes,
-        array $reportReasons
+        array $interests
     ) {
-        $this->encoder = $encoder;
+        $this->hasher = $hasher;
         $this->categories = $categories;
         $this->attributes = $attributes;
-        $this->reportReasons = $reportReasons;
+        $this->interests = $interests;
     }
 
     public function load(ObjectManager $manager): void
@@ -40,6 +41,10 @@ class AppFixtures extends Fixture
 
         $this->createTestUser();
         $this->createLocations();
+
+        foreach ($this->interests as $interest) {
+            $this->createInterest($interest);
+        }
 
         foreach ($this->categories as $categoryName) {
             $category = $this->createCategory($categoryName);
@@ -58,7 +63,7 @@ class AppFixtures extends Fixture
         $user = new User();
         $user->setEmail('test@example.com');
         $user->setEnabled(true);
-        $user->setPassword($this->encoder->encodePassword($user, 'password'));
+        $user->setPassword($this->hasher->hashPassword($user, 'password'));
         $this->objectManager->persist($user);
         $this->objectManager->flush();
     }
@@ -164,13 +169,8 @@ class AppFixtures extends Fixture
         return $region;
     }
 
-    private function createCity(
-        Country $country,
-        Region $region,
-        string $name,
-        float $longitude,
-        float $latitude
-    ): City {
+    private function createCity(Country $country, Region $region, string $name, float $longitude, float $latitude): void
+    {
         $city = new City();
         $city->setName($name);
         $city->setCountry($country);
@@ -180,7 +180,13 @@ class AppFixtures extends Fixture
 
         $this->objectManager->persist($city);
         $this->objectManager->flush();
+    }
 
-        return $city;
+    private function createInterest(string $interestName)
+    {
+        $interest = new Interest();
+        $interest->setName($interestName);
+        $this->objectManager->persist($interest);
+        $this->objectManager->flush();
     }
 }

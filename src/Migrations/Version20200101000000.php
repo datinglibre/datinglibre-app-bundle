@@ -68,7 +68,6 @@ final class Version20200101000000 extends AbstractMigration
     city_id UUID REFERENCES datinglibre.cities,
     status TEXT NOT NULL CHECK (status IN (\'UNMODERATED\', \'ACCEPTED\', \'SUSPENDED\', \'PERMANENTLY_SUSPENDED\')),
     sort_id BIGSERIAL NOT NULL,
-    interests TEXT[],
     updated_at TIMESTAMP WITH TIME ZONE
 );');
         $this->addSql('CREATE UNIQUE INDEX unique_username_index ON datinglibre.profiles (LOWER(username));');
@@ -80,8 +79,25 @@ final class Version20200101000000 extends AbstractMigration
         $this->addSql('CREATE TABLE datinglibre.attributes (
     id UUID NOT NULL PRIMARY KEY,
     name TEXT UNIQUE,
-    category_id UUID NOT NULL REFERENCES datinglibre.categories
+    category_id UUID NOT NULL REFERENCES datinglibre.categories,
+    CONSTRAINT check_attribute_name CHECK (name ~ \'^[a-z_]+$\')
 );');
+        $this->addSql('CREATE TABLE datinglibre.interests (
+    id UUID NOT NULL PRIMARY KEY,
+    name TEXT UNIQUE,
+    CONSTRAINT check_interest_name CHECK (name ~ \'^[a-z_]+$\')
+)');
+        $this->addSql('CREATE TABLE datinglibre.user_interests (
+    user_id UUID NOT NULL REFERENCES datinglibre.users ON DELETE CASCADE,
+    interest_id UUID NOT NULL REFERENCES datinglibre.interests,
+    UNIQUE(user_id, interest_id)
+)');
+        $this->addSql('CREATE TABLE datinglibre.user_interest_filters (
+    user_id UUID NOT NULL REFERENCES datinglibre.users ON DELETE CASCADE,
+    interest_id UUID NOT NULL REFERENCES datinglibre.interests,
+    UNIQUE(user_id, interest_id)
+ )');
+
         $this->addSql('CREATE TABLE datinglibre.requirements (
     user_id UUID NOT NULL REFERENCES datinglibre.users ON DELETE CASCADE,
     attribute_id UUID NOT NULL REFERENCES datinglibre.attributes,
@@ -118,8 +134,7 @@ final class Version20200101000000 extends AbstractMigration
     region_id UUID REFERENCES datinglibre.regions ON DELETE CASCADE,
     distance INTEGER CHECK (distance > 0),
     min_age INTEGER CHECK (min_age >= 18 AND min_age <= max_age),
-    max_age INTEGER CHECK (max_age >= 18 AND max_age >= min_age),
-    interests TEXT[]
+    max_age INTEGER CHECK (max_age >= 18 AND max_age >= min_age)
 )');
         $this->addSql('CREATE TABLE datinglibre.messages (
     id UUID NOT NULL PRIMARY KEY,
@@ -195,6 +210,9 @@ final class Version20200101000000 extends AbstractMigration
         $this->addSql('DROP TABLE datinglibre.regions');
         $this->addSql('DROP TABLE datinglibre.user_attributes');
         $this->addSql('DROP TABLE datinglibre.attributes');
+        $this->addSql('DROP TABLE datinglibre.interests');
+        $this->addSql('DROP TABLE datinglibre.user_interests');
+        $this->addSql('DROP TABLE datinglibre.user_interest_filters');
         $this->addSql('DROP TABLE datinglibre.blocks');
         $this->addSql('DROP TABLE datinglibre.searches');
         $this->addSql('DROP TABLE datinglibre.messages');

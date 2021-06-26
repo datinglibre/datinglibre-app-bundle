@@ -23,6 +23,14 @@ services:
     autoconfigure: true
     arguments: [ '@doctrine' ]
 
+  DatingLibre\AppBundle\Repository\InterestRepository:
+    class: DatingLibre\AppBundle\Repository\InterestRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
   DatingLibre\AppBundle\Repository\AttributeRepository:
     class: DatingLibre\AppBundle\Repository\AttributeRepository
     tags:
@@ -105,6 +113,22 @@ services:
 
   DatingLibre\AppBundle\Repository\UserAttributeRepository:
     class: DatingLibre\AppBundle\Repository\UserAttributeRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\UserInterestRepository:
+    class: DatingLibre\AppBundle\Repository\UserInterestRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\UserInterestFilterRepository:
+    class: DatingLibre\AppBundle\Repository\UserInterestFilterRepository
     tags:
       - { name: doctrine.repository_service }
     autowire: true
@@ -349,7 +373,14 @@ services:
       - { name: container.service_subscriber }
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository', '@DatingLibre\AppBundle\Service\ProfileService', '@DatingLibre\AppBundle\Repository\UserRepository', '@DatingLibre\AppBundle\Service\UserAttributeService', '@DatingLibre\AppBundle\Repository\RegionRepository', '@DatingLibre\AppBundle\Repository\CountryRepository', '@DatingLibre\AppBundle\Service\UserAttributeService' ]
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository',
+                 '@DatingLibre\AppBundle\Service\ProfileService',
+                 '@DatingLibre\AppBundle\Repository\UserRepository',
+                 '@DatingLibre\AppBundle\Service\UserAttributeService',
+                 '@DatingLibre\AppBundle\Service\UserInterestService',
+                 '@DatingLibre\AppBundle\Repository\RegionRepository',
+                 '@DatingLibre\AppBundle\Repository\CountryRepository',
+                 '@DatingLibre\AppBundle\Service\UserAttributeService' ]
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
@@ -375,7 +406,9 @@ services:
       - { name: container.service_subscriber }
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository', '@DatingLibre\AppBundle\Service\UserAttributeService' ]
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository',
+                 '@DatingLibre\AppBundle\Service\UserAttributeService',
+                 '@DatingLibre\AppBundle\Service\UserInterestService']
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
@@ -400,7 +433,13 @@ services:
       - { name: container.service_subscriber }
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Service\ProfileService', '@DatingLibre\AppBundle\Repository\UserRepository', '@DatingLibre\AppBundle\Repository\FilterRepository', '@DatingLibre\AppBundle\Service\RequirementService' ]
+    arguments: [ '@DatingLibre\AppBundle\Service\ProfileService',
+                 '@DatingLibre\AppBundle\Repository\UserRepository',
+                 '@DatingLibre\AppBundle\Repository\FilterRepository',
+                 '@DatingLibre\AppBundle\Repository\InterestRepository',
+                 '@DatingLibre\AppBundle\Service\UserInterestFilterService',
+                 '@DatingLibre\AppBundle\Service\RequirementService',
+                 '@DatingLibre\AppBundle\Service\SuspensionService']
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
@@ -597,12 +636,11 @@ services:
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
-
   DatingLibre\AppBundle\DataFixtures\AppFixtures:
     class: DatingLibre\AppBundle\DataFixtures\AppFixtures
     autowire: true
     autoconfigure: true
-    arguments: [ '@security.user_password_encoder.generic', '%datinglibre.categories%', '%datinglibre.attributes%', '%datinglibre.rules%' ]
+    arguments: [ '@security.user_password_hasher', '%datinglibre.categories%', '%datinglibre.attributes%', '%datinglibre.interests%' ]
 
   DatingLibre\AppBundle\EventListener\LoginListener:
     class: DatingLibre\AppBundle\EventListener\LoginListener
@@ -712,7 +750,10 @@ services:
       - { name: form.type }
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Repository\CategoryRepository', '@DatingLibre\AppBundle\Repository\CountryRepository', '@DatingLibre\AppBundle\Repository\RegionRepository' ]
+    arguments: [ '@DatingLibre\AppBundle\Repository\CategoryRepository',
+                 '@DatingLibre\AppBundle\Repository\CountryRepository',
+                 '@DatingLibre\AppBundle\Repository\RegionRepository',
+                 '@DatingLibre\AppBundle\Repository\InterestRepository' ]
 
   DatingLibre\AppBundle\Form\RegionFieldSubscriber:
     class: DatingLibre\AppBundle\Form\RegionFieldSubscriber
@@ -803,6 +844,19 @@ services:
     autowire: true
     autoconfigure: true
     arguments: [ '@DatingLibre\AppBundle\Repository\UserAttributeRepository', '@DatingLibre\AppBundle\Repository\AttributeRepository' ]
+
+  DatingLibre\AppBundle\Service\UserInterestService:
+    class: DatingLibre\AppBundle\Service\UserInterestService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\InterestRepository', '@DatingLibre\AppBundle\Repository\UserInterestRepository' ]
+
+  DatingLibre\AppBundle\Service\UserInterestFilterService:
+    class: DatingLibre\AppBundle\Service\UserInterestFilterService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\UserInterestFilterRepository' ]
+
 
   DatingLibre\AppBundle\Service\UserService:
     class: DatingLibre\AppBundle\Service\UserService

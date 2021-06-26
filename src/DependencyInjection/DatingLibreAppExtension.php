@@ -28,5 +28,6 @@ class DatingLibreAppExtension extends Extension
         $container->setParameter('datinglibre.site_name', $configuration['site_name']);
         $container->setParameter('datinglibre.site_description', $configuration['site_description']);
         $container->setParameter('datinglibre.payment_providers', $configuration['payment_providers']);
+        $container->setParameter('datinglibre.interests', $configuration['interests']);
     }
 }

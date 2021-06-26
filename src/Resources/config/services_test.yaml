@@ -68,12 +68,11 @@ services:
     public: true
     arguments:
       - '@DatingLibre\AppBundle\Service\UserService'
-      - '@DatingLibre\AppBundle\Repository\UserRepository'
       - '@DatingLibre\AppBundle\Repository\ProfileRepository'
-      - '@DatingLibre\AppBundle\Repository\CityRepository'
       - '@DatingLibre\AppBundle\Repository\RegionRepository'
       - '@DatingLibre\AppBundle\Behat\Page\SearchPage'
       - '@DatingLibre\AppBundle\Repository\FilterRepository'
+      - '@DatingLibre\AppBundle\Service\UserInterestFilterService'
 
   DatingLibre\AppBundle\Behat\ProfileEditContext:
     public: true
@@ -82,6 +81,7 @@ services:
       - '@DatingLibre\AppBundle\Repository\UserRepository'
       - '@DatingLibre\AppBundle\Repository\ProfileRepository'
       - '@DatingLibre\AppBundle\Service\UserAttributeService'
+      - '@DatingLibre\AppBundle\Service\UserInterestService'
       - '@DatingLibre\AppBundle\Service\RequirementService'
       - '@DatingLibre\AppBundle\Repository\CityRepository'
       - '@DatingLibre\AppBundle\Repository\RegionRepository'

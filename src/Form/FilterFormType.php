@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace DatingLibre\AppBundle\Form;
 
-use DatingLibre\AppBundle\Entity\Filter;
 use DatingLibre\AppBundle\Entity\Region;
-use DatingLibre\AppBundle\Repository\CountryRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -16,35 +14,38 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FilterFormType extends AbstractType
 {
-    private CountryRepository $countryRepository;
     private array $distances;
+    private const INTERESTS = 'interests';
+    private const REGIONS = 'regions';
 
-    public function __construct(CountryRepository $countryRepository)
+    public function __construct()
     {
         $this->distances = ['100' => '100000',
             '75' => '75000',
             '50' => '50000',
             '25' => '25000'];
-
-        $this->countryRepository = $countryRepository;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['data_class' => Filter::class, 'regions' => []]);
+        $resolver->setDefaults([
+            'data_class' => FilterForm::class,
+            self::REGIONS => [],
+            self::INTERESTS => []
+        ]);
     }
 
-    public function buildForm(FormBuilderInterface $searchFormBuilder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $searchFormBuilder->add('region', EntityType::class, [
-            'choices' => $options['regions'],
+        $builder->add('region', EntityType::class, [
+            'choices' => $options[self::REGIONS],
             'class' => Region::class,
             'choice_label' => 'name',
             'placeholder' => '',
             'required' => false
         ]);
 
-        $searchFormBuilder->add('distance', ChoiceType::class, [
+        $builder->add('distance', ChoiceType::class, [
             'choices' => $this->distances,
             'choice_label' => function ($choice) {
                 return $choice/1000 . " km";
@@ -54,7 +55,7 @@ class FilterFormType extends AbstractType
             'required' => false
         ]);
 
-        $searchFormBuilder->add('min_age', ChoiceType::class, [
+        $builder->add('min_age', ChoiceType::class, [
             'choices' => range(18, 100),
             'label' => 'search.minimum_age',
             'choice_label' => function ($choice) {
@@ -63,7 +64,7 @@ class FilterFormType extends AbstractType
             'required' => true
          ]);
 
-        $searchFormBuilder->add('max_age', ChoiceType::class, [
+        $builder->add('max_age', ChoiceType::class, [
             'choices' => range(18, 100),
             'label' => 'search.maximum_age',
             'choice_label' => function ($choice) {
@@ -72,7 +73,20 @@ class FilterFormType extends AbstractType
             'required' => true
         ]);
 
-        $searchFormBuilder->add('save', SubmitType::class, [
+        $builder->add(
+            'interests',
+            ChoiceType::class,
+            [
+                'choices' => $options[self::INTERESTS],
+                'choice_label' => 'name',
+                'choice_translation_domain' => 'interests',
+                'choice_value' => 'id',
+                'multiple' => true,
+                'expanded' => true
+            ]
+        );
+
+        $builder->add('save', SubmitType::class, [
             'attr' => ['id' => 'save'],
             'label' => 'search.filter'
         ]);

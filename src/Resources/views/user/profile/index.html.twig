@@ -27,6 +27,15 @@
             </ul>
         {% endif %}
 
+        {% if interests is not empty %}
+            <h4>{{ 'profile.interests'|trans }}</h4>
+            <ul>
+                {% for interest in interests %}
+                    <li>{{ interest.name|trans({}, 'interests') }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
         {{ profile.about|nl2br }}
     </div>
 {% endblock %}

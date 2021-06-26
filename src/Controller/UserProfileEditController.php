@@ -11,8 +11,7 @@ use DatingLibre\AppBundle\Repository\ProfileRepository;
 use DatingLibre\AppBundle\Repository\UserRepository;
 use DatingLibre\AppBundle\Service\ProfileService;
 use DatingLibre\AppBundle\Service\UserAttributeService;
-use DatingLibre\AppBundle\Repository\CountryRepository;
-use DatingLibre\AppBundle\Repository\RegionRepository;
+use DatingLibre\AppBundle\Service\UserInterestService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,17 +22,20 @@ class UserProfileEditController extends AbstractController
     private UserRepository $userRepository;
     private UserAttributeService $userAttributeService;
     private ProfileService $profileService;
+    private UserInterestService $userInterestService;
 
     public function __construct(
         ProfileRepository $profileRepository,
         ProfileService $profileService,
         UserRepository $userRepository,
-        UserAttributeService $userAttributeService
+        UserAttributeService $userAttributeService,
+        UserInterestService $userInterestService
     ) {
         $this->profileRepository = $profileRepository;
         $this->userRepository = $userRepository;
         $this->userAttributeService = $userAttributeService;
         $this->profileService = $profileService;
+        $this->userInterestService = $userInterestService;
     }
 
     public function edit(Request $request)
@@ -46,7 +48,7 @@ class UserProfileEditController extends AbstractController
         $profileForm = new ProfileForm();
         $city = $profile->getCity();
 
-        if ($city != null) {
+        if ($city !== null) {
             $profileForm->setCountry($city->getCountry());
             $profileForm->setRegion($city->getRegion());
             $profileForm->setCity($city);
@@ -57,6 +59,7 @@ class UserProfileEditController extends AbstractController
         $profileForm->setDob($profile->getDob());
         $profileForm->setColor($this->userAttributeService->getOneByCategoryName($user, 'color'));
         $profileForm->setShape($this->userAttributeService->getOneByCategoryName($user, 'shape'));
+        $profileForm->setInterests($this->userInterestService->findInterestsByUserId($user->getId()));
 
         $profileFormType = $this->createForm(ProfileFormType::class, $profileForm);
         $profileFormType->handleRequest($request);
@@ -67,10 +70,12 @@ class UserProfileEditController extends AbstractController
                 [$profileFormType->getData()->getColor(), $profileFormType->getData()->getShape()]
             );
 
-            $profile->setCity($profileFormType->getData()->getCity());
-            $profile->setUsername($profileFormType->getData()->getUsername());
-            $profile->setAbout($profileFormType->getData()->getAbout());
-            $profile->setDob($profileFormType->getData()->getDob());
+            $this->userInterestService->createUserInterestsByInterests($user, $profileForm->getInterests());
+
+            $profile->setCity($profileForm->getCity());
+            $profile->setUsername($profileForm->getUsername());
+            $profile->setAbout($profileForm->getAbout());
+            $profile->setDob($profileForm->getDob());
             $this->profileRepository->save($profile);
             return new RedirectResponse($this->generateUrl('user_profile_index'));
         }

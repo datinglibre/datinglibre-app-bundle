@@ -5,6 +5,7 @@ namespace DatingLibre\AppBundle\Repository;
 use DatingLibre\AppBundle\Entity\Attribute;
 use DatingLibre\AppBundle\Entity\UserAttribute;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NativeQuery;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\Uid\Uuid;
@@ -46,7 +47,7 @@ EOD, new ResultSetMapping());
         $query->execute();
     }
 
-    private function getByUserAndCategoryQuery(Uuid $userId, string $categoryName)
+    private function getByUserAndCategoryQuery(Uuid $userId, string $categoryName): NativeQuery
     {
         $rsm = new ResultSetMapping();
         $rsm->addEntityResult('DatingLibre\AppBundle\Entity\Attribute', 'a');

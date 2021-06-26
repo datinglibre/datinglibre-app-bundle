@@ -46,15 +46,13 @@ class Requirement
         return $this->user;
     }
 
-    public function setUser($user): self
+    public function setUser($user): void
     {
         $this->user = $user;
-        return $this;
     }
 
-    public function setId($id): self
+    public function setId($id): void
     {
         $this->id = $id;
-        return $this;
     }
 }
