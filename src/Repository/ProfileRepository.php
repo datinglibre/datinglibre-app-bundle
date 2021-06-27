@@ -98,11 +98,12 @@ AND NOT EXISTS (
 AND (SELECT EXTRACT(YEAR FROM AGE(dob)) FROM datinglibre.profiles p WHERE p.user_id = :userId)
      BETWEEN COALESCE(filter.min_age, :systemMinAge) AND COALESCE(filter.max_age, :systemMaxAge)
      AND EXTRACT(YEAR FROM AGE(p.dob)) BETWEEN :minAge AND :maxAge
-AND NOT EXISTS (
-    SELECT 1 FROM datinglibre.user_interest_filters uif 
-    LEFT JOIN datinglibre.user_interests ui ON ui.interest_id = uif.interest_id AND ui.user_id = p.user_id
-    WHERE uif.user_id = :userId AND ui.interest_id IS NULL
-)
+AND CASE WHEN (SELECT COUNT(1) FROM datinglibre.user_interest_filters uif WHERE uif.user_id = :userId) > 0 
+        THEN (SELECT COUNT(1) FROM datinglibre.user_interest_filters uif 
+              INNER JOIN datinglibre.user_interests ui ON uif.interest_id = ui.interest_id 
+              WHERE uif.user_id = :userId AND ui.user_id = p.user_id) > 0 
+        ELSE TRUE
+    END 
 EOD;
 
         $radiusSql = 'ST_DWithin(Geography(ST_MakePoint(city.longitude, city.latitude)), Geography(ST_MakePoint(:longitude, :latitude)), :radius, false)';

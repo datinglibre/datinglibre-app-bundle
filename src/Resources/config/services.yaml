@@ -452,7 +452,7 @@ services:
       - { name: container.service_subscriber }
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository' ]
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository', '@DatingLibre\AppBundle\Service\UserInterestService' ]
     calls:
       - [ setContainer, [ '@service_container' ] ]
 

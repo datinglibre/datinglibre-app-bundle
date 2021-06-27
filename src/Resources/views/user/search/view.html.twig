@@ -13,5 +13,13 @@
             <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
         </h2>
         {{ profile.about|nl2br }}
+        {% if interests is not empty %}
+            <h4>{{ 'profile.interests'|trans }}</h4>
+            <ul>
+                {% for interest in interests %}
+                    <li>{{ interest.name|trans({}, 'interests') }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 {% endblock %}
