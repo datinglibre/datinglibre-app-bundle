@@ -694,7 +694,7 @@ services:
       - { name: form.type }
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Repository\CountryRepository' ]
+    arguments: [ '@DatingLibre\AppBundle\Repository\CategoryRepository' ]
 
   DatingLibre\AppBundle\Form\MessageForm:
     class: DatingLibre\AppBundle\Form\MessageForm

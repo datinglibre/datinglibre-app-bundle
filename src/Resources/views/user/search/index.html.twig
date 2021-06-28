@@ -2,28 +2,25 @@
 {% block title %}{{ 'search.search'|trans }}{% endblock %}
 
 {% block menu %}
-    <div class="panel panel-default">
-        <div class="panel-body">
             {% form_theme filterForm 'bootstrap_4_layout.html.twig' %}
-            {{ form(filterForm) }}
-        </div>
-    </div>
+            {{ form_start(filterForm) }}
+            {{ form_widget (filterForm.save, {'attr': {'class': 'btn btn-block btn-md p-2 btn-outline-primary mb-2'}}) }}
+            {{ form_row(filterForm.colors) }}
+            {{ form_row(filterForm.shapes) }}
+            {{ form_row(filterForm.region) }}
+            {{ form_row(filterForm.distance) }}
+            {{ form_row(filterForm.minAge) }}
+            {{ form_row(filterForm.maxAge) }}
+            {{ form_row(filterForm.interests) }}
+            {{ form_end(filterForm) }}
 {% endblock %}
 
 {% block content %}
-    {{ form_start(requirementsForm) }}
-    <div class="form-row">
-        <div class="col-md-5">{{ form_row(requirementsForm.shapes) }}</div>
-        <div class="col-md-5">{{ form_row(requirementsForm.colors) }}</div>
-        <div class="col-md-2">{{ form_widget(requirementsForm.save) }}</div>
-    </div>
-
+<div class="panel panel-default">
+    <div class="panel-body">
     {% if profiles is empty %}
         <p class="alert-warning alert">{{ 'search.no_results'|trans }}</p>
     {% endif %}
-
-    {{ form_end(requirementsForm) }}
-
     {% if profiles is not empty %}
         <ul class="list-unstyled">
             {% for profile in profiles %}
@@ -48,4 +45,6 @@
             </ul>
         </nav>
     {% endif %}
+    </div>
+</div>
 {% endblock %}

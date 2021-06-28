@@ -6,6 +6,8 @@ use DatingLibre\AppBundle\Entity\Region;
 
 class FilterForm
 {
+    private array $colors;
+    private array $shapes;
     private ?Region $region;
     private array $interests;
     private ?int $distance;
@@ -15,6 +17,26 @@ class FilterForm
     public function __construct()
     {
         $this->region = null;
+    }
+
+    public function getShapes(): array
+    {
+        return $this->shapes;
+    }
+
+    public function setShapes(array $shapes): void
+    {
+        $this->shapes = $shapes;
+    }
+
+    public function getColors(): array
+    {
+        return $this->colors;
+    }
+
+    public function setColors(array $colors): void
+    {
+        $this->colors = $colors;
     }
 
     public function getRegion(): ?Region

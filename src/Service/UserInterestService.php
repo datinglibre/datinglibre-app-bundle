@@ -15,7 +15,8 @@ class UserInterestService
     private InterestRepository $interestRepository;
     private UserInterestRepository $userInterestRepository;
 
-    public function __construct(InterestRepository $interestRepository, UserInterestRepository $userInterestRepository) {
+    public function __construct(InterestRepository $interestRepository, UserInterestRepository $userInterestRepository)
+    {
         $this->interestRepository = $interestRepository;
         $this->userInterestRepository = $userInterestRepository;
     }
@@ -28,7 +29,6 @@ class UserInterestService
         $this->userInterestRepository->deleteByUserId($user->getId());
 
         foreach ($interests as $interestName) {
-
             $interest = $this->interestRepository->findOneBy(['name' => $interestName]);
 
             if ($interest !== null) {
@@ -52,5 +52,4 @@ class UserInterestService
     {
         return $this->userInterestRepository->findInterestsByUserId($userId);
     }
-
 }

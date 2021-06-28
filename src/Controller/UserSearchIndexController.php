@@ -8,8 +8,6 @@ use DatingLibre\AppBundle\Entity\Filter;
 use DatingLibre\AppBundle\Entity\User;
 use DatingLibre\AppBundle\Form\FilterForm;
 use DatingLibre\AppBundle\Form\FilterFormType;
-use DatingLibre\AppBundle\Form\RequirementsForm;
-use DatingLibre\AppBundle\Form\RequirementsFormType;
 use DatingLibre\AppBundle\Repository\FilterRepository;
 use DatingLibre\AppBundle\Repository\InterestRepository;
 use DatingLibre\AppBundle\Repository\UserRepository;
@@ -79,6 +77,8 @@ class UserSearchIndexController extends AbstractController
         $filterForm->setMinAge($filter->getMinAge());
         $filterForm->setRegion($filter->getRegion());
         $filterForm->setInterests($userInterestFilters);
+        $filterForm->setColors($this->requirementService->getMultipleByUserAndCategory($user->getId(), 'color'));
+        $filterForm->setShapes($this->requirementService->getMultipleByUserAndCategory($user->getId(), 'shape'));
 
         $filterFormType = $this->createForm(
             FilterFormType::class,
@@ -89,28 +89,7 @@ class UserSearchIndexController extends AbstractController
             ]
         );
 
-
-        $requirementsForm = new RequirementsForm();
-        $requirementsForm->setColors($this->requirementService->getMultipleByUserAndCategory($user->getId(), 'color'));
-        $requirementsForm->setShapes($this->requirementService->getMultipleByUserAndCategory($user->getId(), 'shape'));
-        $requirementsFormType = $this->createForm(RequirementsFormType::class, $requirementsForm);
-
         $filterFormType->handleRequest($request);
-        $requirementsFormType->handleRequest($request);
-
-        if ($requirementsFormType->isSubmitted() && $requirementsFormType->isValid()) {
-            $this->requirementService->createRequirementsInCategory(
-                $user,
-                'color',
-                $requirementsForm->getColors()
-            );
-
-            $this->requirementService->createRequirementsInCategory(
-                $user,
-                'shape',
-                $requirementsForm->getShapes()
-            );
-        }
 
         if ($filterFormType->isSubmitted() && $filterFormType->isValid()) {
             $filter->setUser($user);
@@ -120,6 +99,19 @@ class UserSearchIndexController extends AbstractController
             $filter->setDistance($filterForm->getDistance());
             $this->userInterestFilterService->createUserInterestFiltersByInterests($user, $filterForm->getInterests());
             $this->filterRepository->save($filter);
+
+            $this->requirementService->createRequirementsInCategory(
+                $user,
+                'color',
+                $filterForm->getColors()
+            );
+
+            $this->requirementService->createRequirementsInCategory(
+                $user,
+                'shape',
+                $filterForm->getShapes()
+            );
+
             return new RedirectResponse($this->generateUrl('user_search_index'));
         }
 
@@ -143,7 +135,6 @@ class UserSearchIndexController extends AbstractController
             'page' => 'search_index',
             'profiles' => $profiles,
             'filterForm' => $filterFormType->createView(),
-            'requirementsForm' => $requirementsFormType->createView()
         ]);
     }
 
