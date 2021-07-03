@@ -64,7 +64,7 @@ EOD, $rsm);
         return $query->getOneOrNullResult();
     }
 
-    public function findUnmoderated(): ?ImageProjection
+    public function findUnModerated(): ?ImageProjection
     {
         $rsm = new ResultSetMapping();
 

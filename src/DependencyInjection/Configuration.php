@@ -43,7 +43,10 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('images_bucket')->end()
                 ->scalarNode('site_name')->end()
                 ->scalarNode('site_description')->end()
-            ->end();
+                ->arrayNode('testing_user_email_addresses')
+                     ->scalarPrototype()->end()
+                    ->end()
+                ->end();
 
         return $treeBuilder;
     }

@@ -22,19 +22,18 @@ class Region
     public const NAME = 'name';
 
     /**
-     * @var Uuid
      *
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      * @ORM\Column(type="uuid")
      */
-    private $id;
+    private Uuid $id;
 
     /**
      * @ORM\Column(type="string")
      */
-    private $name;
+    private string $name;
 
     /**
      * @ManyToOne(targetEntity="Country", inversedBy="regions")

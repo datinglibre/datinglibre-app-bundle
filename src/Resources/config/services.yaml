@@ -175,6 +175,30 @@ services:
     autoconfigure: true
     arguments: [ '@doctrine' ]
 
+  DatingLibre\AppBundle\Repository\UserSettingRepository:
+    class: DatingLibre\AppBundle\Repository\UserSettingRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Repository\UserArchiveRepository:
+    class: DatingLibre\AppBundle\Repository\UserArchiveRepository
+    tags:
+      - { name: doctrine.repository_service }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@doctrine' ]
+
+  DatingLibre\AppBundle\Service\UserArchiveService:
+    class: DatingLibre\AppBundle\Service\UserArchiveService
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\UserRepository',
+                 '@DatingLibre\AppBundle\Repository\ProfileRepository',
+                 '@DatingLibre\AppBundle\Repository\UserArchiveRepository' ]
+
   DatingLibre\AppBundle\Command\CreateUserCommand:
     class: DatingLibre\AppBundle\Command\CreateUserCommand
     tags:
@@ -185,6 +209,17 @@ services:
     arguments: [ '@DatingLibre\AppBundle\Service\UserService' ]
     calls:
       - [ setName, [ 'app:users:create' ] ]
+
+  DatingLibre\AppBundle\Command\PurgeUserArchivesCommand:
+    class: DatingLibre\AppBundle\Command\PurgeUserArchivesCommand
+    tags:
+      - { name: console.command }
+      - { name: container.no_preload }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\UserArchiveService' ]
+    calls:
+      - [ setName, [ 'app:user_archives:purge' ] ]
 
   DatingLibre\AppBundle\Twig\DatingLibreExtension:
     class: DatingLibre\AppBundle\Twig\DatingLibreExtension
@@ -201,7 +236,7 @@ services:
       - { name: container.no_preload }
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Service\UserService' ]
+    arguments: [ '@DatingLibre\AppBundle\Service\UserService', '%datinglibre.testing_user_email_addresses%' ]
     calls:
       - [ setName, [ 'app:users:purge' ] ]
 
@@ -262,6 +297,18 @@ services:
       - { name: container.service_subscriber }
     autowire: true
     autoconfigure: true
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+  DatingLibre\AppBundle\Controller\UserAccountSettingController:
+    class: DatingLibre\AppBundle\Controller\UserAccountSettingController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\UserRepository', '@DatingLibre\AppBundle\Repository\UserSettingRepository' ]
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
@@ -739,6 +786,14 @@ services:
     autowire: true
     autoconfigure: true
 
+  DatingLibre\AppBundle\Validator\UniqueUsernameValidator:
+    class: DatingLibre\AppBundle\Validator\UniqueUsernameValidator
+    tags:
+      - { name: validator.constraint_validator }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Repository\ProfileRepository', '@Symfony\Component\Security\Core\Security' ]
+
   DatingLibre\AppBundle\Form\ProfileForm:
     class: DatingLibre\AppBundle\Form\ProfileForm
     autowire: true
@@ -769,19 +824,6 @@ services:
       - { name: form.type }
     autowire: true
     autoconfigure: true
-
-  DatingLibre\AppBundle\Form\RequirementsForm:
-    class: DatingLibre\AppBundle\Form\RequirementsForm
-    autowire: true
-    autoconfigure: true
-
-  DatingLibre\AppBundle\Form\RequirementsFormType:
-    class: DatingLibre\AppBundle\Form\RequirementsFormType
-    tags:
-      - { name: form.type }
-    autowire: true
-    autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Repository\CategoryRepository' ]
 
   DatingLibre\AppBundle\Form\PermanentSuspensionFormType:
     class: DatingLibre\AppBundle\Form\PermanentSuspensionFormType
@@ -867,6 +909,7 @@ services:
                  '@DatingLibre\AppBundle\Service\EmailService',
                  '@DatingLibre\AppBundle\Service\TokenService',
                  '@DatingLibre\AppBundle\Service\ProfileService',
+                 '@DatingLibre\AppBundle\Service\UserArchiveService',
                  '@security.user_password_hasher',
                  '@translator.default',
                  '%datinglibre.admin_email%']

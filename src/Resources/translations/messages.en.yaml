@@ -51,6 +51,9 @@ account:
   deleted: "You account has been deleted"
   incorrect_password: "Incorrect password."
   subscriptions: "Subscriptions"
+  settings: "Settings"
+  settings_updated: "Settings updated"
+  new_match_notifications: "Send an email I receive a new match"
 search:
   search: "Search"
   filter: "Filter"
@@ -84,6 +87,7 @@ menu:
   matches: "Matches"
   report: "Report"
   events: "Events"
+  settings: "Settings"
   suspensions: "Suspensions"
   suspend: "Suspend"
   suspension: "Suspension"

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DatingLibre\AppBundle\Form;
 
+use DateTimeInterface;
 use DatingLibre\AppBundle\Entity\Attribute;
 use DatingLibre\AppBundle\Entity\City;
 use DatingLibre\AppBundle\Entity\Country;
@@ -11,9 +12,9 @@ use DatingLibre\AppBundle\Entity\Region;
 
 class ProfileForm
 {
-    private $username;
-    private $about;
-    private $dob;
+    private ?string $username;
+    private ?DateTimeInterface $dob;
+    private ?string $about;
     private ?Attribute $color;
     private ?Attribute $shape;
     private array $interests;
@@ -86,13 +87,12 @@ class ProfileForm
         return $this->country;
     }
 
-    public function setDob($dob): self
+    public function setDob(?DateTimeInterface $dob): void
     {
         $this->dob = $dob;
-        return $this;
     }
 
-    public function getDob()
+    public function getDob(): ?DateTimeInterface
     {
         return $this->dob;
     }
@@ -117,7 +117,7 @@ class ProfileForm
         $this->shape = $shape;
     }
 
-    public function setInterests(array $interests)
+    public function setInterests(array $interests): void
     {
         $this->interests = $interests;
     }

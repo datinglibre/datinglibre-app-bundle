@@ -22,7 +22,7 @@ final class Version20200101000000 extends AbstractMigration
     password TEXT NOT NULL,
     roles TEXT[] NOT NULL,
     ip TEXT,
-    enabled boolean NOT NULL,
+    enabled BOOLEAN NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     last_login TIMESTAMP WITH TIME ZONE);');
         $this->addSql('CREATE UNIQUE INDEX unique_email_index ON datinglibre.users (LOWER(email));');
@@ -199,6 +199,19 @@ final class Version20200101000000 extends AbstractMigration
     created_at TIMESTAMP WITH TIME ZONE NOT NULL
 )');
         $this->addSql('CREATE UNIQUE INDEX unique_open_suspension ON datinglibre.suspensions(user_id) WHERE (status = \'OPEN\')');
+        $this->addSql('CREATE TABLE datinglibre.user_settings (
+    user_id UUID NOT NULL PRIMARY KEY REFERENCES datinglibre.users ON DELETE CASCADE,
+    new_match_notifications BOOLEAN DEFAULT TRUE,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL
+)');
+        $this->addSql('CREATE TABLE datinglibre.user_archives (
+    id UUID NOT NULL PRIMARY KEY,
+    email TEXT NOT NULL,
+    archive JSONB NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL
+)');
     }
 
     public function down(Schema $schema): void
@@ -223,5 +236,7 @@ final class Version20200101000000 extends AbstractMigration
         $this->addSql('DROP TABLE datinglibre.subscriptions');
         $this->addSql('DROP TABLE datinglibre.reports');
         $this->addSql('DROP TABLE datinglibre.suspensions');
+        $this->addSql('DROP TABLE datinglibre.user_settings');
+        $this->addSql('DROP TABLE datinglibre.archived_users');
     }
 }

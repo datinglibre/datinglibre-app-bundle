@@ -16,11 +16,13 @@ class PurgeUsersCommand extends Command
     public const ALL = 'ALL';
     public const NOT_ENABLED = 'NOT_ENABLED';
     private UserService $userService;
+    private array $testingUserEmailAddresses;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, array $testingUserEmailAddresses = [])
     {
         parent::__construct();
         $this->userService = $userService;
+        $this->testingUserEmailAddresses = $testingUserEmailAddresses;
     }
 
     protected function configure()
@@ -42,7 +44,9 @@ class PurgeUsersCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->userService->purge($input->getArgument('type'), (int) $input->getArgument('hours'));
+        $this->userService->purge($this->testingUserEmailAddresses,
+            $input->getArgument('type'),
+            (int) $input->getArgument('hours'));
 
         return 0;
     }

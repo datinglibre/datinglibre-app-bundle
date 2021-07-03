@@ -1,5 +1,6 @@
 <div class="list-group">
     {% from '@DatingLibreApp/macros/is_active.html.twig' import is_active %}
     <a href="{{ path('user_account_subscription') }}" class="{{ is_active('user_account_subscription') }} list-group-item list-group-item-action">{{ 'account.subscriptions'|trans }}</a>
+    <a href="{{ path('user_account_setting') }}" class="{{ is_active('user_account_setting') }} list-group-item list-group-item-action">{{ 'account.settings'|trans }}</a>
     <a href="{{ path('user_account_delete') }}" class="{{ is_active('user_account_delete') }} list-group-item list-group-item-action">{{ 'account.delete'|trans }}</a>
 </div>

@@ -41,6 +41,11 @@ user_account_delete:
     path: /account/delete
     controller: DatingLibre\AppBundle\Controller\UserAccountDeleteController::delete
     methods: GET|POST
+
+user_account_setting:
+    path: /account/settings
+    controller: DatingLibre\AppBundle\Controller\UserAccountSettingController::index
+    methods: GET|POST
  
 user_profile_edit:
     path: /profile/edit

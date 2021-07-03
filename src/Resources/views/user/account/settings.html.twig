@@ -1,0 +1,11 @@
+{% extends '@DatingLibreApp/user/user.html.twig' %}
+{% block title %}{{ 'account.settings'|trans }} - {{ 'account.account'|trans }}{% endblock %}
+{% block menu %}
+    {% include '@DatingLibreApp/user/account/menu.html.twig' %}
+{% endblock %}
+{% block content %}
+    {% form_theme userSettingsForm 'bootstrap_4_layout.html.twig' %}
+    {{ form_start(userSettingsForm) }}
+    {{ form_row(userSettingsForm.newMatchNotifications) }}
+    {{ form_end(userSettingsForm) }}
+{% endblock %}

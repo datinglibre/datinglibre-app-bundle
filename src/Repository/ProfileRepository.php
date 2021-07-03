@@ -264,7 +264,7 @@ EOD, $this->getProjectionResultSetMapping());
         $this->getEntityManager()->flush();
     }
 
-    public function findProjectionByUsername(string $username)
+    public function findProjectionByUsername(string $username): ?ProfileProjection
     {
         $rsm = $this->getProjectionResultSetMapping();
         $query = $this->getEntityManager()->createNativeQuery(<<<EOD

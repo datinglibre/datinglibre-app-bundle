@@ -11,3 +11,5 @@ profile:
   blank_username: "Please enter a username"
   username_invalid_length: "Your username must be between 3 and 32 characters"
   about_invalid_length: "Your about section is too long"
+  unique_username: "Username has been taken"
+  username_letters_and_numbers: "Username may only contain unaccented letters and numbers, no spaces"

@@ -55,7 +55,7 @@ class ImageService
 
     public function findUnmoderated(): ?ImageProjection
     {
-        return $this->imageRepository->findUnmoderated();
+        return $this->imageRepository->findUnModerated();
     }
 
     public function accept(string $id)

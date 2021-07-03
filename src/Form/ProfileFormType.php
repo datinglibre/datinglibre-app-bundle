@@ -10,6 +10,8 @@ use DatingLibre\AppBundle\Repository\CategoryRepository;
 use DatingLibre\AppBundle\Repository\CountryRepository;
 use DatingLibre\AppBundle\Repository\InterestRepository;
 use DatingLibre\AppBundle\Repository\RegionRepository;
+use DatingLibre\AppBundle\Validator\LettersAndNumbers;
+use DatingLibre\AppBundle\Validator\UniqueUsername;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -46,13 +48,13 @@ class ProfileFormType extends AbstractType
         $resolver->setDefaults(['data_class' => ProfileForm::class]);
     }
 
-    public function buildForm(FormBuilderInterface $profileFormBuilder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $categories = $this->categoryRepository->findAll();
         $countries = $this->countryRepository->findAll();
 
         foreach ($categories as $category) {
-            $profileFormBuilder->add(
+            $builder->add(
                 $category->getLowercaseName(),
                 EntityType::class,
                 [
@@ -65,7 +67,7 @@ class ProfileFormType extends AbstractType
             );
         }
 
-        $profileFormBuilder->add(
+        $builder->add(
             'interests',
             ChoiceType::class,
             [
@@ -78,7 +80,7 @@ class ProfileFormType extends AbstractType
             ]
         );
 
-        $profileFormBuilder->add(
+        $builder->add(
             'username',
             TextType::class,
             [
@@ -86,6 +88,12 @@ class ProfileFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'profile.blank_username',
+                    ]),
+                    new LettersAndNumbers([
+                        'message' => 'profile.username_letters_and_numbers',
+                    ]),
+                    new UniqueUsername([
+                        'message' => 'profile.unique_username'
                     ]),
                     new Length([
                         'minMessage' => 'profile.username_invalid_length',
@@ -97,7 +105,7 @@ class ProfileFormType extends AbstractType
             ]
         );
 
-        $profileFormBuilder->add(
+        $builder->add(
             'dob',
             DateType::class,
             [
@@ -106,7 +114,7 @@ class ProfileFormType extends AbstractType
             ]
         );
 
-        $profileFormBuilder->add(
+        $builder->add(
             'country',
             EntityType::class,
             [
@@ -119,13 +127,13 @@ class ProfileFormType extends AbstractType
             ]
         );
 
-        $profileFormBuilder->addEventSubscriber(new CountryFieldSubscriber($this->countryRepository));
-        $profileFormBuilder->addEventSubscriber(new RegionFieldSubscriber(
-            $profileFormBuilder->getFormFactory(),
+        $builder->addEventSubscriber(new CountryFieldSubscriber($this->countryRepository));
+        $builder->addEventSubscriber(new RegionFieldSubscriber(
+            $builder->getFormFactory(),
             $this->regionRepository
         ));
 
-        $profileFormBuilder->add(
+        $builder->add(
             'about',
             TextareaType::class,
             [
@@ -142,7 +150,7 @@ class ProfileFormType extends AbstractType
             ]
         );
 
-        $profileFormBuilder->add('save', SubmitType::class, [
+        $builder->add('save', SubmitType::class, [
             'attr' => ['id' => 'save'],
             'label' => 'controls.save',
         ]);

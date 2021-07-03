@@ -29,6 +29,7 @@ class UserService
     private ProfileService $profileService;
     private TranslatorInterface $translator;
     private string $adminEmail;
+    private UserArchiveService $userArchiveService;
 
     public function __construct(
         EntityManager $entityManager,
@@ -36,6 +37,7 @@ class UserService
         EmailService $emailService,
         TokenService $tokenService,
         ProfileService $profileService,
+        UserArchiveService $userArchiveService,
         UserPasswordHasherInterface $passwordHasher,
         TranslatorInterface $translator,
         string $adminEmail
@@ -48,6 +50,7 @@ class UserService
         $this->adminEmail = $adminEmail;
         $this->translator = $translator;
         $this->entityManager = $entityManager;
+        $this->userArchiveService = $userArchiveService;
     }
 
     public function create(string $email, string $password, bool $enabled, array $roles): User
@@ -63,6 +66,7 @@ class UserService
 
     public function delete(?Uuid $deletedById, Uuid $userId): void
     {
+        $this->userArchiveService->saveArchive($userId);
         $this->profileService->delete($userId);
         $this->userRepository->delete($userId);
     }
@@ -191,7 +195,7 @@ class UserService
     /**
      * @throws Exception
      */
-    public function purge(string $type, int $hours): void
+    public function purge(array $testUsers, string $type, int $hours): void
     {
         $users = [];
 
@@ -214,10 +218,7 @@ class UserService
 
         /** @var User $user */
         foreach ($users as $user) {
-            $roles = $user->getRoles();
-
-            if (in_array(User::ADMIN, $roles)
-                || in_array(User::MODERATOR, $roles)) {
+            if (array_search($user->getEmail(), $testUsers) !== false) {
                 continue;
             }
 

@@ -112,6 +112,14 @@ services:
       - '@DatingLibre\AppBundle\Service\UserService'
       - '@DatingLibre\AppBundle\Behat\Page\LoginPage'
 
+  DatingLibre\AppBundle\Behat\AccountContext:
+    public: true
+    arguments:
+      - '@DatingLibre\AppBundle\Service\UserService'
+      - '@DatingLibre\AppBundle\Repository\UserSettingRepository'
+      - '@DatingLibre\AppBundle\Service\UserArchiveService'
+      - '@DatingLibre\AppBundle\Repository\UserArchiveRepository'
+
   DatingLibre\AppBundle\Behat\MessageContext:
     public: true
     arguments:
