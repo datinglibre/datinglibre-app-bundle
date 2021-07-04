@@ -207,7 +207,7 @@ final class Version20200101000000 extends AbstractMigration
 )');
         $this->addSql('CREATE TABLE datinglibre.user_archives (
     id UUID NOT NULL PRIMARY KEY,
-    email TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
     archive JSONB NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL
@@ -237,6 +237,6 @@ final class Version20200101000000 extends AbstractMigration
         $this->addSql('DROP TABLE datinglibre.reports');
         $this->addSql('DROP TABLE datinglibre.suspensions');
         $this->addSql('DROP TABLE datinglibre.user_settings');
-        $this->addSql('DROP TABLE datinglibre.archived_users');
+        $this->addSql('DROP TABLE datinglibre.user_archives');
     }
 }
