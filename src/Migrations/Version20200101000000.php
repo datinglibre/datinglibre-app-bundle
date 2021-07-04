@@ -207,7 +207,7 @@ final class Version20200101000000 extends AbstractMigration
 )');
         $this->addSql('CREATE TABLE datinglibre.user_archives (
     id UUID NOT NULL PRIMARY KEY,
-    email TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL,
     archive JSONB NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL
