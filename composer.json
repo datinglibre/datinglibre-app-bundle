@@ -13,7 +13,7 @@
         "php": "^7.4||^8.0",
         "ext-json": "*",
         "ext-calendar": "*",
-        "datinglibre/ccbill": "0.7.*",
+        "datinglibre/ccbill": "^0.10.0",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "aws/aws-sdk-php": "^3.174.3",
         "doctrine/annotations": "^1.0",
