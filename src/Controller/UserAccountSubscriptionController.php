@@ -21,11 +21,14 @@ class UserAccountSubscriptionController extends AbstractController
 
     public function viewSubscription(): Response
     {
+        $userId = $this->getUser()->getId();
+
         return $this->render(
             '@DatingLibreApp/user/account/subscription.html.twig',
             [
-                'userId' => $this->getUser()->getId(),
-                'subscriptions' => $this->subscriptionService->findByUserId($this->getUser()->getId()),
+                'userId' => $userId,
+                'subscriptions' => $this->subscriptionService->findByUserId($userId),
+                'activeSubscription' => $this->subscriptionService->findActiveSubscriptionByUserId($userId),
                 'paymentProviders' => $this->paymentProviders
             ]
         );

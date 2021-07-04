@@ -4,15 +4,17 @@
     {% include '@DatingLibreApp/user/account/menu.html.twig' %}
 {% endblock %}
 {% block content %}
+{% if activeSubscription is null %}
 <div class="card">
-<div class="card-body">
-    {% for providerName, provider in paymentProviders %}
-    {% if provider.active %}
-        <a class="btn btn-outline-primary" href="{{ provider.url }}?custom1={{ userId }}" role="button">{{ 'subscription.buy_subscription'|trans }} {{ ('subscription.' ~ providerName)|trans }}</a>
-    {% endif %}
-{% endfor %}
+    <div class="card-body">
+        {% for providerName, provider in paymentProviders %}
+        {% if provider.active %}
+            <a class="btn btn-outline-primary" href="{{ provider.url }}?custom1={{ userId }}" role="button">{{ 'subscription.buy_subscription'|trans }} {{ ('subscription.' ~ providerName)|trans }}</a>
+        {% endif %}
+    {% endfor %}
+    </div>
 </div>
-</div>
+{% endif %}
 {% if subscriptions is empty %}
     <div class="alert alert-info" role="alert">{{ 'subscriptions.empty'|trans }}</div>
 {% endif %}

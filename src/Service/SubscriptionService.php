@@ -27,6 +27,11 @@ class SubscriptionService
         return $this->subscriptionRepository->findBy(['user' => $id]);
     }
 
+    public function findActiveSubscriptionByUserId(Uuid $userId): ?Subscription
+    {
+        return $this->subscriptionRepository->findOneBy(['user' => $userId, 'status' => Subscription::ACTIVE]);
+    }
+
     /**
      * @throws Exception
      */
