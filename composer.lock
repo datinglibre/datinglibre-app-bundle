@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f8a971c382ecd0a272655fd2899b58d",
+    "content-hash": "18802d9e4edc7fb935407b8de935be01",
     "packages": [
         {
             "name": "async-aws/core",
@@ -295,16 +295,16 @@
         },
         {
             "name": "datinglibre/ccbill",
-            "version": "v0.10.0",
+            "version": "v0.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/datinglibre/ccbill.git",
-                "reference": "d27b7069a0c432ec21035a306f67016bf7c5b6bb"
+                "reference": "dbd3192b4b7966c49afd18bdbff53709c2cc4991"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/datinglibre/ccbill/zipball/d27b7069a0c432ec21035a306f67016bf7c5b6bb",
-                "reference": "d27b7069a0c432ec21035a306f67016bf7c5b6bb",
+                "url": "https://api.github.com/repos/datinglibre/ccbill/zipball/dbd3192b4b7966c49afd18bdbff53709c2cc4991",
+                "reference": "dbd3192b4b7966c49afd18bdbff53709c2cc4991",
                 "shasum": ""
             },
             "require": {
@@ -335,9 +335,9 @@
             "description": "DatingLibre CCBill library (unoffical)",
             "support": {
                 "issues": "https://github.com/datinglibre/ccbill/issues",
-                "source": "https://github.com/datinglibre/ccbill/tree/v0.10.0"
+                "source": "https://github.com/datinglibre/ccbill/tree/v0.11.0"
             },
-            "time": "2021-07-04T14:53:37+00:00"
+            "time": "2021-07-05T17:27:18+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -1356,21 +1356,22 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "3.1.4",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "207210c57f6c15835e8d6228075cd235bd061efc"
+                "reference": "072c11c1dcfced4505e29a0487b06ea774c403f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/207210c57f6c15835e8d6228075cd235bd061efc",
-                "reference": "207210c57f6c15835e8d6228075cd235bd061efc",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/072c11c1dcfced4505e29a0487b06ea774c403f4",
+                "reference": "072c11c1dcfced4505e29a0487b06ea774c403f4",
                 "shasum": ""
             },
             "require": {
                 "composer/package-versions-deprecated": "^1.8",
                 "doctrine/dbal": "^2.11",
+                "doctrine/deprecations": "^0.5.3",
                 "doctrine/event-manager": "^1.0",
                 "friendsofphp/proxy-manager-lts": "^1.0",
                 "php": "^7.2 || ^8.0",
@@ -1391,6 +1392,7 @@
                 "phpstan/phpstan-strict-rules": "^0.12",
                 "phpstan/phpstan-symfony": "^0.12",
                 "phpunit/phpunit": "^8.5 || ^9.4",
+                "symfony/cache": "^5.3",
                 "symfony/process": "^3.4 || ^4.0 || ^5.0",
                 "symfony/yaml": "^3.4 || ^4.0 || ^5.0"
             },
@@ -1440,7 +1442,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/migrations/issues",
-                "source": "https://github.com/doctrine/migrations/tree/3.1.4"
+                "source": "https://github.com/doctrine/migrations/tree/3.2.0"
             },
             "funding": [
                 {
@@ -1456,7 +1458,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-15T18:57:30+00:00"
+            "time": "2021-07-05T07:06:31+00:00"
         },
         {
             "name": "doctrine/orm",
