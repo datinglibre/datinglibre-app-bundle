@@ -17,6 +17,7 @@ use DatingLibre\CcBill\Event\RefundEvent;
 use DatingLibre\CcBill\Event\RenewalFailureEvent;
 use DatingLibre\CcBill\Event\RenewalSuccessEvent;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
 
 class CcBillEventService
@@ -37,11 +38,14 @@ class CcBillEventService
 
     private EventService $eventService;
     private SubscriptionEventService $subscriptionService;
+    private LoggerInterface $logger;
 
     public function __construct(
+        LoggerInterface $logger,
         EventService $eventService,
         SubscriptionEventService $subscriptionEventService
     ) {
+        $this->logger = $logger;
         $this->eventService = $eventService;
         $this->subscriptionService = $subscriptionEventService;
     }
@@ -69,6 +73,8 @@ class CcBillEventService
             $this->billingDateChange($event);
         } elseif ($event instanceof ErrorEvent) {
             $this->error($event);
+        } else {
+            $this->logger->error(sprintf("Unknown event [%s]", json_encode($event)));
         }
     }
 

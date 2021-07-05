@@ -965,8 +965,9 @@ services:
     class: DatingLibre\AppBundle\Service\CcBillEventService
     autowire: true
     autoconfigure: true
-    arguments: [ '@DatingLibre\AppBundle\Service\EventService',
-                 '@DatingLibre\AppBundle\Service\SubscriptionEventService' ]
+    arguments: [  '@monolog.logger',
+                  '@DatingLibre\AppBundle\Service\EventService',
+                  '@DatingLibre\AppBundle\Service\SubscriptionEventService']
 
   DatingLibre\AppBundle\Service\UuidValueResolver:
     class: DatingLibre\AppBundle\Service\UuidValueResolver
