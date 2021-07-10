@@ -252,7 +252,6 @@ services:
     calls:
       - [ setName, [ 'app:secure_urls:refresh_image_urls' ] ]
 
-
   DatingLibre\AppBundle\Controller\UserLocationController:
     class: DatingLibre\AppBundle\Controller\UserLocationController
     public: true
@@ -277,8 +276,8 @@ services:
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
-  DatingLibre\AppBundle\Controller\UserBlockController:
-    class: DatingLibre\AppBundle\Controller\UserBlockController
+  DatingLibre\AppBundle\Controller\UserBlockCreateController:
+    class: DatingLibre\AppBundle\Controller\UserBlockCreateController
     public: true
     tags:
       - { name: controller.service_arguments }
@@ -288,6 +287,29 @@ services:
     calls:
       - [ setContainer, [ '@service_container' ] ]
 
+  DatingLibre\AppBundle\Controller\UserBlockDeleteController:
+    class: DatingLibre\AppBundle\Controller\UserBlockDeleteController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\ProfileService', '@DatingLibre\AppBundle\Service\BlockService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
+
+  DatingLibre\AppBundle\Controller\UserBlockListController:
+    class: DatingLibre\AppBundle\Controller\UserBlockListController
+    public: true
+    tags:
+      - { name: controller.service_arguments }
+      - { name: container.service_subscriber }
+    autowire: true
+    autoconfigure: true
+    arguments: [ '@DatingLibre\AppBundle\Service\BlockService' ]
+    calls:
+      - [ setContainer, [ '@service_container' ] ]
 
   DatingLibre\AppBundle\Controller\UserAccountDeleteController:
     class: DatingLibre\AppBundle\Controller\UserAccountDeleteController
@@ -643,7 +665,9 @@ services:
       - { name: container.service_subscriber }
     autowire: true
     autoconfigure: true
-    arguments: [ '%datinglibre.payment_providers%', '@DatingLibre\AppBundle\Service\SubscriptionService' ]
+    arguments: [ '%datinglibre.payment_providers%',
+                 '@DatingLibre\AppBundle\Service\SuspensionService',
+                 '@DatingLibre\AppBundle\Service\SubscriptionService' ]
     calls:
       - [ setContainer, [ '@service_container' ] ]
 

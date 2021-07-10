@@ -73,6 +73,7 @@ services:
       - '@DatingLibre\AppBundle\Behat\Page\SearchPage'
       - '@DatingLibre\AppBundle\Repository\FilterRepository'
       - '@DatingLibre\AppBundle\Service\UserInterestFilterService'
+      - '@router'
 
   DatingLibre\AppBundle\Behat\ProfileEditContext:
     public: true

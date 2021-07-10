@@ -21,23 +21,22 @@ class Event
 {
     public const SUBSCRIPTION_ERROR = 'datinglibre.subscription.error';
     public const CCBILL_NEW_SALE = 'datinglibre.ccbill.newsale';
-    public const CCBILL_NEW_SALE_FAILURE = 'datinglibre.ccbill.newsalefailure';
+    public const CCBILL_NEW_SALE_FAILURE = 'datinglibre.ccbill.new_sale_failure';
     public const CCBILL_RENEWAL = 'datinglibre.ccbill.renewal';
     public const CCBILL_CANCELLATION = 'datinglibre.ccbill.cancellation';
-    public const CCBILL_RENEWAL_FAILURE = 'datinglibre.ccbill.renewal.failure';
+    public const CCBILL_RENEWAL_FAILURE = 'datinglibre.ccbill.renewal_failure';
     public const CCBILL_CHARGEBACK = 'datinglibre.ccbill.chargeback';
     public const CCBILL_REFUND = 'datinglibre.ccbill.refund';
-    public const CCILL_BILLING_DATE_CHANGE = 'datinglibre.ccbill.billing.date.change';
+    public const CCILL_BILLING_DATE_CHANGE = 'datinglibre.ccbill.billing_date_change';
+    public const CCBILL_EXPIRATION = 'datinglibre.ccbill.expiration';
 
     /**
-     * @var Uuid
-     *
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      * @ORM\Column(type="uuid")
      */
-    private $id;
+    private Uuid $id;
 
     /**
      * @ManyToOne(targetEntity="User")

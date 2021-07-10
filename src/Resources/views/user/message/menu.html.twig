@@ -1,7 +1,15 @@
+{% macro message_menu(id, isBlocked) %}
 <div class="list-group">
     {% from '@DatingLibreApp/macros/is_active.html.twig' import is_active %}
-    <a href="{{ path('user_profile_view', {'userId': profile.id}) }}" class="{{ is_active('user_profile_view') }} list-group-item list-group-item-action">{{ 'menu.view'|trans }}</a>
-    <a href="{{ path('user_send_message', {'userId': profile.id}) }}" class="{{ is_active('user_send_message') }} list-group-item list-group-item-action">{{ 'menu.message'|trans }}</a>
-    <a href="{{ path('user_block', {'userId': profile.id }) }}" class="{{ is_active('user_block') }} list-group-item list-group-item-action">{{ 'menu.block'|trans }}</a>
-    <a href="{{ path('user_report', {'userId': profile.id }) }}" class="{{ is_active('user_report') }} list-group-item list-group-item-action">{{ 'menu.report'|trans }}</a>
+    <a href="{{ path('user_profile_view', {'userId': id}) }}" class="{{ is_active('user_profile_view') }} list-group-item list-group-item-action">{{ 'menu.view'|trans }}</a>
+    {% if not isBlocked %}
+    <a href="{{ path('user_send_message', {'userId': id}) }}" class="{{ is_active('user_send_message') }} list-group-item list-group-item-action">{{ 'menu.message'|trans }}</a>
+    {% endif %}
+    {% if isBlocked %}
+    <a href="{{ path('user_block_delete', {'userId': id}) }}" class="{{ is_active('user_block_delete') }} list-group-item list-group-item-action">{{ 'menu.unblock'|trans }}</a>
+    {% else %}
+    <a href="{{ path('user_block_create', {'userId': id }) }}" class="{{ is_active('user_block_create') }} list-group-item list-group-item-action">{{ 'menu.block'|trans }}</a>
+    {% endif %}
+    <a href="{{ path('user_report', {'userId': id }) }}" class="{{ is_active('user_report') }} list-group-item list-group-item-action">{{ 'menu.report'|trans }}</a>
 </div>
+{% endmacro %}

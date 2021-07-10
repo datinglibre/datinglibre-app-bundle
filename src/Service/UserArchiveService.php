@@ -18,7 +18,8 @@ class UserArchiveService
     public function __construct(
         UserRepository $userRepository,
         ProfileRepository $profileRepository,
-        UserArchiveRepository $userArchiveRepository)
+        UserArchiveRepository $userArchiveRepository
+    )
     {
         $this->userRepository = $userRepository;
         $this->profileRepository = $profileRepository;

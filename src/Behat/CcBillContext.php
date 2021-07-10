@@ -14,6 +14,7 @@ use DatingLibre\CcBill\Event\CancellationEvent;
 use DatingLibre\CcBill\Event\CcBillEventConstants;
 use DatingLibre\CcBill\Event\ChargebackEvent;
 use DatingLibre\CcBill\Event\ErrorEvent;
+use DatingLibre\CcBill\Event\ExpirationEvent;
 use DatingLibre\CcBill\Event\NewSaleFailureEvent;
 use DatingLibre\CcBill\Event\NewSaleSuccessEvent;
 use DatingLibre\CcBill\Event\RefundEvent;
@@ -285,6 +286,18 @@ class CcBillContext implements Context
         )));
     }
 
+    /**
+     * @Given there has been an expiration event for :providerSubscriptionId
+     */
+    public function thereHasBeenAnExpirationEvent(string $providerSubscriptionId)
+    {
+        $this->ccBillEventService->processEvent(ExpirationEvent::fromArray($this->getExpirationPayload(
+            [
+                CcBillEventConstants::SUBSCRIPTION_ID => $providerSubscriptionId
+            ]
+        )));
+    }
+
     private function getBillingDateChangePayload(array $merge)
     {
         return array_merge(
@@ -427,6 +440,18 @@ class CcBillContext implements Context
                 CcBillEventConstants::LIFETIME_PRICE => self::TEST_LIFETIME_PRICE,
                 CcBillEventConstants::PAYMENT_ACCOUNT => self::TEST_PAYMENT_ACCOUNT,
                 CcBillEventConstants::THREE_D_SECURE => self::TEST_3_D_SECURE
+            ],
+            $merge
+        );
+    }
+
+    private function getExpirationPayload(array $merge): array
+    {
+        return array_merge(
+            [
+                CcBillEventConstants::CLIENT_ACCOUNT_NO => self::TEST_CLIENT_ACCOUNT_NO,
+                CcBillEventConstants::CLIENT_SUB_ACCOUNT_NO => self::TEST_CLIENT_SUB_ACCOUNT_NO,
+                CcBillEventConstants::TIMESTAMP => self::TEST_TIMESTAMP
             ],
             $merge
         );

@@ -135,7 +135,7 @@ class SuspensionContext implements Context
     {
         $permanentSuspensionEmail = EmailUtil::getEmail($email);
         Assert::eq($permanentSuspensionEmail->getSubject(), 'Your profile has been permanently suspended');
-        Assert::contains($permanentSuspensionEmail->getBody(), 'Your profile has been permanently suspended for violating the following rules: ');
+        Assert::contains($permanentSuspensionEmail->getBody(), 'Your profile has been permanently suspended for breaking the following rules:');
         Assert::contains($permanentSuspensionEmail->getBody(), $rule);
     }
 }

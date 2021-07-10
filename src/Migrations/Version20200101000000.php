@@ -113,6 +113,7 @@ final class Version20200101000000 extends AbstractMigration
     id UUID NOT NULL PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES datinglibre.users ON DELETE CASCADE,
     blocked_user_id UUID NOT NULL REFERENCES datinglibre.users ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     UNIQUE (user_id, blocked_user_id)
 );');
 
@@ -178,7 +179,7 @@ final class Version20200101000000 extends AbstractMigration
     user_id UUID REFERENCES datinglibre.users ON DELETE SET NULL,
     provider TEXT NOT NULL,
     provider_subscription_id TEXT NOT NULL,
-    status TEXT NOT NULL CHECK (status IN (\'ACTIVE\', \'CANCELLED\', \'RENEWAL_FAILURE\', \'CHARGEBACK\', \'REFUND\')),
+    status TEXT NOT NULL CHECK (status IN (\'ACTIVE\', \'CANCELLED\', \'RENEWAL_FAILURE\', \'CHARGEBACK\', \'REFUND\', \'EXPIRED\')),
     renewal_date DATE NULL,
     expiry_date DATE NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,

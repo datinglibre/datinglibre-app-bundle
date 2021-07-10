@@ -11,13 +11,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
 
-class UserBlockController extends AbstractController
+class UserBlockCreateController extends AbstractController
 {
     public function block(Uuid $userId, Request $request, ProfileService $profileService, BlockService $blockService)
     {
         $profile = $profileService->findProjectionByCurrentUser($this->getUser()->getId(), $userId);
 
-        if (null === $profile) {
+        if (null === $profile || $profile->isBlockedByUser()) {
             throw $this->createNotFoundException();
         }
 
@@ -34,7 +34,6 @@ class UserBlockController extends AbstractController
         return $this->render(
             '@DatingLibreApp/user/block/create.html.twig',
             [
-                'controller_name' => 'BlockController',
                 'blockForm' => $blockFormType->createView(),
                 'profile' => $profile
             ]

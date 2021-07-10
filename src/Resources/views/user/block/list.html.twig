@@ -1,0 +1,25 @@
+{% extends '@DatingLibreApp/user/user.html.twig' %}
+{% block title %}{{ 'menu.blocks'|trans }}{% endblock %}
+{% block menu %}
+    {% include '@DatingLibreApp/user/matches/menu.html.twig' %}
+{% endblock %}
+{% block content %}
+<div class="panel panel-default">
+{% if profiles is empty %}
+    <div class="alert alert-info">{{ 'block.no_blocks'|trans }}</div>
+{% endif %}
+{% if profiles is not empty %}
+        <ul class="list-unstyled">
+            {% for profile in profiles %}
+                <li class="media">
+                    <img src="{% if profile.imageUrl is null %}/profile.jpg{% else %}{{ profile.imageUrl }}{% endif %}" class="mr-3" alt="" height="64" width="64">
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1"><a href="{{ path('user_profile_view', {'userId': profile.id}) }}">{{ profile.username }}</a>, <small>{{ profile.age }}</small>. <small>{{ profile.cityName }}, {{ profile.regionName }}.</small></h5>
+                        <p>{{ profile.about|u.truncate(100, '...') }}</p>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+{% endif %}
+</div>
+{% endblock %}

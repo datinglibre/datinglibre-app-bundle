@@ -86,6 +86,21 @@ class SubscriptionEventService
         $this->subscriptionService->save($subscription);
     }
 
+    public function expire(string $provider, ?string $providerSubscriptionId, string $event, array $data): void
+    {
+        $subscription = $this->subscriptionService->findOneByProviderAndSubscriptionId($provider, $providerSubscriptionId);
+
+        if ($subscription === null) {
+            $this->eventService->save(null, Event::SUBSCRIPTION_ERROR, [self::NO_SUBSCRIPTION_FOUND => $data]);
+            return;
+        }
+
+        $this->eventService->save($subscription->getUser()->getId(), $event, $data);
+        $subscription->setStatus(Subscription::EXPIRED);
+        $subscription->setRenewalDate(null);
+        $this->subscriptionService->save($subscription);
+    }
+
     public function failRenewal(string $provider, ?string $providerSubscriptionId, string $event, ?DateTimeInterface $nextRetryDate, array $data): void
     {
         $subscription = $this->subscriptionService->findOneByProviderAndSubscriptionId($provider, $providerSubscriptionId);

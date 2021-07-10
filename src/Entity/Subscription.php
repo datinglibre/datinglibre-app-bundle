@@ -31,6 +31,7 @@ class Subscription
     public const RENEWAL_FAILURE = 'RENEWAL_FAILURE';
     public const CHARGEBACK = 'CHARGEBACK';
     public const REFUND = 'REFUND';
+    public const EXPIRED = 'EXPIRED';
 
     /**
      * @ORM\Id()

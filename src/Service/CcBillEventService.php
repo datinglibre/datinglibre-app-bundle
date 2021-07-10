@@ -11,6 +11,7 @@ use DatingLibre\CcBill\Event\CancellationEvent;
 use DatingLibre\CcBill\Event\CcBillEvent;
 use DatingLibre\CcBill\Event\ChargebackEvent;
 use DatingLibre\CcBill\Event\ErrorEvent;
+use DatingLibre\CcBill\Event\ExpirationEvent;
 use DatingLibre\CcBill\Event\NewSaleFailureEvent;
 use DatingLibre\CcBill\Event\NewSaleSuccessEvent;
 use DatingLibre\CcBill\Event\RefundEvent;
@@ -71,6 +72,8 @@ class CcBillEventService
             $this->refund($event);
         } elseif ($event instanceof BillingDateChangeEvent) {
             $this->billingDateChange($event);
+        } elseif ($event instanceof ExpirationEvent) {
+            $this->expiration($event);
         } elseif ($event instanceof ErrorEvent) {
             $this->error($event);
         } else {
@@ -133,7 +136,8 @@ class CcBillEventService
                 self::TRANSACTION_ID => $event->getTransactionId(),
                 self::SUBSCRIPTION_ID => $event->getSubscriptionId(),
                 self::PAYMENT_TYPE => $event->getPaymentType(),
-                self::CARD_TYPE => $event->getCardType()
+                self::CARD_TYPE => $event->getCardType(),
+                self::EMAIL => $event->getEmail()
             ]
         );
     }
@@ -214,6 +218,19 @@ class CcBillEventService
                 self::SUBSCRIPTION_ID => $event->getSubscriptionId(),
                 self::TIMESTAMP => $event->getTimestamp()->format(self::DATETIME_FORMAT),
                 self::NEXT_BILLING_DATE => $event->getNextRenewalDate()->format(self::DATE_FORMAT)
+            ]
+        );
+    }
+
+    private function expiration(ExpirationEvent $event)
+    {
+        $this->subscriptionService->expire(
+            Subscription::CCBILL,
+            $event->getSubscriptionId(),
+            Event::CCBILL_EXPIRATION,
+            [
+                self::TIMESTAMP => $event->getTimestamp()->format(self::DATETIME_FORMAT),
+                self::SUBSCRIPTION_ID => $event->getSubscriptionId()
             ]
         );
     }

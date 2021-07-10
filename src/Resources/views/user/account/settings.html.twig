@@ -4,8 +4,15 @@
     {% include '@DatingLibreApp/user/account/menu.html.twig' %}
 {% endblock %}
 {% block content %}
-    {% form_theme userSettingsForm 'bootstrap_4_layout.html.twig' %}
-    {{ form_start(userSettingsForm) }}
-    {{ form_row(userSettingsForm.newMatchNotifications) }}
-    {{ form_end(userSettingsForm) }}
+    <div class="card border-light">
+        <div class="card-body">
+            <h5 class="card-title">{{ 'settings.contact'|trans }}</h5>
+            {% form_theme userSettingsForm 'bootstrap_4_layout.html.twig' %}
+            {{ form_start(userSettingsForm) }}
+            {{ form_widget(userSettingsForm.newMatchNotifications) }}
+            <br />
+            {{ form_widget(userSettingsForm.update) }}
+            {{ form_end(userSettingsForm) }}
+        </div>
+    </div>
 {% endblock %}

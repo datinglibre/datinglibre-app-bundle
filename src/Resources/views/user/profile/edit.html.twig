@@ -8,8 +8,9 @@
 {% block content %}
     {% from "@DatingLibreApp/user/profile/profile.image.moderation.status.html.twig" import profile_image_moderation_status %}
     {{ profile_image_moderation_status(profile.imagePresent, profile.imageUnmoderated, profile.imageRejected) }}
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="card border-light">
+        <div class="card-body">
+            <h4 class="card-title">{{ 'nav.profile'|trans }}</h4>
             <div id="cityId" value="{{ profileForm.vars.value.city == null ? null : profileForm.vars.value.city.id }}"></div>
             <div id="regionId" value="{{ profileForm.vars.value.region == null ? null : profileForm.vars.value.region.id }}"></div>
             <div id="countryId" value="{{ profileForm.vars.value.country == null ? null : profileForm.vars.value.country.id }}"></div>

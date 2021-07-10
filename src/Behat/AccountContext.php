@@ -20,10 +20,12 @@ class AccountContext extends RawMinkContext
     private UserArchiveRepository $userArchiveRepository;
     private UserSettingRepository $userSettingRepository;
 
-    public function __construct(UserService $userService,
-                                UserSettingRepository $userSettingRepository,
-                                UserArchiveService $userArchiveService,
-                                UserArchiveRepository $userArchiveRepository)
+    public function __construct(
+        UserService $userService,
+        UserSettingRepository $userSettingRepository,
+        UserArchiveService $userArchiveService,
+        UserArchiveRepository $userArchiveRepository
+    )
     {
         $this->userService = $userService;
         $this->userSettingRepository = $userSettingRepository;

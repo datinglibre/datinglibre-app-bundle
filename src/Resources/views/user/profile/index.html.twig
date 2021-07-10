@@ -2,40 +2,54 @@
 {% block title %}Profile{% endblock %}
 {% block menu %}
     {% from '@DatingLibreApp/macros/profile.image.html.twig' import profile_image %}
-        <a href="{{ path('user_profile_image') }}">{{ profile_image(profile.imageUrl) }}</a>
+    <a href="{{ path('user_profile_image') }}">{{ profile_image(profile.imageUrl) }}</a>
     {% include '@DatingLibreApp/user/profile/menu.html.twig' %}
 {% endblock %}
 {% block content %}
-    <div class="panel panel-default">
-    {% from "@DatingLibreApp/user/profile/profile.image.moderation.status.html.twig" import profile_image_moderation_status %}
-    {{ profile_image_moderation_status(profile.imagePresent, profile.imageUnmoderated, profile.imageRejected) }}
-    <div class="panel-body">
-        <h2>
-            {{ profile.username }}
-            <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
-        </h2>
+    <h2>
+        {{ profile.username }}
+        <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
+    </h2>
+    <div class="card border-light">
+        {% from "@DatingLibreApp/user/profile/profile.image.moderation.status.html.twig" import profile_image_moderation_status %}
+        {{ profile_image_moderation_status(profile.imagePresent, profile.imageUnmoderated, profile.imageRejected) }}
+        <div class="card-body">
+            {% if suspension is not null %}
+                <div class="alert alert-danger">
+                    {% if suspension.isPermanent %}
+                        <p>{{ 'profile.permanently_suspended'|trans({'%updatedAt%': suspension.updatedAt|date}) }}</p>
+                        <p>{{ 'profile.subscription_cancelled'|trans }}</p>
+                    {% else %}
+                        {{ 'profile.suspended'|trans({'%hours%': suspension.duration, '%updatedAt%': suspension.updatedAt|date}) }}
+                    {% endif %}
+                    {% if suspension.reasons is not empty %}
+                        <ul class="p-3">
+                            {% for reason in suspension.reasons %}
+                                <li>{{ reason|trans({}, 'rules') }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            {% endif %}
 
-        {% if suspension is not null %}
-            <div class="alert alert-danger">{{ 'profile.suspended'|trans }}</div>
-        {% endif %}
+            {% if attributes is not empty %}
+                <ul>
+                    {% for attribute in attributes %}
+                        <li>{{ attribute.name|trans({}, 'attributes') }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
 
-        {% if attributes is not empty %}
-            <ul>
-                {% for attribute in attributes %}
-                    <li>{{ attribute.name|trans({}, 'attributes') }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+            {% if interests is not empty %}
+                <h4>{{ 'profile.interests'|trans }}</h4>
+                <ul>
+                    {% for interest in interests %}
+                        <li>{{ interest.name|trans({}, 'interests') }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
 
-        {% if interests is not empty %}
-            <h4>{{ 'profile.interests'|trans }}</h4>
-            <ul>
-                {% for interest in interests %}
-                    <li>{{ interest.name|trans({}, 'interests') }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-
-        {{ profile.about|nl2br }}
+            {{ profile.about|nl2br }}
+        </div>
     </div>
 {% endblock %}

@@ -17,6 +17,6 @@ class BlockFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $blockForm, array $options)
     {
-        $blockForm->add('confirm', SubmitType::class, ['label' => 'block.block']);
+        $blockForm->add('confirm', SubmitType::class, ['label' => 'block.confirm']);
     }
 }

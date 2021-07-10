@@ -44,9 +44,11 @@ class PurgeUsersCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->userService->purge($this->testingUserEmailAddresses,
+        $this->userService->purge(
+            $this->testingUserEmailAddresses,
             $input->getArgument('type'),
-            (int) $input->getArgument('hours'));
+            (int) $input->getArgument('hours')
+        );
 
         return 0;
     }

@@ -45,7 +45,7 @@ class EventRepository extends ServiceEntityRepository
                     FROM datinglibre.events 
                     WHERE EXTRACT (YEAR FROM created_at) = :year
                           AND EXTRACT(MONTH FROM created_at) = :month 
-                    ORDER BY created_at ASC';
+                    ORDER BY created_at DESC';
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $query->setParameter('year', $year);
         $query->setParameter('month', $month);
@@ -59,7 +59,7 @@ class EventRepository extends ServiceEntityRepository
         $sql = 'SELECT id, name, data, created_at 
                     FROM datinglibre.events 
                     WHERE created_at::date = :date
-                    ORDER BY created_at ASC';
+                    ORDER BY created_at DESC';
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $query->setParameter('date', $year . '-' . $month . '-' . $day);
 

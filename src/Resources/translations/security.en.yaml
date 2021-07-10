@@ -1,3 +1,2 @@
 Invalid credentials.: "Incorrect username or password"
-user:
-  incorrect_credentials: "Incorrect username or password"
+Invalid CSRF token.: "Invalid CSRF token. Please try again."

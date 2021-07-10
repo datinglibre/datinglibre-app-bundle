@@ -38,4 +38,14 @@ class BlockService
 
         $this->blockRepository->save($block);
     }
+
+    public function findByUserId(Uuid $userId): array
+    {
+        return $this->blockRepository->findProfileProjectionsByUserId($userId);
+    }
+
+    public function unblock(Uuid $userId, Uuid $blockedUserId): void
+    {
+        $this->blockRepository->deleteByUserIdAndBlockedUserId($userId, $blockedUserId);
+    }
 }

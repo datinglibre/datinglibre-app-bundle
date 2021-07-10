@@ -239,17 +239,17 @@ EOD, $rsm);
             city.name AS city_name, 
             region.name AS region_name, 
             p.status AS status,
-            u.last_login as last_login
+            CASE WHEN blockedBy.user_id IS NULL THEN FALSE ELSE TRUE END AS blocked_by_user_id,
+            CASE WHEN blocked.blocked_user_id IS NULL THEN FALSE ELSE TRUE END AS blocked_user_id,
+            u.last_login AS last_login
             FROM datinglibre.profiles p
             LEFT JOIN datinglibre.images i ON p.user_id = i.user_id AND i.status = 'ACCEPTED' AND i.is_profile IS TRUE
+            LEFT JOIN datinglibre.blocks blockedBy ON blockedBy.user_id = p.user_id AND blockedBy.blocked_user_id = :currentUserId
+            LEFT JOIN datinglibre.blocks blocked ON blocked.user_id = :currentUserId AND blocked.blocked_user_id = p.user_id    
             INNER JOIN datinglibre.users u ON p.user_id = u.id
             INNER JOIN datinglibre.cities city ON p.city_id = city.id 
             INNER JOIN datinglibre.regions region ON city.region_id = region.id
             WHERE p.user_id = :userId 
-            AND NOT EXISTS 
-            (SELECT b FROM datinglibre.blocks b WHERE
-             (b.user_id = :currentUserId AND b.blocked_user_id = :userId) OR (b.user_id = :userId AND b.blocked_user_id = :currentUserId)
-            )
 EOD, $this->getProjectionResultSetMapping());
 
         $query->setParameter('userId', $userId);
@@ -304,6 +304,8 @@ EOD, $rsm);
         $rsm->addFieldResult('pv', 'last_login', 'lastLogin');
         $rsm->addFieldResult('pv', 'secure_url', 'imageUrl');
         $rsm->addFieldResult('pv', 'profile_status', 'profileStatus');
+        $rsm->addFieldResult('pv', 'blocked_by_user_id', 'blockedBy');
+        $rsm->addFieldResult('pv', 'blocked_user_id', 'blocked');
         $rsm->addFieldResult('pv', 'image_status', 'imageStatus');
         return $rsm;
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DatingLibre\AppBundle\Behat;
 
+use Behat\MinkExtension\Context\RawMinkContext;
 use DatingLibre\AppBundle\Behat\Util\TableUtil;
 use DatingLibre\AppBundle\Entity\Filter;
 use DatingLibre\AppBundle\Entity\ProfileProjection;
@@ -13,12 +14,12 @@ use DatingLibre\AppBundle\Repository\FilterRepository;
 use DatingLibre\AppBundle\Service\UserInterestFilterService;
 use DatingLibre\AppBundle\Service\UserService;
 use DatingLibre\AppBundle\Behat\Page\SearchPage;
-use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use DatingLibre\AppBundle\Repository\RegionRepository;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Webmozart\Assert\Assert;
 
-class SearchContext implements Context
+class SearchContext extends RawMinkContext
 {
     private UserService $userService;
     private ProfileRepository $profileRepository;
@@ -27,6 +28,7 @@ class SearchContext implements Context
     private FilterRepository $filterRepository;
     private array $profiles;
     private UserInterestFilterService $userInterestFilterService;
+    private UrlGeneratorInterface $urlGenerator;
 
     public function __construct(
         UserService $userService,
@@ -34,7 +36,8 @@ class SearchContext implements Context
         RegionRepository $regionRepository,
         SearchPage $searchPage,
         FilterRepository $filterRepository,
-        UserInterestFilterService $userInterestFilterService
+        UserInterestFilterService $userInterestFilterService,
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->userService = $userService;
         $this->profileRepository = $profileRepository;
@@ -42,6 +45,7 @@ class SearchContext implements Context
         $this->filterRepository = $filterRepository;
         $this->regionRepository = $regionRepository;
         $this->userInterestFilterService = $userInterestFilterService;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -221,6 +225,51 @@ class SearchContext implements Context
         Assert::notNull($profile->getImageUrl());
         Assert::notNull($profile->getImageStatus());
         Assert::true($profile->isImagePresent());
+    }
+
+    /**
+     * @Then the profile of :email should be 404
+     */
+    public function assertProfile404(string $email): void
+    {
+        $user = $this->userService->findByEmail($email);
+        Assert::notNull($user);
+
+        $profilePage = $this->urlGenerator->generate('user_profile_view', ['userId' => $user->getId()]);
+
+        $this->getSession()->visit($profilePage);
+
+        Assert::eq($this->getSession()->getStatusCode(), 404);
+    }
+
+    /**
+     * @Then the message page of :email should be 404
+     */
+    public function assertMessagePage404(string $email): void
+    {
+        $user = $this->userService->findByEmail($email);
+        Assert::notNull($user);
+
+        $messagePage = $this->urlGenerator->generate('user_send_message', ['userId' => $user->getId()]);
+
+        $this->getSession()->visit($messagePage);
+
+        Assert::eq($this->getSession()->getStatusCode(), 404);
+    }
+
+    /**
+     * @Then the block page of :email should be 404
+     */
+    public function assertBlockPage404(string $email): void
+    {
+        $user = $this->userService->findByEmail($email);
+        Assert::notNull($user);
+
+        $blockPage = $this->urlGenerator->generate('user_block_create', ['userId' => $user->getId()]);
+
+        $this->getSession()->visit($blockPage);
+
+        Assert::eq($this->getSession()->getStatusCode(), 404);
     }
 
     private function containsMatches(array $users): void

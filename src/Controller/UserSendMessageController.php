@@ -51,7 +51,7 @@ class UserSendMessageController extends AbstractController
 
         $recipientSuspension = $this->suspensionService->findOpenByUserId($recipient->getId());
 
-        if ($recipientProfile === null) {
+        if ($recipientProfile === null || $recipientProfile->isBlockedByUser()) {
             throw $this->createNotFoundException();
         }
 

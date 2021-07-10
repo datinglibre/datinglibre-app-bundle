@@ -3,16 +3,22 @@
 {% block menu %}
     {% from '@DatingLibreApp/macros/profile.image.html.twig' import profile_image %}
     {{ profile_image(profile.imageUrl) }}
-    {% include '@DatingLibreApp/user/message/menu.html.twig' %}
+    {% from '@DatingLibreApp/user/message/menu.html.twig' import message_menu %}
+    {{ message_menu(profile.id, profile.isBlockedUser) }}
 {% endblock %}
 {% block content %}
-<div class="panel panel-default">
-    <div class="panel-body">
-        <h2>
-            {{ profile.username }}
-            <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
-        </h2>
-    {{ form(reportForm) }}
+    <h2>
+        {{ profile.username }}
+        <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
+    </h2>
+    <div class="card border-danger">
+        <div class="card-body text-danger">
+            <h5 class="card-title">{{ 'menu.report'|trans }}</h5>
+            {{ form_start(reportForm) }}
+            {{ form_row(reportForm.reasons) }}
+            {{ form_row(reportForm.message) }}
+            {{ form_row(reportForm.submit, {'attr': {'class': 'btn btn-danger'}}) }}
+            {{ form_end(reportForm) }}
+        </div>
     </div>
-</div>
 {% endblock %}

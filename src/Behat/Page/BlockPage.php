@@ -11,7 +11,7 @@ class BlockPage extends SymfonyPage
 {
     public function getRouteName(): string
     {
-        return 'user_block';
+        return 'user_block_create';
     }
 
     public function assertContains(string $value): void

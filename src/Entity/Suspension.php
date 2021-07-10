@@ -167,4 +167,9 @@ class Suspension
     {
         return $this->createdAt;
     }
+
+    public function isPermanent(): bool
+    {
+        return $this->getDuration() === null;
+    }
 }

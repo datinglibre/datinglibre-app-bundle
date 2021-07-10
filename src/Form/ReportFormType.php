@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ReportFormType extends AbstractType
 {
@@ -32,7 +33,10 @@ class ReportFormType extends AbstractType
             'choice_translation_domain' => 'rules',
             'required' => true,
             'expanded' => true,
-            'multiple' => true
+            'multiple' => true,
+            'constraints' => [
+                new NotBlank()
+            ]
         ]);
 
         $builder->add('message', TextareaType::class, [

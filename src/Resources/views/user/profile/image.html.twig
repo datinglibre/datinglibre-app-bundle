@@ -6,15 +6,8 @@
     {% include '@DatingLibreApp/user/profile/menu.html.twig' %}
 {% endblock %}
 {% block content %}
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="alert alert-success collapse" id="profileImageSuccessMessage" role="alert">{{ 'profile.image.success'|trans }}</div>
-            <div class="alert alert-danger collapse" id="profileImageFailureMessage" role="alert">{{ 'profile.image.failure'|trans }}</div>
-
-            {% if not imageUpload %}
-            <div class="alert alert-danger" id="disableImageUpload" role="alert">{{ 'profile.image.disabled'|trans }}</div>
-            {% endif %}
-
+    <div class="card border-light">
+        <div class="card-header text-center bg-white">
             <label class="btn btn-primary" for="inputImageButton" title="Import">
                 <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="Import image">Open image</span>
                 <input type="file" id="inputImageButton" name="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" hidden />
@@ -48,7 +41,9 @@
           integrity="sha384-LviqaWVrhQ5vfp8yDZoxcPR9PH4//hAxpcfh5coUt5oZ3/jGIGj/R8bxO6AjCOM3"
           crossorigin="anonymous"/>
     <style>
-        img {max-width: 100%;}
+        img {
+            max-width: 100%;
+        }
     </style>
 {% endblock %}
 {% block javascripts %}

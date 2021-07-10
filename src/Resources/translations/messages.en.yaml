@@ -3,6 +3,7 @@ site:
   moderator: "Moderator"
 submit: "Submit"
 confirm: "Confirm"
+update: "Update"
 user:
   email: "Email"
   remember_me: "Remember me"
@@ -41,7 +42,9 @@ profile:
     awaiting_moderation: "Your profile image is awaiting moderation"
     rejected: "Your profile image has failed moderation. Please upload a different image"
     disabled: "Saving a profile image is currently disabled"
-  suspended: "Your profile has been suspended"
+  suspended: "As of %updatedAt% your profile has been suspended for the reasons below. It will be reviewed after %hours% hours."
+  permanently_suspended: "As of %updatedAt% your profile has been permanently suspended for the reasons below."
+  subscription_cancelled: "Your subscription, if it exists, has been cancelled."
   interests: "Interests"
 account:
   delete_confirmation: "Confirm your password below to permanently delete your account"
@@ -54,6 +57,8 @@ account:
   settings: "Settings"
   settings_updated: "Settings updated"
   new_match_notifications: "Send an email I receive a new match"
+settings:
+  contact: "Contact"
 search:
   search: "Search"
   filter: "Filter"
@@ -83,6 +88,8 @@ menu:
   images: "Images"
   reports: "Reports"
   block: "Block"
+  unblock: "Unblock"
+  blocks: "Blocks"
   messages: "Messages"
   matches: "Matches"
   report: "Report"
@@ -98,16 +105,23 @@ message:
   send: "Send"
   message: "Message"
   sent: "Sent message"
-  suspended: "This user has been suspended for at least %hours% hours. They will be unable to reply."
+  suspended: "As of %updatedAt% this user has been suspended for at least %hours% hours. They will be unable to reply."
+  permanently_suspended: "This user has been permanently suspended. They will be unable to reply."
 matches:
   title: "Matches"
   empty: "No matches"
 block:
   block: "Block"
   reason: "Reason"
-  confirm_message: "Are you sure you want to block this profile?"
+  confirm_message: "Are you sure you want to block this user?"
+  confirm: "Confirm"
   placeholder: "Please choose a reason"
   success: "Blocked user"
+  no_blocks: "No blocks"
+unblock:
+  unblock: "Unblock"
+  confirm_message: "Are you sure you want to unblock this user?"
+  success: "Successfully unblocked user"
 report:
   report: "Report"
   success: "Reported user"
@@ -143,6 +157,7 @@ registration:
   password_reset_form: "password reset form"
 subscriptions:
   empty: "No subscriptions"
+  profile_suspended: "Your profile has been suspended."
 subscription:
   id: "ID"
   provider: "Provider"
@@ -158,6 +173,7 @@ subscription:
   ccbill: "CCBill"
   not_applicable: "N/a"
   refund: "Refund"
+  expired: "Expired"
   datinglibre: "DatingLibre"
   buy_subscription: "Buy a subscription with"
 event:
@@ -187,12 +203,12 @@ suspension:
   missing: "Missing"
   closed_confirmation: "Closed suspension"
   suspended_subject: "Your profile has been suspended"
-  suspended_body: "Your profile has been suspended for %hours% hours for breaking the following rules:"
+  suspended_body: "Your profile has been suspended, as it broke the rules below. The suspension will be reviewed after %hours% hours."
   permanent_queue_confirm: "Are you sure you want to suspend and enter this profile into the permanent suspension queue?"
   permanently_suspend_confirm: "Are you sure you want to permanently suspend this user?"
   permanently_suspended: "Profile has been permanently suspended"
   permanently_suspended_subject: "Your profile has been permanently suspended"
-  permanently_suspended_body: "Your profile has been permanently suspended for violating the following rules: "
+  permanently_suspended_body: "Your profile has been permanently suspended for breaking the following rules:"
   confirm_enqueue_permanent_suspension: "Confirm"
   not_applicable: "N/a"
   permanent: "Permanent"

@@ -2,6 +2,7 @@
 
 namespace DatingLibre\AppBundle\Entity;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,37 +18,37 @@ class ProfileProjection
      * @ORM\Column(type="string", length=255, name="id")
      * @ORM\Id()
      */
-    private $id;
+    private string $id;
 
     /**
      * @ORM\Column(type="string")
      */
-    private $username;
+    private string $username;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $age;
+    private int $age;
 
     /**
      * @ORM\Column(type="string")
      */
-    private $about;
+    private ?string $about;
 
     /**
      * @ORM\Column(type="string", name="city_name")
      */
-    private $cityName;
+    private string $cityName;
 
     /**
      * @ORM\Column(type="string", name="region_name")
      */
-    private $regionName;
+    private string $regionName;
 
     /**
      * @ORM\Column(type="datetimetz", name="last_login")
      */
-    private $lastLogin;
+    private DateTimeInterface $lastLogin;
 
     /**
      * @ORM\Column(type="string", name="profile_status")
@@ -57,33 +58,42 @@ class ProfileProjection
     /**
      * @ORM\Column(type="integer")
      */
-    private $sortId;
+    private int $sortId;
 
     /**
      * @ORM\Column(type="string")
      */
-    private $imageUrl;
+    private ?string $imageUrl = null;
 
     /**
      * @ORM\Column(type="string")
      */
-    private $imageStatus;
+    private ?string $imageStatus = null;
 
-    public function getId(): ?string
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $blockedBy = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $blocked = false;
+
+
+    public function getId(): string
     {
         return $this->id;
     }
 
-    public function setId($id): self
+    public function setId($id): void
     {
         $this->id = $id;
-        return $this;
     }
 
-    public function setUsername($username): self
+    public function setUsername($username): void
     {
         $this->username = $username;
-        return $this;
     }
 
     public function getUsername(): string
@@ -91,10 +101,9 @@ class ProfileProjection
         return $this->username;
     }
 
-    public function setAbout($about): self
+    public function setAbout($about): void
     {
         $this->about = $about;
-        return $this;
     }
 
     public function getAbout(): ?string
@@ -102,77 +111,74 @@ class ProfileProjection
         return $this->about;
     }
 
-    public function setCityName($cityName)
+    public function setCityName($cityName): void
     {
         $this->cityName = $cityName;
-        return $this;
     }
 
-    public function getCityName()
+    public function getCityName(): string
     {
         return $this->cityName;
     }
 
-    public function setRegionName($regionName)
+    public function setRegionName($regionName): void
     {
         $this->regionName = $regionName;
-        return $this;
     }
 
-    public function getRegionName()
+    public function getRegionName(): string
     {
         return $this->regionName;
     }
 
-    public function setAge($age)
+    public function setAge($age): void
     {
         $this->age = $age;
-        return $this;
     }
-
 
     public function getAge()
     {
         return $this->age;
     }
 
-    public function setLastLogin($lastLogin)
+    public function setLastLogin($lastLogin): void
     {
         $this->lastLogin = $lastLogin;
-        return $this;
     }
 
-    public function getLastLogin()
+    public function getLastLogin(): DateTimeInterface
     {
         return $this->lastLogin;
     }
 
-    public function setSortId($sortId)
+    public function setProfileStatus(string $profileStatus): void
     {
-        $this->sortId = $sortId;
-        return $this;
+        $this->profileStatus = $profileStatus;
     }
 
-    public function getSortId()
+    public function setSortId($sortId): void
+    {
+        $this->sortId = $sortId;
+    }
+
+    public function getSortId(): int
     {
         return $this->sortId;
     }
 
-    public function setImageUrl($imageUrl)
+    public function setImageUrl(?string $imageUrl): void
     {
         $this->imageUrl = $imageUrl;
-        return $this;
     }
 
-    public function getImageUrl()
+    public function getImageUrl(): ?string
     {
         return $this->imageUrl;
     }
 
-    public function setImageStatus($imageStatus)
+    public function setImageStatus($imageStatus): void
     {
         $this->imageStatus = $imageStatus;
-        return $this;
     }
 
     public function getImageStatus()
@@ -198,5 +204,25 @@ class ProfileProjection
     public function isPermanentlySuspended(): bool
     {
         return Profile::PERMANENTLY_SUSPENDED === $this->profileStatus;
+    }
+
+    public function setBlockedBy(bool $blockedBy): void
+    {
+        $this->blockedBy = $blockedBy;
+    }
+
+    public function setBlocked(bool $blocked): void
+    {
+        $this->blocked = $blocked;
+    }
+
+    public function isBlockedUser(): bool
+    {
+        return $this->blocked;
+    }
+
+    public function isBlockedByUser(): bool
+    {
+        return $this->blockedBy;
     }
 }

@@ -3,32 +3,41 @@
 {% block menu %}
     {% from '@DatingLibreApp/macros/profile.image.html.twig' import profile_image %}
     {{ profile_image(profile.imageUrl) }}
-    {% include '@DatingLibreApp/user/message/menu.html.twig' %}
+    {% from '@DatingLibreApp/user/message/menu.html.twig' import message_menu %}
+    {{ message_menu(profile.id, profile.isBlockedUser) }}
 {% endblock %}
 {% block content %}
-    <div class="panel panel-default">
-    <div class="panel-body">
-        <h2>
-            {{ profile.username }}
-            <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
-        </h2>
+    <h2>
+        {{ profile.username }}
+        <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
+    </h2>
     {% if recipientSuspension is not null %}
-        <div class="alert alert-danger">{{ 'message.suspended'|trans({'%hours%': recipientSuspension.duration}) }}</div>
+        <div class="alert alert-danger">
+            {% if recipientSuspension.isPermanent %}
+                {{ 'message.permanently_suspended'|trans }}
+            {% else %}
+                {{ 'message.suspended'|trans({'%hours%': recipientSuspension.duration, '%updatedAt%': recipientSuspension.updatedAt|date }) }}
+            {% endif %}
+        </div>
     {% endif %}
-    {% if messages is not empty %}
-    {% from '@DatingLibreApp/macros/profile.image.html.twig' import profile_image %}
-        <table class="table table-striped">
-            {% for message in messages %}
-                <tr class="d-flex">
-                    <td class="col-1">{{ profile_image(message.secureProfileImageUrl) }}</td>
-                    <td class="col-11">
-                        <h5 class="media-heading">{{ message.senderUsername }}</h5>
-                        <div>{{ message.content }}</div>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% endif %}
-        {{ form(messageForm) }}
+    <div class="card border-light">
+        <div class="card-body">
+            {% if messages is not empty %}
+                {% from '@DatingLibreApp/macros/profile.image.html.twig' import profile_image %}
+                <table class="table table-striped">
+                    {% for message in messages %}
+                        <tr class="d-flex">
+                            <td class="col-1">{{ profile_image(message.secureProfileImageUrl) }}</td>
+                            <td class="col-11">
+                                <h5 class="media-heading">{{ message.senderUsername }}</h5>
+                                <div>{{ message.content }}</div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+            {{ form(messageForm) }}
+        </div>
     </div>
+
 {% endblock %}

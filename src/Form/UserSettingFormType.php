@@ -16,6 +16,6 @@ class UserSettingFormType extends AbstractType
             CheckboxType::class,
             ['label' => 'account.new_match_notifications', 'required' => false]
         );
-        $builder->add('submit', SubmitType::class);
+        $builder->add('update', SubmitType::class, ['label' => 'update']);
     }
 }

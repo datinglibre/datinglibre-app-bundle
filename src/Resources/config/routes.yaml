@@ -17,9 +17,19 @@ user_password_reset:
     controller: DatingLibre\AppBundle\Controller\UserPasswordResetController::password
     methods: GET|POST
 
-user_block:
+user_block_create:
     path: /block/{userId}
-    controller: DatingLibre\AppBundle\Controller\UserBlockController::block
+    controller: DatingLibre\AppBundle\Controller\UserBlockCreateController::block
+    methods: GET|POST
+
+user_block_delete:
+    path: /block/{userId}/delete
+    controller: DatingLibre\AppBundle\Controller\UserBlockDeleteController::delete
+    methods: GET|POST
+
+user_block_list:
+    path: /blocks
+    controller: DatingLibre\AppBundle\Controller\UserBlockListController::index
     methods: GET|POST
 
 user_matches_index:

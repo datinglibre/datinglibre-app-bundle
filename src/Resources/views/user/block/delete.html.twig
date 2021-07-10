@@ -11,12 +11,12 @@
         {{ profile.username }}
         <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
     </h2>
-    <div class="card border-danger">
-        <div class="card-body text-danger">
-            <h5 class="card-title">{{ 'block.block'|trans }}</h5>
-            <p class="card-text">{{ 'block.confirm_message'|trans }}</p>
+    <div class="card border-primary">
+        <div class="card-body text-primary">
+            <h5 class="card-title">{{ 'menu.unblock'|trans }}</h5>
+            <p class="card-text">{{ 'unblock.confirm_message'|trans }}</p>
             {{ form_start(blockForm) }}
-            {{ form_widget(blockForm.confirm, {'attr': {'class': 'btn btn-danger'}}) }}
+            {{ form_widget(blockForm.confirm, {'attr': {'class': 'btn btn-primary'}}) }}
             {{ form_end(blockForm) }}
         </div>
     </div>
