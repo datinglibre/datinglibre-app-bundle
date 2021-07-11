@@ -188,20 +188,20 @@ class SuspensionService
         $permanentSuspension = $this->findOpenPermanentSuspension($suspendedUserId) ?? new Suspension();
         $user = $this->userRepository->find($userId);
         $suspendedUser = $this->userRepository->find($suspendedUserId);
-        $profile = $this->profileRepository->find($suspendedUserId);
+        $suspendedProfile = $this->profileRepository->find($suspendedUserId);
 
         $this->subscriptionService->cancel($suspendedUser->getId());
 
         $this->entityManager->beginTransaction();
         try {
-            $this->suspensionRepository->closeAllByUserId($user->getId());
+            $this->suspensionRepository->closeAllByUserId($suspendedUserId);
             $permanentSuspension->setUser($suspendedUser);
             $permanentSuspension->setUserOpened($user);
             $permanentSuspension->setReasons($reasons);
             $this->suspensionRepository->save($permanentSuspension);
 
-            $profile->setStatus(Profile::PERMANENTLY_SUSPENDED);
-            $this->profileRepository->save($profile);
+            $suspendedProfile->setStatus(Profile::PERMANENTLY_SUSPENDED);
+            $this->profileRepository->save($suspendedProfile);
 
             $email = (new TemplatedEmail())
                 ->from($this->adminEmail)
