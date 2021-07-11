@@ -12,7 +12,6 @@
             {{ profile.username }}
             <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
         </h2>
-        {{ profile.about|nl2br }}
     </div>
     {% from '@DatingLibreApp/moderator/macros/reports.table.html.twig' import reports_table %}
     {{ reports_table(reports, false, false, null)}}

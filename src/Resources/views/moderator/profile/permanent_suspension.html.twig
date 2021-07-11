@@ -6,22 +6,21 @@
     {% include '@DatingLibreApp/moderator/profile/menu.html.twig' %}
 {% endblock %}
 {% block content %}
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <h2>
-                {{ profile.username }}
-                <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
-            </h2>
-            {{ profile.about|nl2br }}
+    <h2>
+        {{ profile.username }}
+        <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
+    </h2>
+    <div class="card border-danger">
+        <div class="card-body">
+            {% if permanentSuspension is not null %}
+                <p class="alert alert-danger">{{ 'suspension.permanent_suspension_enqueued'|trans }}</p>
+            {% else %}
+                <p class="alert alert-danger">{{ 'suspension.permanent_queue_confirm'|trans }}</p>
+                {{ form_start(enqueuePermanentSuspensionForm) }}
+                {{ form_row(enqueuePermanentSuspensionForm.reasons) }}
+                {{ form_row(enqueuePermanentSuspensionForm.submit, {'attr': {'class': 'btn btn-danger'}}) }}
+                {{ form_end(enqueuePermanentSuspensionForm) }}
+            {% endif %}
         </div>
     </div>
-    {% if permanentSuspension is not null %}
-        <p class="alert alert-danger">{{ 'suspension.permanent_suspension_enqueued'|trans }}</p>
-    {% else %}
-        <p class="alert alert-danger">{{ 'suspension.permanent_queue_confirm'|trans }}</p>
-        {{ form_start(enqueuePermanentSuspensionForm) }}
-        {{ form_row(enqueuePermanentSuspensionForm.reasons) }}
-        {{ form_row(enqueuePermanentSuspensionForm.submit, {'attr': {'class': 'btn btn-danger'}}) }}
-        {{ form_end(enqueuePermanentSuspensionForm) }}
-    {% endif %}
 {% endblock %}

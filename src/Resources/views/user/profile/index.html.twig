@@ -6,31 +6,31 @@
     {% include '@DatingLibreApp/user/profile/menu.html.twig' %}
 {% endblock %}
 {% block content %}
-    <h2>
-        {{ profile.username }}
-        <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
-    </h2>
-    <div class="card border-light">
-        {% from "@DatingLibreApp/user/profile/profile.image.moderation.status.html.twig" import profile_image_moderation_status %}
-        {{ profile_image_moderation_status(profile.imagePresent, profile.imageUnmoderated, profile.imageRejected) }}
-        <div class="card-body">
-            {% if suspension is not null %}
-                <div class="alert alert-danger">
-                    {% if suspension.isPermanent %}
-                        <p>{{ 'profile.permanently_suspended'|trans({'%updatedAt%': suspension.updatedAt|date}) }}</p>
-                        <p>{{ 'profile.subscription_cancelled'|trans }}</p>
-                    {% else %}
-                        {{ 'profile.suspended'|trans({'%hours%': suspension.duration, '%updatedAt%': suspension.updatedAt|date}) }}
-                    {% endif %}
-                    {% if suspension.reasons is not empty %}
-                        <ul class="p-3">
-                            {% for reason in suspension.reasons %}
-                                <li>{{ reason|trans({}, 'rules') }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
+    {% if suspension is not null %}
+        <div class="alert alert-danger">
+            {% if suspension.isPermanent %}
+                <p>{{ 'profile.permanently_suspended'|trans({'%updatedAt%': suspension.updatedAt|date}) }}</p>
+                <p>{{ 'profile.subscription_cancelled'|trans }}</p>
+            {% else %}
+                {{ 'profile.suspended'|trans({'%hours%': suspension.duration, '%updatedAt%': suspension.updatedAt|date}) }}
             {% endif %}
+            {% if suspension.reasons is not empty %}
+                <ul class="p-3">
+                    {% for reason in suspension.reasons %}
+                        <li>{{ reason|trans({}, 'rules') }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    {% endif %}
+    <div class="card-body">
+        <h2>
+            {{ profile.username }}
+            <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
+        </h2>
+        <div class="card border-light">
+            {% from "@DatingLibreApp/user/profile/profile.image.moderation.status.html.twig" import profile_image_moderation_status %}
+            {{ profile_image_moderation_status(profile.imagePresent, profile.imageUnmoderated, profile.imageRejected) }}
 
             {% if attributes is not empty %}
                 <ul>

@@ -6,15 +6,10 @@
     {% include '@DatingLibreApp/moderator/profile/menu.html.twig' %}
 {% endblock %}
 {% block content %}
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <h2>
-                {{ profile.username }}
-                <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
-            </h2>
-            {{ profile.about|nl2br }}
-        </div>
-    </div>
+    <h2>
+        {{ profile.username }}
+        <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
+    </h2>
     {{ form_start(closeSuspensionForm) }}
     {{ form_row(closeSuspensionForm.suspension) }}
     <p class="alert alert-danger">{{ 'suspension.close_confirm'|trans }}</p>
