@@ -10,6 +10,7 @@ use DatingLibre\AppBundle\Form\ProfileFormType;
 use DatingLibre\AppBundle\Repository\ProfileRepository;
 use DatingLibre\AppBundle\Repository\UserRepository;
 use DatingLibre\AppBundle\Service\ProfileService;
+use DatingLibre\AppBundle\Service\SuspensionService;
 use DatingLibre\AppBundle\Service\UserAttributeService;
 use DatingLibre\AppBundle\Service\UserInterestService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,19 +24,22 @@ class UserProfileEditController extends AbstractController
     private UserAttributeService $userAttributeService;
     private ProfileService $profileService;
     private UserInterestService $userInterestService;
+    private SuspensionService $suspensionService;
 
     public function __construct(
         ProfileRepository $profileRepository,
         ProfileService $profileService,
         UserRepository $userRepository,
         UserAttributeService $userAttributeService,
-        UserInterestService $userInterestService
+        UserInterestService $userInterestService,
+        SuspensionService $suspensionService
     ) {
         $this->profileRepository = $profileRepository;
         $this->userRepository = $userRepository;
         $this->userAttributeService = $userAttributeService;
         $this->profileService = $profileService;
         $this->userInterestService = $userInterestService;
+        $this->suspensionService = $suspensionService;
     }
 
     public function edit(Request $request)
@@ -44,6 +48,11 @@ class UserProfileEditController extends AbstractController
         $user = $this->userRepository->find($userId);
         $profile = $this->profileRepository->find($userId) ?? (new Profile())->setUser($user);
         $profileProjection = $this->profileService->findProjection($user->getId());
+        $permanentSuspension = $this->suspensionService->findOpenPermanentSuspension($user->getId());
+
+        if ($permanentSuspension !== null) {
+            return new RedirectResponse($this->generateUrl('user_profile_index'));
+        }
 
         $profileForm = new ProfileForm();
         $city = $profile->getCity();

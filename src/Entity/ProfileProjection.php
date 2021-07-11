@@ -206,6 +206,11 @@ class ProfileProjection
         return Profile::PERMANENTLY_SUSPENDED === $this->profileStatus;
     }
 
+    public function isSuspended(): bool
+    {
+        return Profile::SUSPENDED === $this->profileStatus;
+    }
+
     public function setBlockedBy(bool $blockedBy): void
     {
         $this->blockedBy = $blockedBy;

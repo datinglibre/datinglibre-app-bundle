@@ -44,6 +44,7 @@ profile:
     disabled: "Saving a profile image is currently disabled"
   suspended: "As of %updatedAt% your profile has been suspended for the reasons below. It will be reviewed after %hours% hours."
   permanently_suspended: "As of %updatedAt% your profile has been permanently suspended for the reasons below."
+  permanent_suspension_queued: "As of %updatedAt% your profile has been suspended for the reasons below. The suspension will be reviewed."
   subscription_cancelled: "Your subscription, if it exists, has been cancelled."
   interests: "Interests"
 account:

@@ -23,7 +23,15 @@
             <th colspan="col">{{ 'suspension.status'|trans }}</th>
             </thead>
             {% for suspension in suspensions %}
-                <tr class="{% if suspension.elapsed and suspension.status == 'OPEN' %}table-warning{% endif %}">
+                {% set row_class %}
+                    {% if suspension.elapsed and suspension.isOpen %}
+                        table-warning
+                    {% elseif suspension.isOpen %}
+                        table-primary
+                    {% else %}
+                    {% endif %}
+                {% endset %}
+                <tr class="{{ row_class }}">
                     <td>
                         {% if suspension.reasons is not empty %}
                             <ul>
@@ -62,7 +70,6 @@
            class="btn btn-primary btn-sd mb-3">{{ 'suspension.close'|trans }}</a>
     {% endif %}
 
-    {% if (openElapsedSuspension is not null and openPermanentSuspension is not null) or suspensions is empty  %}
     <div class="card border-danger">
         <div class="card-body">
             <h5 class="text-danger">{{ 'suspension.create'|trans }}</h5>
@@ -73,6 +80,5 @@
             {{ form_end(suspensionForm) }}
         </div>
     </div>
-    {% endif %}
 {% endblock %}
 

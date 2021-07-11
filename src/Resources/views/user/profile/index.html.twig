@@ -1,5 +1,5 @@
 {% extends '@DatingLibreApp/user/user.html.twig' %}
-{% block title %}Profile{% endblock %}
+{% block title %}{{ 'nav.profile'|trans }}{% endblock %}
 {% block menu %}
     {% from '@DatingLibreApp/macros/profile.image.html.twig' import profile_image %}
     <a href="{{ path('user_profile_image') }}">{{ profile_image(profile.imageUrl) }}</a>
@@ -9,10 +9,12 @@
     {% if suspension is not null %}
         <div class="card border-danger">
             <div class="card-body">
-            {% if suspension.isPermanent %}
+            {% if suspension.isPermanent and profile.isPermanentlySuspended %}
                 <p>{{ 'profile.permanently_suspended'|trans({'%updatedAt%': suspension.updatedAt|date}) }}</p>
+            {% elseif suspension.isPermanent and profile.isSuspended %}
+                <p>{{ 'profile.permanent_suspension_queued'|trans({'%updatedAt%': suspension.updatedAt|date}) }}</p>
             {% else %}
-                {{ 'profile.suspended'|trans({'%hours%': suspension.duration, '%updatedAt%': suspension.updatedAt|date}) }}
+                <p>{{ 'profile.suspended'|trans({'%hours%': suspension.duration, '%updatedAt%': suspension.updatedAt|date}) }}</p>
             {% endif %}
             {% if suspension.reasons is not empty %}
                 <ul>
@@ -21,7 +23,7 @@
                     {% endfor %}
                 </ul>
             {% endif %}
-            {% if suspension.isPermanent %}
+            {% if suspension.isPermanent and profile.isPermanentlySuspended %}
                 <p>{{ 'profile.subscription_cancelled'|trans }}</p>
             {% endif%}
             </div>
