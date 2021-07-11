@@ -7,20 +7,24 @@
 {% endblock %}
 {% block content %}
     {% if suspension is not null %}
-        <div class="alert alert-danger">
+        <div class="card border-danger">
+            <div class="card-body">
             {% if suspension.isPermanent %}
                 <p>{{ 'profile.permanently_suspended'|trans({'%updatedAt%': suspension.updatedAt|date}) }}</p>
-                <p>{{ 'profile.subscription_cancelled'|trans }}</p>
             {% else %}
                 {{ 'profile.suspended'|trans({'%hours%': suspension.duration, '%updatedAt%': suspension.updatedAt|date}) }}
             {% endif %}
             {% if suspension.reasons is not empty %}
-                <ul class="p-3">
+                <ul>
                     {% for reason in suspension.reasons %}
                         <li>{{ reason|trans({}, 'rules') }}</li>
                     {% endfor %}
                 </ul>
             {% endif %}
+            {% if suspension.isPermanent %}
+                <p>{{ 'profile.subscription_cancelled'|trans }}</p>
+            {% endif%}
+            </div>
         </div>
     {% endif %}
     <div class="card-body">

@@ -8,6 +8,8 @@ use Behat\Behat\Context\Context;
 use DateInterval;
 use DateTimeImmutable;
 use DatingLibre\AppBundle\Behat\Util\EmailUtil;
+use DatingLibre\AppBundle\Entity\Suspension;
+use DatingLibre\AppBundle\Entity\SuspensionProjection;
 use DatingLibre\AppBundle\Repository\SuspensionRepository;
 use DatingLibre\AppBundle\Service\SuspensionService;
 use DatingLibre\AppBundle\Service\UserService;
@@ -38,8 +40,31 @@ class SuspensionContext implements Context
     {
         $moderator = $this->userService->findByEmail($moderatorEmail);
         $user = $this->userService->findByEmail($userEmail);
+        Assert::notNull($moderator);
+        Assert::notNull($user);
 
         $this->suspensionService->suspend($moderator->getId(), $user->getId(), [$reason], $hours);
+    }
+
+    /**
+     * @Then only one open suspension should exist for :email
+     */
+    public function onlyOneOpenSuspensionExistsFor(string $email)
+    {
+        $user = $this->userService->findByEmail($email);
+        Assert::notNull($user);
+        $suspensions = $this->suspensionService->findAllByUserId($user->getId());
+        Assert::count($suspensions, 2);
+
+        $openSuspensionCount = 0;
+        /** @var SuspensionProjection $suspension */
+        foreach ($suspensions as $suspension) {
+            if ($suspension->isOpen()) {
+                $openSuspensionCount++;
+            }
+        }
+
+        Assert::eq($openSuspensionCount, 1);
     }
 
     /**
@@ -86,29 +111,6 @@ class SuspensionContext implements Context
         $user = $this->userService->findByEmail($userEmail);
 
         $this->suspensionService->suspend($moderator->getId(), $user->getId(), ['spam'], null);
-    }
-
-    /**
-     * @Given the moderator :moderatorEmail suspends :userEmail again an error should be thrown
-     */
-    public function suspendAgain(string $moderatorEmail, string $userEmail)
-    {
-        $moderator = $this->userService->findByEmail($moderatorEmail);
-        $user = $this->userService->findByEmail($userEmail);
-        $exceptionThrown = false;
-
-        try {
-            $this->suspensionService->suspend(
-                $moderator->getId(),
-                $user->getId(),
-                ['spam'],
-                self::DEFAULT_SUSPENSION_DURATION
-            );
-        } catch (UniqueConstraintViolationException $exception) {
-            $exceptionThrown = true;
-        }
-
-        Assert::true($exceptionThrown);
     }
 
     /**

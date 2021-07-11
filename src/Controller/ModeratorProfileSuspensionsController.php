@@ -57,7 +57,8 @@ class ModeratorProfileSuspensionsController extends AbstractController
         return $this->render('@DatingLibreApp/moderator/profile/suspensions.html.twig', [
             'profile' => $profile,
             'suspensionForm' => $suspensionFormType->createView(),
-            'openSuspension' => $this->suspensionService->findOpenByUserId($userId),
+            'openElapsedSuspension' => $this->suspensionService->findElapsedAndOpenByUserId($userId),
+            'openPermanentSuspension' => $this->suspensionService->findOpenPermanentSuspension($userId),
             'suspensions' => $this->suspensionService->findAllByUserId($userId),
         ]);
     }

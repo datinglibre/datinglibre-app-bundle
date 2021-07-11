@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace DatingLibre\AppBundle\Service;
+
 use DatingLibre\AppBundle\Entity\UserArchive;
 use DatingLibre\AppBundle\Repository\ProfileRepository;
 use DatingLibre\AppBundle\Repository\UserArchiveRepository;
@@ -19,8 +20,7 @@ class UserArchiveService
         UserRepository $userRepository,
         ProfileRepository $profileRepository,
         UserArchiveRepository $userArchiveRepository
-    )
-    {
+    ) {
         $this->userRepository = $userRepository;
         $this->profileRepository = $profileRepository;
         $this->userArchiveRepository = $userArchiveRepository;

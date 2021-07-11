@@ -4,6 +4,7 @@ namespace DatingLibre\AppBundle\Repository;
 
 use DateTimeInterface;
 use DatingLibre\AppBundle\Entity\Suspension;
+use DatingLibre\AppBundle\Entity\SuspensionProjection;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\Persistence\ManagerRegistry;
@@ -56,14 +57,15 @@ SELECT
     s.status AS status   
 FROM datinglibre.suspensions s
     INNER JOIN datinglibre.profiles p ON p.user_id = s.user_id
-WHERE s.user_id = :userId;
+WHERE s.user_id = :userId
+ORDER BY created_at DESC;
 EOD;
         $query = $this->getEntityManager()->createNativeQuery($sql, $this->getSuspensionProjectionMapping());
         $query->setParameter('userId', $userId);
         return $query->getResult();
     }
 
-    public function getElapsedSuspensions(): array
+    public function findElapsedSuspensions(): array
     {
         $sql =<<<EOD
 SELECT 
@@ -120,5 +122,40 @@ WHERE s.duration IS NULL
 EOD;
         $query = $this->getEntityManager()->createNativeQuery($sql, $this->getSuspensionProjectionMapping());
         return $query->getResult();
+    }
+
+    public function findElapsedAndOpenByUserId(Uuid $userId): ?SuspensionProjection
+    {
+        $sql =<<<EOD
+SELECT 
+    s.id AS id,
+    s.user_id AS user_id,
+    s.reasons AS reasons,   
+    s.duration AS duration,
+    s.created_at AS created_at,
+    p.username AS username,
+    s.created_at + INTERVAL '1  hour' * s.duration < now() AS elapsed,
+    s.status AS status
+FROM datinglibre.suspensions s
+    INNER JOIN datinglibre.profiles p ON p.user_id = s.user_id
+WHERE  
+    s.status = 'OPEN'
+    AND s.created_at + INTERVAL '1 hour' * s.duration < now() 
+    AND p.status <> 'PERMANENTLY_SUSPENDED' 
+    AND s.user_id = :userId
+EOD;
+        $query = $this->getEntityManager()->createNativeQuery($sql, $this->getSuspensionProjectionMapping());
+        $query->setParameter('userId', $userId);
+        return $query->getOneOrNullResult();
+    }
+
+    public function closeAllByUserId(Uuid $userId): void
+    {
+        $sql =<<<EOD
+UPDATE datinglibre.suspensions SET status = 'CLOSED' WHERE user_id = :userId
+EOD;
+        $query = $this->getEntityManager()->createNativeQuery($sql, new ResultSetMapping());
+        $query->setParameter('userId', $userId);
+        $query->execute();
     }
 }

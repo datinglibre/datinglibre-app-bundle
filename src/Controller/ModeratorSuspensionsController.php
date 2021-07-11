@@ -19,7 +19,7 @@ class ModeratorSuspensionsController extends AbstractController
 
     public function index(): Response
     {
-        $elapsedSuspensions = $this->suspensionService->getElapsedSuspensions();
+        $elapsedSuspensions = $this->suspensionService->findElapsedSuspensions();
         return $this->render('@DatingLibreApp/moderator/suspensions/index.html.twig', [
             'suspensions' => $elapsedSuspensions
         ]);

@@ -10,9 +10,13 @@
         {{ profile.username }}
         <small class="text-muted">{{ profile.age }}. {{ profile.cityName }}, {{ profile.regionName }}.</small>
     </h2>
-    {{ form_start(closeSuspensionForm) }}
-    {{ form_row(closeSuspensionForm.suspension) }}
-    <p class="alert alert-danger">{{ 'suspension.close_confirm'|trans }}</p>
-    {{ form_widget(closeSuspensionForm.submit, {'attr': {'class': 'btn btn-danger'}}) }}
-    {{ form_end(closeSuspensionForm) }}
+    <div class="card border-danger">
+        <div class="card-body">
+            {{ form_start(closeSuspensionForm) }}
+            {{ form_row(closeSuspensionForm.suspension) }}
+            <p>{{ 'suspension.close_confirm'|trans }}</p>
+            {{ form_widget(closeSuspensionForm.submit, {'attr': {'class': 'btn btn-danger'}}) }}
+            {{ form_end(closeSuspensionForm) }}
+        </div>
+    </div>
 {% endblock %}

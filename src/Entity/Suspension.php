@@ -172,4 +172,14 @@ class Suspension
     {
         return $this->getDuration() === null;
     }
+
+    public function isClosed(): bool
+    {
+        return $this->getStatus() == self::CLOSED;
+    }
+
+    public function isOpen(): bool
+    {
+        return $this->getStatus() == self::OPEN;
+    }
 }

@@ -21,7 +21,6 @@
             <th colspan="col">{{ 'suspension.duration'|trans }}</th>
             <th colspan="col">{{ 'suspension.elapsed'|trans }}</th>
             <th colspan="col">{{ 'suspension.status'|trans }}</th>
-            <th colspan="col">{{ 'suspension.action'|trans }}</th>
             </thead>
             {% for suspension in suspensions %}
                 <tr class="{% if suspension.elapsed and suspension.status == 'OPEN' %}table-warning{% endif %}">
@@ -48,25 +47,32 @@
                         {% endif %}
                     </td>
                     <td>{{ ('suspension.' ~ suspension.status|lower)|trans }}</td>
-                    <td>{% if suspension.elapsed and suspension.status == 'OPEN' %}
-                            <a href="{{ path('moderator_profile_suspension', {'userId': profile.id, 'suspensionId': suspension.id}) }}"
-                               class="btn btn-primary btn-sm">{{ 'suspension.close'|trans }}</a>
-                        {% endif %}
-                        {% if suspension.duration is null and is_granted('ROLE_ADMIN') and suspension.status == 'OPEN' %}
-                            <a href="{{ path('moderator_profile_suspension', {'userId': profile.id, 'suspensionId': suspension.id}) }}"
-                               class="btn btn-primary btn-sm">{{ 'suspension.close'|trans }}</a>
-                        {% endif %}
-                    </td>
                 </tr>
             {% endfor %}
         </table>
     {% endif %}
-    {% if openSuspension is null %}
-        {{ form_start(suspensionForm) }}
-        {{ form_row(suspensionForm.duration) }}
-        {{ form_row(suspensionForm.reasons) }}
-        {{ form_row(suspensionForm.submit, {'attr': {'class': 'btn btn-danger'}}) }}
-        {{ form_end(suspensionForm) }}
+
+    {% if openElapsedSuspension %}
+        <a href="{{ path('moderator_profile_suspension', {'userId': profile.id, 'suspensionId': openElapsedSuspension.id}) }}"
+           class="btn btn-primary btn-md mb-3">{{ 'suspension.close'|trans }}</a>
+    {% endif %}
+
+    {% if openPermanentSuspension and is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('moderator_profile_suspension', {'userId': profile.id, 'suspensionId': openPermanentSuspension.id}) }}"
+           class="btn btn-primary btn-sd mb-3">{{ 'suspension.close'|trans }}</a>
+    {% endif %}
+
+    {% if (openElapsedSuspension is not null and openPermanentSuspension is not null) or suspensions is empty  %}
+    <div class="card border-danger">
+        <div class="card-body">
+            <h5 class="text-danger">{{ 'suspension.create'|trans }}</h5>
+            {{ form_start(suspensionForm) }}
+            {{ form_row(suspensionForm.duration) }}
+            {{ form_row(suspensionForm.reasons) }}
+            {{ form_row(suspensionForm.submit, {'attr': {'class': 'btn btn-danger'}}) }}
+            {{ form_end(suspensionForm) }}
+        </div>
+    </div>
     {% endif %}
 {% endblock %}
 

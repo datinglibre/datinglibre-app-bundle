@@ -29,11 +29,12 @@ class SuspensionFormType extends AbstractType
     {
         $builder->add('duration', ChoiceType::class, [
             // keys are also values
-            'choices' => [24 => 24,  48 => 48, 72 => 72],
+            'choices' => [24 => 24, 48 => 48, 72 => 72],
             'required' => true,
             'constraints' => [
                 new NotBlank()
-            ]
+            ],
+            'label' => 'suspension.duration'
         ]);
 
         $builder->add('reasons', ChoiceType::class, [
@@ -45,9 +46,10 @@ class SuspensionFormType extends AbstractType
             'multiple' => true,
             'constraints' => [
                 new NotBlank()
-            ]
+            ],
+            'label' => 'suspension.reasons'
         ]);
 
-        $builder->add('submit', SubmitType::class, ['label' => 'suspension.suspend_user']);
+        $builder->add('submit', SubmitType::class, ['label' => 'suspension.suspend']);
     }
 }

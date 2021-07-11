@@ -7,6 +7,7 @@ namespace DatingLibre\AppBundle\Service;
 use DatingLibre\AppBundle\Entity\Email;
 use DatingLibre\AppBundle\Entity\Profile;
 use DatingLibre\AppBundle\Entity\Suspension;
+use DatingLibre\AppBundle\Entity\SuspensionProjection;
 use DatingLibre\AppBundle\Repository\ProfileRepository;
 use DatingLibre\AppBundle\Repository\SuspensionRepository;
 use DatingLibre\AppBundle\Repository\UserRepository;
@@ -80,6 +81,7 @@ class SuspensionService
         $this->entityManager->beginTransaction();
 
         try {
+            $this->suspensionRepository->closeAllByUserId($user->getId());
             $suspension = new Suspension();
             $suspension->setUserOpened($moderator);
             $suspension->setUser($user);
@@ -117,14 +119,19 @@ class SuspensionService
         );
     }
 
+    public function findElapsedAndOpenByUserId(Uuid $userId): ?SuspensionProjection
+    {
+        return $this->suspensionRepository->findElapsedAndOpenByUserId($userId);
+    }
+
     public function findAllByUserId(Uuid $userId): array
     {
         return $this->suspensionRepository->findAllByUserId($userId);
     }
 
-    public function getElapsedSuspensions(): array
+    public function findElapsedSuspensions(): array
     {
-        return $this->suspensionRepository->getElapsedSuspensions();
+        return $this->suspensionRepository->findElapsedSuspensions();
     }
 
     /**
@@ -187,6 +194,7 @@ class SuspensionService
 
         $this->entityManager->beginTransaction();
         try {
+            $this->suspensionRepository->closeAllByUserId($user->getId());
             $permanentSuspension->setUser($suspendedUser);
             $permanentSuspension->setUserOpened($user);
             $permanentSuspension->setReasons($reasons);

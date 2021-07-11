@@ -13,9 +13,9 @@
     <div class="card border-danger">
         <div class="card-body">
             {% if permanentSuspension is not null %}
-                <p class="alert alert-danger">{{ 'suspension.permanent_suspension_enqueued'|trans }}</p>
+                <p>{{ 'suspension.permanent_suspension_enqueued'|trans }}</p>
             {% else %}
-                <p class="alert alert-danger">{{ 'suspension.permanent_queue_confirm'|trans }}</p>
+                <p>{{ 'suspension.permanent_queue_confirm'|trans }}</p>
                 {{ form_start(enqueuePermanentSuspensionForm) }}
                 {{ form_row(enqueuePermanentSuspensionForm.reasons) }}
                 {{ form_row(enqueuePermanentSuspensionForm.submit, {'attr': {'class': 'btn btn-danger'}}) }}

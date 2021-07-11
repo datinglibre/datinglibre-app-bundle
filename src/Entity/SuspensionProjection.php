@@ -114,7 +114,7 @@ class SuspensionProjection
         $this->elapsed = $elapsed;
     }
 
-    public function isStatus(): string
+    public function getStatus(): string
     {
         return $this->status;
     }
@@ -132,5 +132,15 @@ class SuspensionProjection
     public function setCreatedAt(DateTimeInterface $createdAt): void
     {
         $this->createdAt = $createdAt;
+    }
+
+    public function isClosed(): bool
+    {
+        return $this->getStatus() == Suspension::CLOSED;
+    }
+
+    public function isOpen(): bool
+    {
+        return $this->getStatus() == Suspension::OPEN;
     }
 }
