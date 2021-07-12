@@ -185,7 +185,7 @@ class SuspensionService
      */
     public function permanentlySuspend(Uuid $userId, Uuid $suspendedUserId, array $reasons): void
     {
-        $permanentSuspension = $this->findOpenPermanentSuspension($suspendedUserId) ?? new Suspension();
+
         $user = $this->userRepository->find($userId);
         $suspendedUser = $this->userRepository->find($suspendedUserId);
         $suspendedProfile = $this->profileRepository->find($suspendedUserId);
@@ -195,6 +195,7 @@ class SuspensionService
         $this->entityManager->beginTransaction();
         try {
             $this->suspensionRepository->closeAllByUserId($suspendedUserId);
+            $permanentSuspension = new Suspension();
             $permanentSuspension->setUser($suspendedUser);
             $permanentSuspension->setUserOpened($user);
             $permanentSuspension->setReasons($reasons);
